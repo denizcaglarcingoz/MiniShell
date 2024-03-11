@@ -1,3 +1,8 @@
+
+#include <time.h>
+#include <stdio.h>
+#include <sys/stat.h>
+
 // The stat function in C is used to retrieve information about a file or
 // a file system object (like a directory). It provides details such as file size,
 // permissions, modification time, and more. 
@@ -12,9 +17,6 @@
 
 // Here's an example of using stat:
 
-#include <time.h>
-#include <stdio.h>
-#include <sys/stat.h>
 
 int main() {
     const char *filename = "example.txt";

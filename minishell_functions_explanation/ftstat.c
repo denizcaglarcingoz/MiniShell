@@ -3,6 +3,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+/// It is like stat but instead works on file descriptor files that are open
+/// but sstill does the same shit to open files
+///int fstat(int fd, struct stat *buf);
+
 int main() {
     const char *filename = "example.txt";
     int fileDescriptor = open(filename, O_RDONLY);
@@ -28,7 +32,3 @@ int main() {
     return 0;
 }
 
-
-/// It is like stat but instead works on file descriptor files that are open
-/// but sstill does the same shit to open files
-///int fstat(int fd, struct stat *buf);

@@ -1,11 +1,11 @@
 
-// // int dup2(int oldfd, int newfd);
-// oldfd: The file descriptor that you want to duplicate.
-// newfd: The desired file descriptor number for the duplicate.
-
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
+
+// // int dup2(int oldfd, int newfd);
+// oldfd: The file descriptor that you want to duplicate.
+// newfd: The desired file descriptor number for the duplicate.
 
 int main() {
     int fd = open("example.txt", O_RDONLY);

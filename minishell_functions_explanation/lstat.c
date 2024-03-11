@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+//// lstat and stat are same with one twist.
+/// lstat works directly on symbolic file
+/// stat goes to work on where symbolic file directs to
+//  if there is a symboliklink as the file
+
 int main() {
     const char *filename = "symboliklinkchdir";
     struct stat fileStat;
@@ -24,6 +29,3 @@ int main() {
     return 0;
 }
 
-//// lstat and stat are same with one twist.
-/// lstat works directly on symbolic file
-/// stat goes to work on where symbolic file directs to

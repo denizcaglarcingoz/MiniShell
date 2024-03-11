@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <dirent.h>
 
+// Change the current working directory
+
 int main() {
     const char* targetDirectory = "/Users/denizcaglarcingoz/Desktop/CC/chdir";
 
