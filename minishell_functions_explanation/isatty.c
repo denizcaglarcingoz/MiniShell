@@ -29,7 +29,8 @@ int main() {
     int fd = open("example.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	//int fd = 12;
     // Check if the file descriptor is associated with a terminal
-    if (isatty(fd)) {
+    // fd is not but for example STDIN_FILENO is associated
+	if (isatty(fd)) {
         printf("File descriptor %d is associated with a terminal.\n", fd);
     } else {
         printf("File descriptor %d is not associated with a terminal.\n", fd);
