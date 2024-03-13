@@ -3,6 +3,9 @@
 		"stdlib.h": "c",
 		"functional": "c",
 		"termcap.h": "c",
-		"typeinfo": "c"
+		"typeinfo": "c",
+		"stdio.h": "c",
+		"unistd.h": "c",
+		"term.h": "c"
 	}
 }
