@@ -8,20 +8,28 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <sys/ioctl.h> 
+#include <termios.h>
 
-void sigint_handler(int signum)
+struct sigaction orig_sigquit_action;
+
+void sigint_handler_int(int signum)
 {
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 }
 
+void sigint_handler_quit(int signum)
+{
+	write(1, "", 1);
+}
+
 int main()
 {
     
-
-	signal(SIGINT, sigint_handler);
-
+	signal(SIGINT, sigint_handler_int);
+	signal(SIGQUIT, SIG_IGN);
+	
 	while (1)
 	{
         char* input = readline("MINISHELL> ");
@@ -45,7 +53,10 @@ int main()
             free(input);
             break;
         }
+		free(input);
     }
-
+	
     return 0;
 }
+
+// cc main.c -o minishell -lreadline -lncurses
