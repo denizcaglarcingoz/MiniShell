@@ -17,6 +17,7 @@
 
 typedef enum e_token_type
 {
+	INITIAL, //THE FIRST PART UNTIL THE SPACE --COMMAND OR PATH ETC
 	WHITESPACE,
 	PIPE,
 	STRING,
@@ -25,7 +26,9 @@ typedef enum e_token_type
 	D_LESS,
 	D_GREATER,
 	L_PAR,
-	R_PAR
+	R_PAR,
+	QUOTE,
+	D_QUOTE
 
 }	t_token_type;
 
@@ -37,7 +40,7 @@ typedef struct s_tokens
 }	t_tokens;
 
 /****SHELL****/
-void	shell_loop();
+void		shell_loop();
 
 
 /****LIST_UTILS****/
@@ -45,17 +48,17 @@ void		free_list(t_tokens **tokens);
 int			ft_size(t_tokens *tokens);//DO I NEED THIS?
 t_tokens	*ft_last(t_tokens *tokens); //OR THIS?
 void		add_token(t_tokens **tokens, t_tokens *newnode);
-t_tokens		build_token_list(char *input);
+t_tokens	*build_token_list(char *input);
 
 /****SIGNALS****/
-void sigint_handler_int(int signum);
-void sigint_handler_quit(int signum);
+void		sigint_handler_int(int signum);
+void		sigint_handler_quit(int signum);
 
 /***OTHER***/
-void	print_intro(void);
+void		print_intro(void);
 
 /**testing**/
-void	print_tokens(t_token *tokens);
+void		print_tokens(t_tokens *tokens);
 
 
 #endif

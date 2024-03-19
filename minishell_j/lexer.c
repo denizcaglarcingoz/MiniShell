@@ -1,16 +1,45 @@
 #include "minishell.h"
 
-t_token	*make_token(char *content, t_token_type type)
+t_tokens	*token_init(t_tokens *c_token, char *content, t_token_type type)
 {
-	t_token *new_token;
+	t_tokens *new_token;
 
-	new_token = (t_token *)malloc(sizeof(t_token));//finish protect todo
+	new_token = (t_tokens *)malloc(sizeof(t_tokens));
+	//finish protect todo
+	c_token->next = new_token;
+	new_token->content = ft_strdup(content);
+	//protect
+	new_token->type = type;
+	new_token->next = NULL;
+	return new_token;
+}
+
+t_tokens	*token_init_quote(t_tokens *c_token,char **content, t_token_type type)
+{
+	t_tokens *new_token;
+
+	new_token = (t_tokens *)malloc(sizeof(t_tokens));//finish protect todo
 	if (!new_token)
 	{
 		perror("Malloc Error");
 		exit(EXIT_FAILURE);
 	}
-	new_token->content = ft_strdup(content);
+	c_token->next = new_token;
+	int i = 0;
+	(*content)++;
+	while ((*content)[i] != '"')
+		i++;
+	new_token->content = (char*)malloc(i);
+	//protect malloc
+	i = 0;
+	while((*content)[i] != '"')
+	{
+		(new_token->content)[i] = (*content)[i];
+		i++;
+	}
+	(new_token->content)[i] = '\0';
+	while(**content != '"')
+		(*content)++;
 	if (!new_token->content)
 	{
 		perror("Malloc Error");
@@ -21,70 +50,70 @@ t_token	*make_token(char *content, t_token_type type)
 	return new_token;
 }
 
-/* 	WHITESPACE,
-	PIPE,
-	LESS,
-	GREATER,
-	D_LESS,
-	D_GREATER,
-	L_PAR,
-	R_PAR,
-	STRING */
+t_tokens	*init_initial_token(char **inp)
+{
+	t_tokens	*c_token;
 
-void	build_token_list(char *input)
+	c_token = (t_tokens*)malloc(sizeof(t_tokens));
+	//protect malloc later
+	int i = 0;
+	while((*inp)[i] != ' ')
+		i++;
+	c_token->type = INITIAL; 
+	c_token->content = (char *)malloc(i);
+	//protect malloc later
+	c_token->next = NULL;
+	i = 0;
+	while((*inp)[i] != ' ')
+	{
+		(c_token->content)[i] = (*inp)[i];
+		i++;
+	}
+	(c_token->content)[i] = '\0';
+	while(**inp != ' ')
+		(*inp)++;
+	return (c_token);
+}
+
+t_tokens	*build_token_list(char *input)
 {
 		
-	t_tokens *tokens;
-	t_token_type type;
-	char *token_start;
+	t_tokens		*c_token;
+	t_tokens		*first_token;
+	t_token_type	type;
+	char			*token_start;
+	int				quotes_pos;
 	
 	token_start = input;
-	tokens = NULL;
+	quotes_pos = 0;
+	//INITIAL TOKEN initilization
+	c_token = init_initial_token(&input);
+	first_token = c_token;
 	while(*input)
 	{
-		if (ft_strchr(, *input))
-		{
-			if (input != token_start)
-			{
-			*input = '\0';/* new = (t_tokens *)malloc(sizeof(t_tokens));
-		if (new == NULL)
-		{
-			free_list(tokens);
-			free(input);
-			ft_putstr_color_fd(2, "Malloc Error", BOLD_RED);
-			exit(EXIT_FAILURE);
-		}		
-		//printf("inp:%s\n",input);
-		new->content = ft_strdup(input);
-		if (new == NULL)
-		{
-			free_list(tokens);
-			free(input);
-			ft_putstr_color_fd(2, "Malloc Error", BOLD_RED);
-			exit(EXIT_FAILURE);
-		}		 */
-		if (*input == ' ')
-			type = WHITESPACE; 
-		else if (*input == '|')
-			type = PIPE;
-		else if (*input == '<' && *(input + 1) != '<')
-			type = LESS;
-		else if (*input == '>' && *(input + 1) != '>')
-			type = GREATER;
-		else if (*input == '<' && *(input + 1) == '<')
-		{
-			type = D_LESS;
+		if (*input == ' ' && quotes_pos % 2 == 0)
 			input++;
+		
+		if (*input == '|' && quotes_pos % 2 == 0)
+			c_token = token_init(c_token, "|", PIPE);
+		else if (*input == '<' && *(input + 1) != '<' && *(input - 1) != '<' && quotes_pos % 2 == 0)
+			c_token = token_init(c_token, "<", LESS);
+		else if (*input == '>' && *(input + 1) != '>' && *(input - 1) != '>' && quotes_pos % 2 == 0)
+			c_token = token_init(c_token, ">", GREATER);
+		else if (*input == '<' && *(input + 1) == '<' && quotes_pos % 2 == 0)
+			c_token = token_init(c_token, "<<", D_LESS);
+		else if (*input == '>' && *(input + 1) == '>'&& quotes_pos % 2 == 0)
+			c_token = token_init(c_token, ">>", D_GREATER);
+		else if (*input == '(' && quotes_pos % 2 == 0)
+			c_token = token_init(c_token, "(", L_PAR);
+		else if (*input == ')' && quotes_pos % 2 == 0)
+			c_token = token_init(c_token, ")", R_PAR);
+		else if (*input == '"')
+		{	
+			quotes_pos++;
+			c_token = token_init_quote(c_token, &input, D_QUOTE);
+			quotes_pos++;
 		}
-		else if (*input == '>' && *(input + 1) == '>')
-		{
-			type = D_GREATER;
-			input++;
-		}
-		else if (*input == '(')
-			type = L_PAR; 
-		else if (*input == ')')
-			type = R_PAR;
 		else
 		{
 			type = STRING;
@@ -92,18 +121,25 @@ void	build_token_list(char *input)
 				input++;
 			input--; */
 		}
-	add_token(tokens, make_token(&tokens, token_start, type));
-	token_start = input + 1;	
-	input++;
+		
+		input++;
 	}
-	return (tokens);
+	return (first_token);
 }
 //testing---------------------------------
-void	print_tokens(t_token *tokens)
+void	print_tokens(t_tokens *tokens)
 {
-	while (tokens) 
+	while (1) 
 	{
-		printf(" TOKEN TYPE: %d\n TOKEN CONTENT: %c\n\n", tokens->type, tokens->content);
-		tokens = (*temp)->next;
+		if (tokens == NULL)
+		{
+			printf("last token\n");
+			break;
+		}
+		printf(" TOKEN TYPE: %d\n TOKEN CONTENT: %s\n", tokens->type, tokens->content);
+		printf("strlen: %lu\n\n", strlen(tokens->content));
+		if (tokens == NULL)
+			break;
+		tokens = tokens->next;
 	}
 }
