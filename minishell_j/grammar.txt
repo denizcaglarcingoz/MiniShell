@@ -1,0 +1,31 @@
+%token  WORD
+%token  AND  OR
+%token  LESS  GREAT  DLESS  DGREAT
+%token  PIPE  LPAREN  RPAREN
+
+/* -------------------------------------------------------
+   The Grammar
+   -------------------------------------------------------
+*/
+%start list
+%%
+list             : pipe cond                                    : w << < > >> (
+cond             : AND pipe cond | OR pipe cond | e            : && || )
+pipe             : cmd pipe_n                                : w << < > >> (
+cmd             : s_cmd | ssh ssh_red                        : w << < > >> (
+pipe_n          : PIPE pipe | e                                : | e
+ssh             : LBRACE list RBRACE                        : (
+ssh_red         : red_list | e                                : << < > >> e
+s_cmd            : WORD word_n | cmd_p fcmd_p                : w << < > >>
+word_n          : cmd_s | e                                    : << < > >> w e 
+fcmd_p          : WORD word_n | e                            : w e 
+cmd_p             : io_red cmd_p_n                            : << < > >>
+cmd_p_n         : io_red cmd_p_n | e                        : << < > >> e
+cmd_s             : io_red cmd_s_n | WORD cmd_s_n                : << < > >> w
+cmd_s_n         : io_red cmd_s_n | WORD cmd_s_n | e            : << < > >> w e
+red_list         : io_red red_list_n                         : << < > >>
+red_list_n         : io_red red_list_n | e                        : << < > >> e
+io_red             : io_f | io_h                                : << < > >>
+io_f             : LESS WORD | GREAT WORD | DGREAT WORD        : < > >>
+io_h             : DLESS WORD                                : <<
+%%
