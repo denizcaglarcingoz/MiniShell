@@ -98,7 +98,7 @@ t_tokens	*build_token_list(char *input)
 			c_token = token_init(c_token, "|", PIPE);
 		else if (*input == '<' && *(input + 1) != '<' && *(input - 1) != '<' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, "<", LESS);
-		else if (*input == '>' && *(input + 1) != '>' && *(input - 1) != '>' && quotes_pos % 2 == 0)
+		else if (*input == '>' && *(input + 1) != '>' && *(input -o 1) != '>' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, ">", GREATER);
 		else if (*input == '<' && *(input + 1) == '<' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, "<<", D_LESS);
