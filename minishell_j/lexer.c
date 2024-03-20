@@ -5,7 +5,7 @@ t_tokens	*token_init(t_tokens *c_token, char *content, t_token_type type)
 	t_tokens *new_token;
 
 	new_token = (t_tokens *)malloc(sizeof(t_tokens));
-	//finish protect todo
+	//protect todo
 	c_token->next = new_token;
 	new_token->content = ft_strdup(content);
 	//protect
@@ -18,12 +18,8 @@ t_tokens	*token_init_quote(t_tokens *c_token,char **content, t_token_type type)
 {
 	t_tokens *new_token;
 
-	new_token = (t_tokens *)malloc(sizeof(t_tokens));//finish protect todo
-	if (!new_token)
-	{
-		perror("Malloc Error");
-		exit(EXIT_FAILURE);
-	}
+	new_token = (t_tokens *)malloc(sizeof(t_tokens));
+	//protect todo
 	c_token->next = new_token;
 	int i = 0;
 	(*content)++;
@@ -40,11 +36,6 @@ t_tokens	*token_init_quote(t_tokens *c_token,char **content, t_token_type type)
 	(new_token->content)[i] = '\0';
 	while(**content != '"')
 		(*content)++;
-	if (!new_token->content)
-	{
-		perror("Malloc Error");
-		exit(EXIT_FAILURE);
-	}
 	new_token->type = type;
 	new_token->next = NULL;
 	return new_token;
