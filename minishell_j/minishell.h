@@ -60,5 +60,8 @@ void		print_intro(void);
 /**testing**/
 void		print_tokens(t_tokens *tokens);
 
+/**is**/
+bool is_meta_char(char is);
+
 
 #endif

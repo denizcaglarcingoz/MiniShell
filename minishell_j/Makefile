@@ -1,6 +1,6 @@
 NAME := minishell
 
-SRCS := main.c print_intro.c signals.c list_utils.c lexer.c
+SRCS := main.c print_intro.c signals.c list_utils.c lexer.c checker.c
   
 CFLAGS := -Wall -Wextra -Werror
 

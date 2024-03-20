@@ -14,28 +14,60 @@ t_tokens	*token_init(t_tokens *c_token, char *content, t_token_type type)
 	return new_token;
 }
 
-t_tokens	*token_init_quote(t_tokens *c_token,char **content, t_token_type type)
+t_tokens	*token_init_string(t_tokens *c_token,char **content, t_token_type type)
 {
-	t_tokens *new_token;
-
+	t_tokens	*new_token;
+	int			quo_quant;
 	new_token = (t_tokens *)malloc(sizeof(t_tokens));
 	//protect todo
 	c_token->next = new_token;
 	int i = 0;
-	(*content)++;
-	while ((*content)[i] != '"')
+
+	quo_quant = 0;
+	while (1)
+	{
+		if((*content)[i] == '\0')
+			break ;
+		if((*content)[i] == '"')
+			quo_quant++;
+		if((*content)[i] == ' ' && quo_quant % 2 == 0)
+			break ;
+		if(is_meta_char((*content)[i]) == true && quo_quant %2 == 0)
+			break ;
 		i++;
+	}
 	new_token->content = (char*)malloc(i);
 	//protect malloc
 	i = 0;
-	while((*content)[i] != '"')
+	quo_quant = 0;
+	while(1)
 	{
+		if((*content)[i] == '\0')
+			break ;
+		if((*content)[i] == '"')
+			quo_quant++;
+		if((*content)[i] == ' ' && quo_quant % 2 == 0)
+			break ;
+		if(is_meta_char((*content)[i]) == true && quo_quant % 2 == 0)
+			break ;
 		(new_token->content)[i] = (*content)[i];
 		i++;
 	}
 	(new_token->content)[i] = '\0';
-	while(**content != '"')
+	quo_quant = 0;
+	while(1)
+	{
+		if(**content == '\0')
+			break ;
+		if(**content == '"')
+			quo_quant++;
+		if (**content == ' ' && quo_quant % 2 == 0)
+			break ;
+		if(is_meta_char(**content) == true && quo_quant % 2 == 0)
+			break ;
 		(*content)++;
+	}
+	(*content)--;
 	new_token->type = type;
 	new_token->next = NULL;
 	return new_token;
@@ -71,7 +103,6 @@ t_tokens	*build_token_list(char *input)
 		
 	t_tokens		*c_token;
 	t_tokens		*first_token;
-	t_token_type	type;
 	char			*token_start;
 	int				quotes_pos;
 	
@@ -87,30 +118,29 @@ t_tokens	*build_token_list(char *input)
 		
 		if (*input == '|' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, "|", PIPE);
-		else if (*input == '<' && *(input + 1) != '<' && *(input - 1) != '<' && quotes_pos % 2 == 0)
+		else if (*input == '<' && *(input + 1) != '<' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, "<", LESS);
-		else if (*input == '>' && *(input + 1) != '>' && *(input - 1) != '>' && quotes_pos % 2 == 0)
+		else if (*input == '>' && *(input + 1) != '>' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, ">", GREATER);
 		else if (*input == '<' && *(input + 1) == '<' && quotes_pos % 2 == 0)
-			c_token = token_init(c_token, "<<", D_LESS);
+			{
+				c_token = token_init(c_token, "<<", D_LESS);
+				input++;
+			}
 		else if (*input == '>' && *(input + 1) == '>'&& quotes_pos % 2 == 0)
-			c_token = token_init(c_token, ">>", D_GREATER);
+			{
+				c_token = token_init(c_token, ">>", D_GREATER);
+				input++;	
+			}
 		else if (*input == '(' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, "(", L_PAR);
 		else if (*input == ')' && quotes_pos % 2 == 0)
 			c_token = token_init(c_token, ")", R_PAR);
-		else if (*input == '"')
-		{	
-			quotes_pos++;
-			c_token = token_init_quote(c_token, &input, D_QUOTE);
-			quotes_pos++;
-		}
 		else
 		{
-			type = STRING;
-			/* while (*input && !ft_strchr(" |<>()", *input))
-				input++;
-			input--; */
+			quotes_pos++;
+			c_token = token_init_string(c_token, &input, D_QUOTE);
+			quotes_pos++;
 		}
 		
 		input++;
