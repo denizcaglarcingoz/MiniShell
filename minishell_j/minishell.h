@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+#include <fcntl.h>
 # include "ansi_colors.h"
 # include <unistd.h>
 # include <stdio.h>

@@ -32,7 +32,15 @@ t_tokens	*token_init_string(t_tokens *c_token,char **content, t_token_type type)
 		if((*content)[i] == '\0')
 			break ;
 		if((*content)[i] == '"')
+		{
 			d_quo_quant++;
+			if(d_quo_quant == 2)
+			{
+				d_quo_quant = 0;
+				if(quo_quant % 2 == 1)
+					quo_quant = 0;
+			}
+		}
 		if((*content)[i] == '\'')
 			quo_quant++;
 		if((*content)[i] == ' ' && d_quo_quant % 2 == 0  && quo_quant % 2 == 0)
@@ -51,7 +59,15 @@ t_tokens	*token_init_string(t_tokens *c_token,char **content, t_token_type type)
 		if((*content)[i] == '\0')
 			break ;
 		if((*content)[i] == '"')
+		{
 			d_quo_quant++;
+			if(d_quo_quant == 2)
+			{
+				d_quo_quant = 0;
+				if(quo_quant % 2 == 1)
+					quo_quant = 0;
+			}
+		}
 		if((*content)[i] == '\'')
 			quo_quant++;
 		if((*content)[i] == ' ' && d_quo_quant % 2 == 0  && quo_quant % 2 == 0)
@@ -69,7 +85,15 @@ t_tokens	*token_init_string(t_tokens *c_token,char **content, t_token_type type)
 		if(**content == '\0')
 			break ;
 		if(**content == '"')
+		{
 			d_quo_quant++;
+			if(d_quo_quant == 2)
+			{
+				d_quo_quant = 0;
+				if(quo_quant % 2 == 1)
+					quo_quant = 0;
+			}
+		}
 		if(**content == '\'')
 			quo_quant++;
 		if (**content == ' ' && d_quo_quant % 2 == 0  && quo_quant % 2 == 0)
