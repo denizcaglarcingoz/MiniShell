@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-#include <fcntl.h>
+# include <fcntl.h>
 # include "ansi_colors.h"
 # include <unistd.h>
 # include <stdio.h>
@@ -11,6 +11,7 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
+# include <limits.h>
 # include <termcap.h>//what are these last four doing?
 # include <ncurses.h>
 # include <sys/ioctl.h> 
@@ -62,7 +63,12 @@ void		sigint_handler_int(int signum);
 void		sigint_handler_quit(int signum);
 
 /***BUILT-INS****/
-void	ft_echo(t_tokens **tokens);
+void	ft_exit(t_tokens *tokens);
+void	ft_echo(t_tokens *tokens);
+void	ft_cd(t_tokens *tokens);
+void	ft_pwd(void);
+
+
 
 
 /***OTHER***/

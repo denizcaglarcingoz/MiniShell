@@ -4,14 +4,13 @@ void	check_and_run_builtins(t_tokens *tokens, char **env)
 {
     (void)env;
 	if (ft_strcmp(tokens->content, "exit") == 0) 
-	{
-        ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
-		clear_history();
-		free_list(&tokens);
-		exit(EXIT_SUCCESS);
-	}
-	if (ft_strcmp(tokens->content, "echo") == 0) //maybe after error check, check builtins, do else
-		ft_echo(&tokens);
+		ft_exit(tokens);
+	else if (ft_strcmp(tokens->content, "echo") == 0) //maybe after error check, check builtins, do else
+		ft_echo(tokens);
+	else if (ft_strcmp(tokens->content, "cd") == 0) 
+		ft_cd(tokens);
+	else if (ft_strcmp(tokens->content, "pwd") == 0) 
+		ft_pwd();
 	//function takes any node from list as a start.
 	//check command against all builtins here, then against all other cmds in next function, if no match invalid	
 }

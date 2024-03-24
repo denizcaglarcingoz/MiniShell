@@ -3,7 +3,7 @@
 //SUPER SECRET CODE TO KEEP DENIZ FROM HARVESTING MY MIND-FRUITS.
 /**todo**/
 //Seems mostly good, further testing to be sure... 
-//use quote handling for other places in minishell as well.
+//use quote handling for other places in minishell as well., some weird behaviours of '$' in bash to look into...
 char	*handle_env_var_helper(char *token_str, char *path, char *path_start)
 {
 	size_t	len;
@@ -17,7 +17,7 @@ char	*handle_env_var_helper(char *token_str, char *path, char *path_start)
 	path = ft_substr(path_start, 0, len);
 	//protect
 	if (getenv(path))
-		ft_putstr_fd(getenv(path), 1);
+		ft_putstr_color_fd(1, getenv(path), GREEN);
 	free(path);
 	return (token_str);
 }
@@ -98,26 +98,26 @@ static void	parse_and_print(char *token_str)
 	}
 }
 
-void	ft_echo(t_tokens **tokens)
+void	ft_echo(t_tokens *tokens)
 {
 	bool	flag;
 
 	flag = false;
-	if ((*tokens)->next)
+	if (tokens->next)
 	{
-		if (!ft_strcmp((*tokens)->next->content, "-n"))
+		if (!ft_strcmp(tokens->next->content, "-n"))
 		{
 			flag = true;
-			*tokens = (*tokens)->next;
+			tokens = tokens->next;
 		}
-		*tokens = (*tokens)->next;
-		while ((*tokens)->next)
+		tokens = tokens->next;
+		while (tokens->next)
 		{
-			parse_and_print((*tokens)->content);
+			parse_and_print(tokens->content);
 			write(1, " ", 1);
-			*tokens = (*tokens)->next;
+			tokens = tokens->next;
 		}
-		parse_and_print((*tokens)->content);
+		parse_and_print(tokens->content);
 	}
 	if (!flag)
 		ft_putchar_fd('\n', 1);

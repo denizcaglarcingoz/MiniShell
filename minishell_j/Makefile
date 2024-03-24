@@ -1,6 +1,7 @@
 NAME := minishell
 
-SRCS := main.c print_intro.c signals.c list_utils.c lexer.c checker.c built_ins/echo.c execute/env.c
+SRCS := main.c print_intro.c signals.c list_utils.c lexer.c checker.c built_ins/echo.c \
+execute/env.c built_ins/cd.c built_ins/exit.c built_ins/pwd.c
   
 #-fPIE in compile need for at home?
 CFLAGS := -Wall -Wextra -Werror -fPIE
