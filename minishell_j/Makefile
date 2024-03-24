@@ -1,8 +1,9 @@
 NAME := minishell
 
-SRCS := main.c print_intro.c signals.c list_utils.c lexer.c checker.c
+SRCS := main.c print_intro.c signals.c list_utils.c lexer.c checker.c built_ins/echo.c execute/env.c
   
-CFLAGS := -Wall -Wextra -Werror
+#-fPIE in compile need for at home?
+CFLAGS := -Wall -Wextra -Werror -fPIE
 
 RM := rm -f
 
@@ -13,6 +14,7 @@ LIBFT_ARCH = $(LIBFT_PATH)/libft.a
 CC := cc
 
 OBS := $(SRCS:.c=.o)
+
 
 COLOR_RESET = \033[0m
 COLOR_GREEN = \033[1;92m
@@ -27,6 +29,11 @@ endef
 .SILENT:
 
 all: $(LIBFT_ARCH) $(NAME)
+
+# Compilation rule with -fPIE flag
+
+$(OBS): %.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBS)
 	$(CC) $^ -L$(LIBFT_PATH) -lft -lreadline -lhistory -o $@

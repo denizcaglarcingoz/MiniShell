@@ -41,7 +41,7 @@ typedef struct s_tokens
 }	t_tokens;
 
 /****SHELL****/
-void		shell_loop();
+void		shell_loop(char **env);
 
 
 /****LIST_UTILS****/
@@ -51,9 +51,19 @@ t_tokens	*ft_last(t_tokens *tokens); //OR THIS?
 void		add_token(t_tokens **tokens, t_tokens *newnode);
 t_tokens	*build_token_list(char *input);
 
+
+/***FUNCTION_UTILS***/
+char **get_env();
+void print_env(char **env);
+
+
 /****SIGNALS****/
 void		sigint_handler_int(int signum);
 void		sigint_handler_quit(int signum);
+
+/***BUILT-INS****/
+void	ft_echo(t_tokens **tokens);
+
 
 /***OTHER***/
 void		print_intro(void);

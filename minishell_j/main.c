@@ -1,16 +1,33 @@
 #include "minishell.h"
 
-
-void	reset_and_run(char *input)
+void	check_and_run_builtins(t_tokens *tokens, char **env)
 {
-	//reset
-	free(input);	
-	//print(tokens);
-	//free_list(tokens);
-	shell_loop();
+    (void)env;
+	if (ft_strcmp(tokens->content, "exit") == 0) 
+	{
+        ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
+		clear_history();
+		free_list(&tokens);
+		exit(EXIT_SUCCESS);
+	}
+	if (ft_strcmp(tokens->content, "echo") == 0) //maybe after error check, check builtins, do else
+		ft_echo(&tokens);
+	//function takes any node from list as a start.
+	//check command against all builtins here, then against all other cmds in next function, if no match invalid	
 }
 
-void	shell_loop()//at completion of execution reset all data and recall this.
+
+void	reset_and_run(t_tokens **tokens, char *input, char **env)
+{
+	//RESET FOR NEXT PASS, AND CALL LOOP AGAIN
+	free(input);	
+	/* print(tokens);
+	printf("--------"); */
+	free_list(tokens);
+	shell_loop(env);
+}
+
+void	shell_loop(char **env)//at completion of execution reset all data and recall this.
 {
 	char *init_in;
 	char *input;
@@ -29,29 +46,28 @@ void	shell_loop()//at completion of execution reset all data and recall this.
 	{
 		clear_history();
 		free(input);
+		free(init_in);
 		exit(EXIT_FAILURE);
 	}
-    else if (ft_strncmp(input, "exit", 4) == 0) 
-	{
-        ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
-		free(input);
-		exit(EXIT_SUCCESS);
-	}
-	if (ft_strncmp(init_in, "", 1) != 0)
+	if (ft_strcmp(input, "") != 0)
 		add_history(init_in);//free/ clear history.(reset) /// to keep up arrow button history add history is necessary // clean at the end
 	free(init_in);
 	tokens = build_token_list(input);
-	print_tokens(tokens);
-	reset_and_run(input);
+	//print_tokens(tokens);//test
+	//printf("--------\n");//test
+	check_and_run_builtins(tokens, env);
+	reset_and_run(&tokens, input, env);
 }
 
 int	main(int ac, char **av, char **envp)
 {
+	char **env;
 	//t_shell *shell;
 	//shell = NULL;
 	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
 
+	env = get_env();// SHELL STRUCT AND PASS.
 	(void)av;
 	(void)envp;
 	
@@ -61,7 +77,7 @@ int	main(int ac, char **av, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	//print_intro();
-	shell_loop();
+	shell_loop(env);
 	return (0);
 }
 

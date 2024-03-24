@@ -1,6 +1,4 @@
-#include "/home/dcingoz/CC/minishell/minishell_j/minishell.h"
-
-#include <stdio.h>
+#include "../minishell.h"
 
 /// get it at the start of the program
 

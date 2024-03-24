@@ -138,12 +138,12 @@ t_tokens	*build_token_list(char *input)
 		
 	t_tokens		*c_token;
 	t_tokens		*first_token;
-	char			*token_start;
+	//char			*token_start;
 	int				quotes_pos;
 	int				first_entry;
 
 	first_entry = 1;
-	token_start = input;
+	//token_start = input;
 	quotes_pos = 0;
 	//INITIAL TOKEN initilization
 	c_token = init_initial_token();//&input);
