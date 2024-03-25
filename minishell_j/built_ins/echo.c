@@ -4,7 +4,7 @@
 /**todo**/
 //Seems mostly good, further testing to be sure... 
 //use quote handling for other places in minishell as well., some weird behaviours of '$' in bash to look into...
-char	*handle_env_var_helper(char *token_str, char *path, char *path_start)
+char	*handle_env_var_helper(char *token_str, char *path, char *path_start, int *p_flag)
 {
 	size_t	len;
 
@@ -17,12 +17,12 @@ char	*handle_env_var_helper(char *token_str, char *path, char *path_start)
 	path = ft_substr(path_start, 0, len);
 	//protect
 	if (getenv(path))
-		ft_putstr_color_fd(1, getenv(path), GREEN);
+		*p_flag = ft_putstr_color_fd(1, getenv(path), GREEN);
 	free(path);
 	return (token_str);
 }
 
-char	*handle_env_var(char *token_str)
+char	*handle_env_var(char *token_str, int *p_flag)
 {
 	char	*path;
 	char	*path_start;
@@ -32,7 +32,7 @@ char	*handle_env_var(char *token_str)
 	{
 		token_str++;
 		path_start = token_str;
-		token_str = handle_env_var_helper(token_str, path, path_start);
+		token_str = handle_env_var_helper(token_str, path, path_start, p_flag);
 	}
 	else
 	{
@@ -43,7 +43,7 @@ char	*handle_env_var(char *token_str)
 	return (token_str);
 }
 
-char	*handle_quotes(char *token_str, int d_quote_count, int s_quote_count)
+char	*handle_quotes(char *token_str, int d_quote_count, int s_quote_count, int *p_flag)
 {
 	while (*token_str && (*token_str == '\"' || *token_str == '\''))
 	{
@@ -51,7 +51,7 @@ char	*handle_quotes(char *token_str, int d_quote_count, int s_quote_count)
 		{
 			token_str++;
 			while (*token_str != '\"')
-				token_str = handle_env_var(token_str);
+				token_str = handle_env_var(token_str, p_flag);
 			token_str++;
 		}
 		else if (*token_str == '\'' && s_quote_count % 2 == 0)
@@ -70,7 +70,7 @@ char	*handle_quotes(char *token_str, int d_quote_count, int s_quote_count)
 	return (token_str);
 }
 
-static void	parse_and_print(char *token_str)
+static void	parse_and_print(char *token_str, int *p_flag)
 {
 	int		d_quote_count;
 	int		s_quote_count;
@@ -91,7 +91,9 @@ static void	parse_and_print(char *token_str)
 	token_str = start;
 	while (*token_str)
 	{
-		token_str = handle_quotes(token_str, d_quote_count, s_quote_count);
+		if (*token_str == '$')
+		token_str = handle_env_var(token_str, p_flag);
+		token_str = handle_quotes(token_str, d_quote_count, s_quote_count, p_flag);
 		write(1, token_str, 1);
 		if (*token_str != '\0')
 			token_str++;
@@ -101,7 +103,9 @@ static void	parse_and_print(char *token_str)
 void	ft_echo(t_tokens *tokens)
 {
 	bool	flag;
+	int		p_flag;
 
+	p_flag = 0;
 	flag = false;
 	if (tokens->next)
 	{
@@ -113,11 +117,12 @@ void	ft_echo(t_tokens *tokens)
 		tokens = tokens->next;
 		while (tokens->next)
 		{
-			parse_and_print(tokens->content);
+			parse_and_print(tokens->content, &p_flag);
+			if (!(*(tokens->content) == '$' && !p_flag))/// this is to fix DONT PRINT SPACE WHEN TOKEN PRINTS NOTHING.. AS IN BAD EVNVAR
 			write(1, " ", 1);
 			tokens = tokens->next;
 		}
-		parse_and_print(tokens->content);
+		parse_and_print(tokens->content, &p_flag);
 	}
 	if (!flag)
 		ft_putchar_fd('\n', 1);

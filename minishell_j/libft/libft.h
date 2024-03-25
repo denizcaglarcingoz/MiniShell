@@ -55,8 +55,8 @@ char	**ft_split(const char *s, char c);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
-void	ft_putchar_fd(char c, int fd);
-void	ft_putstr_fd(char *s, int fd);
+int		ft_putchar_fd(char c, int fd);
+int		ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_strcmp(char *s1, char *s2);
@@ -66,7 +66,7 @@ int		ft_strcmp(char *s1, char *s2);
 void	ft_quicksort(int *tab, int start, int end);
 long	ft_atol(const char *nptr);
 double	ft_atof(char *s);
-void	ft_putstr_color_fd(int fd, char *s, char *color);
+int		ft_putstr_color_fd(int fd, char *s, char *color);
 
 
 
