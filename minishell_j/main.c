@@ -1,7 +1,4 @@
 #include "minishell.h"
-// YOU ARE DOING GREAT DENIZ, HAVE A GREAT DAY.
-
-
 
 void	sham_parse(t_tokens *tokens)//life is a scam...
 {
@@ -15,20 +12,25 @@ void	sham_parse(t_tokens *tokens)//life is a scam...
 		if (path)
 			dir = opendir(path);	
 	}
-	if (dir)//handling $input MAKE SO ONLY WORKS FOR DIRECTORIES..
+	if (dir)//handling $input MAKE SO ONLY WORKS FOR DIRECTORIES.., now need to handle $PATH, $USER, etc
 	{
 		ft_putstr_color_fd(1, "minishell: ", MAGENTA);
-		ft_putstr_color_fd(1, getenv((tokens->content) + 1), GREEN);
-		ft_putstr_color_fd(1, " Is a directory \n", MAGENTA);
+		ft_putstr_color_fd(1, path, GREEN);
+		ft_putstr_color_fd(1, " Is a directory\n", MAGENTA);
 		closedir(dir);
 	}
-	else if (*(tokens->content + 1) && tokens->next)
+	else if (ft_strcmp(tokens->content + 1, "USER") == 0)
+	{
+		ft_putstr_color_fd(1, path, RED);
+		ft_putstr_color_fd(1, ": command not found\n", RED);
+	}
+	else if ((tokens->content + 1) && tokens->next)
 	{
 		tokens = tokens->next;
 		check_and_run_builtins(tokens);
 	}
 	else
-	{
+	{	
 		if (!(*(tokens->content) == '$' && *(tokens->content + 1)))
 		{
 			ft_putstr_color_fd(1, tokens->content, RED);
@@ -52,8 +54,11 @@ void	check_and_run_builtins(t_tokens *tokens)
 		ft_pwd();
 	else
 	{
-		ft_putstr_color_fd(1, tokens->content, RED);
-		ft_putstr_color_fd(1, ": command not found\n", RED);
+		if (!(*(tokens->content) == '$' && *(tokens->content + 1)))
+		{
+			ft_putstr_color_fd(1, tokens->content, RED);
+			ft_putstr_color_fd(1, ": command not found\n", RED);
+		}
 	}
 	//else check against other commands if non exist then print not a command
 	//function takes any node from list as a start.
