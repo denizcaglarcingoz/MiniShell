@@ -6,6 +6,9 @@
 		"typeinfo": "c",
 		"stdio.h": "c",
 		"unistd.h": "c",
-		"term.h": "c"
+		"term.h": "c",
+		"libft.h": "c",
+		"ioctl.h": "c",
+		"string.h": "c"
 	}
 }
