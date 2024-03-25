@@ -201,3 +201,5 @@ void	print_tokens(t_tokens *tokens)
 		tokens = tokens->next;
 	}
 }
+		//else if(is_white_space(*input) && *input != '$')//added to remove whitespace between tokens..
+		//	input++;

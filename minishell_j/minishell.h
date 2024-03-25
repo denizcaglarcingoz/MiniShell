@@ -12,6 +12,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <limits.h>
+# include <dirent.h>
 # include <termcap.h>//what are these last four doing?
 # include <ncurses.h>
 # include <sys/ioctl.h> 
@@ -57,6 +58,9 @@ t_tokens	*build_token_list(char *input);
 char **get_env();
 void print_env(char **env);
 
+bool is_white_space(char is);
+
+
 
 /****SIGNALS****/
 void		sigint_handler_int(int signum);
@@ -67,6 +71,9 @@ void	ft_exit(t_tokens *tokens);
 void	ft_echo(t_tokens *tokens);
 void	ft_cd(t_tokens *tokens);
 void	ft_pwd(void);
+
+void	check_and_run_builtins(t_tokens *tokens);
+
 
 
 

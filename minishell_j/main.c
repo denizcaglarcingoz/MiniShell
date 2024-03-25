@@ -1,16 +1,61 @@
 #include "minishell.h"
+// YOU ARE DOING GREAT DENIZ, HAVE A GREAT DAY.
 
-void	check_and_run_builtins(t_tokens *tokens, char **env)
+
+
+void	sham_parse(t_tokens *tokens)//life is a scam...
 {
-    (void)env;
-	if (ft_strcmp(tokens->content, "exit") == 0) 
+	char *path;
+	DIR *dir;
+
+	dir = NULL;
+	if (*(tokens->content + 1))
+	{
+		path = getenv((tokens->content) + 1);//handle if in dquotes
+		if (path)
+			dir = opendir(path);	
+	}
+	if (dir)//handling $input MAKE SO ONLY WORKS FOR DIRECTORIES..
+	{
+		ft_putstr_color_fd(1, "minishell: ", MAGENTA);
+		ft_putstr_color_fd(1, getenv((tokens->content) + 1), GREEN);
+		ft_putstr_color_fd(1, " Is a directory \n", MAGENTA);
+		closedir(dir);
+	}
+	else if (*(tokens->content + 1) && tokens->next)
+	{
+		tokens = tokens->next;
+		check_and_run_builtins(tokens);
+	}
+	else
+	{
+		if (!(*(tokens->content) == '$' && *(tokens->content + 1)))
+		{
+			ft_putstr_color_fd(1, tokens->content, RED);
+			ft_putstr_color_fd(1, ": command not found\n", RED);
+		}
+	}
+}
+
+void	check_and_run_builtins(t_tokens *tokens)
+{
+    //(void)env;
+	if (*(tokens->content) == '$')
+		sham_parse(tokens);
+	else if (ft_strcmp(tokens->content, "exit") == 0) 
 		ft_exit(tokens);
-	else if (ft_strcmp(tokens->content, "echo") == 0) //maybe after error check, check builtins, do else
+	else if (ft_strcmp(tokens->content, "echo") == 0) // check builtins, check error /path, rerun under correct conditions( SHAM PARSING..)
 		ft_echo(tokens);
 	else if (ft_strcmp(tokens->content, "cd") == 0) 
 		ft_cd(tokens);
 	else if (ft_strcmp(tokens->content, "pwd") == 0) 
 		ft_pwd();
+	else
+	{
+		ft_putstr_color_fd(1, tokens->content, RED);
+		ft_putstr_color_fd(1, ": command not found\n", RED);
+	}
+	//else check against other commands if non exist then print not a command
 	//function takes any node from list as a start.
 	//check command against all builtins here, then against all other cmds in next function, if no match invalid	
 }
@@ -19,6 +64,7 @@ void	check_and_run_builtins(t_tokens *tokens, char **env)
 void	reset_and_run(t_tokens **tokens, char *input, char **env)
 {
 	//RESET FOR NEXT PASS, AND CALL LOOP AGAIN
+	(void)env;
 	free(input);	
 	/* print(tokens);
 	printf("--------"); */
@@ -54,7 +100,7 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 	tokens = build_token_list(input);
 	//print_tokens(tokens);//test
 	//printf("--------\n");//test
-	check_and_run_builtins(tokens, env);
+	check_and_run_builtins(tokens);
 	reset_and_run(&tokens, input, env);
 }
 
