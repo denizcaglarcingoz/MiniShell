@@ -1,2 +1,0 @@
-/home/dcingoz/CC/minishell/minishell_j
-Deniz

@@ -1,8 +1,10 @@
 NAME := minishell
 
-SRCS := main.c print_intro.c signals.c list_utils.c lexer.c checker.c
+SRCS := main.c print_intro.c signals/signals.c utils/list_utils.c lexer.c checker.c
   
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -I./headers
+
+OBJDIR := objects
 
 RM := rm -f
 
@@ -12,7 +14,7 @@ LIBFT_ARCH = $(LIBFT_PATH)/libft.a
 
 CC := cc
 
-OBS := $(SRCS:.c=.o)
+OBS := $(SRCS:/%.c=$(OBJDIR)/%.o)
 
 COLOR_RESET = \033[0m
 COLOR_GREEN = \033[1;92m
