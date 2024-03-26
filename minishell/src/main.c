@@ -104,9 +104,9 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 		add_history(init_in);//free/ clear history.(reset) /// to keep up arrow button history add history is necessary // clean at the end
 	free(init_in);
 	tokens = build_token_list(input);
-	print_tokens(tokens);//test
+	//print_tokens(tokens);//test
 	//printf("--------\n");//test
-	//check_and_run_builtins(tokens);
+	check_and_run_builtins(tokens);
 	reset_and_run(&tokens, input, env);
 }
 

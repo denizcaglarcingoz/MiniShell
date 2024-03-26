@@ -169,7 +169,7 @@ t_tokens	*build_token_list(char *input)
 			c_token = token_init(c_token, ">>", D_GREATER);
 			input++;	
 		}
-		else
+		else if (*input != ' ')
 		{
 			quotes_pos++;
 			c_token = token_init_string(c_token, &input, D_QUOTE);
