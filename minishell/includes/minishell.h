@@ -70,7 +70,11 @@ void	ft_cd(t_tokens *tokens);
 void	ft_pwd(void);
 
 
-
+/***LEXER UTILS***/
+t_tokens	*token_init_string(t_tokens *c_token,char **content, t_token_type type);
+int			init_loop(char **content, int d_quo_qty, int quo_qty, int i);
+t_tokens	*token_init(t_tokens *c_token, char *content, t_token_type type);
+t_tokens	*meta_content(t_tokens *c_token, char **input);
 
 /***OTHER***/
 void		print_intro(void);

@@ -2,6 +2,8 @@
 
 void	check_and_run_builtins(t_tokens *tokens, char **env)
 {
+	if (tokens == NULL)
+		return ;
     (void)env;
 	if (ft_strcmp(tokens->content, "exit") == 0) 
 		ft_exit(tokens);
@@ -15,14 +17,14 @@ void	check_and_run_builtins(t_tokens *tokens, char **env)
 	//check command against all builtins here, then against all other cmds in next function, if no match invalid	
 }
 
-
 void	reset_and_run(t_tokens **tokens, char *input, char **env)
 {
 	//RESET FOR NEXT PASS, AND CALL LOOP AGAIN
 	free(input);	
 	/* print(tokens);
 	printf("--------"); */
-	free_list(tokens);
+	if (*tokens != NULL)
+		free_list(tokens);
 	shell_loop(env);
 }
 
@@ -52,8 +54,8 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 		add_history(init_in);//free/ clear history.(reset) /// to keep up arrow button history add history is necessary // clean at the end
 	free(init_in);
 	tokens = build_token_list(input);
-	//print_tokens(tokens);//test
-	//printf("--------\n");//test
+	print_tokens(tokens);//test
+	printf("--------\n");//test
 	check_and_run_builtins(tokens, env);
 	reset_and_run(&tokens, input, env);
 }
