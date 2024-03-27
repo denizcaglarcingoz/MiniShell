@@ -32,9 +32,6 @@ void	free_all_env(char **env)
 
 void	print_env(char **env)
 {
-	//int i;	
-
-	//i = 0;
 	if (env == NULL)
 	{
 		printf("Empty Environmental Variable List\n");

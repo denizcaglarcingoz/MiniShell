@@ -1,7 +1,7 @@
 #include "../../includes/minishell.h"
-/* cd - = change to previous dir.
-	cd  or cd ~ = change to home
-	cd ../ or .. = one level up
+/* cd - = change to previous dir. dont
+	cd  or cd ~ = change to home dont need to handle see pdf
+	cd ../ or .. = one level up rel v abs path?
 	cd ../../ = two lev up
 	*/
 //update env?

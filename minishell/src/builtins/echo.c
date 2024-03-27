@@ -85,7 +85,7 @@ static void	parse_and_print(char *token_str, int *p_flag)
 			d_quote_count++;
 		else if (*token_str == '\'')
 			s_quote_count++;
-		if (*token_str != '\0')
+		if (*token_str != '\0')//test without this... just replace all with quote count functions...
 			token_str++;
 	}
 	token_str = start;
@@ -115,7 +115,7 @@ void	ft_echo(t_tokens *tokens)
 			tokens = tokens->next;
 		}
 		tokens = tokens->next;
-		while (tokens->next)
+		while (tokens->next)// handle so stops for operator types.... 
 		{
 			parse_and_print(tokens->content, &p_flag);
 			if (!(*(tokens->content) == '$' && !p_flag))/// this is to fix DONT PRINT SPACE WHEN TOKEN PRINTS NOTHING.. AS IN BAD EVNVAR

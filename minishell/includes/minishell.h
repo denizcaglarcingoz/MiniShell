@@ -67,8 +67,6 @@ void	print_env(char **env);
 char	**add_env(char **env, char *variable);
 char	**del_env(char **env, char *variable);
 
-
-
 /****SIGNALS****/
 void		sigint_handler_int(int signum);
 void		sigint_handler_quit(int signum);
