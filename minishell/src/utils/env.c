@@ -1,110 +1,96 @@
 #include "minishell.h"
 
-/// get it at the start of the program
-
-char **get_env()
-{
-    extern char **environ;
-    char **env;
-
-    int i = 0;
-    if (environ == NULL || environ[i] == NULL)
-        return (NULL);
-
-    while(environ[i] != NULL)
-        i++;
-
-    env = (char **)malloc(i * sizeof(char*));
-        //protect
-    env[i-1] = NULL;
-    
-    i = 0;
-    while(environ[i] != NULL)
-    {
-        env[i] =ft_strdup(environ[i]);
-        //protect
-        i++;
-    }
-
-    return (env);
-}
-
-// print when command env runs
-
-void print_env(char **env)
-{
-    while (env != NULL)
-    {
-        printf("%s\n", *env);
-        env++;
-    }
-    if (env == NULL)
-        printf("Empty Environmental Variable List\n");
-}
-
 /// remember to add/delete variabes if they run the commands
+// like this variable = "DENIZ=deniz/home/cd asdasdadasdasdDasdasd"
 
-char **add_env(char **env, char *variable)
+static char	**add_env_helper(char **env, char **new_env, \
+	char *variable, int size)
 {
+	int	i;
 
-    // assume getting  like this variable = "DENIZ=deniz/home/cd asdasdadasdasdDasdasd"
-
-    char **new_env;
-
-
-    if (variable == NULL)
-        return (env);
-    
-    int i = 0;
-    while(env[i] != NULL)
-        i++;
-    new_env = (char **)malloc((i + 1) * sizeof(char **));
-    //protect
-
-    i = 0;
-    while(env[i] != NULL)
-    {
-        new_env[i] =ft_strdup(env[i]);
-        //protect
-        i++;
-    }
-    new_env[i] = ft_strdup(variable);
-    //protect
-
-    //free original env
-    //might be free variable
-    return new_env;
+	i = -1;
+	new_env = (char **)malloc((size + 2) * sizeof(char *));
+	if (new_env == NULL)
+		return (NULL);
+	while (++i < size)
+	{
+		new_env[i] = ft_strdup(env[i]);
+		if (!new_env[i])
+		{
+			free_envs(new_env, i);
+			return (NULL);
+		}
+	}
+	new_env[i] = ft_strdup(variable);
+	if (!new_env[i])
+	{
+		free_envs(new_env, i);
+		return (NULL);
+	}
+	new_env[i + 1] = NULL;
+	return (new_env);
 }
 
-
-char **del_env(char **env, char *variable)
+char	**add_env(char **env, char *variable)
 {
+	int		i;
+	char	**new_env;
 
-    // assume getting  like this variable = "DENIZ=deniz/home/cd asdasdadasdasdDasdasd"
+	i = 0;
+	if (variable == NULL || *variable == '\0')
+		return (env);
+	new_env = NULL;
+	while (env[i] != NULL)
+		i++;
+	new_env = add_env_helper(env, new_env, variable, i);
+	if (!new_env)
+		return (NULL);
+	free_envs(env, i);
+	return (new_env);
+}
 
-    char **new_env;
+static char	**del_env_helper(char **env, char **new_env, \
+	char *variable, int size)
+{
+	int	i;
+	int	j;
 
+	i = -1;
+	j = 0;
+	new_env = (char **)malloc((size) * sizeof(char *));
+	if (new_env == NULL)
+		return (NULL);
+	while (++i < size)
+	{
+		if (ft_strcmp(env[i], variable) != 0)
+		{
+			new_env[j] = ft_strdup(env[i]);
+			if (!new_env[j])
+			{
+				free_envs(new_env, j);
+				return (NULL);
+			}
+		}
+		j++;
+	}
+	new_env[j - 1] = NULL;
+	return (new_env);
+}
 
-    if (variable == NULL)
-        return (env);
-    
-    int i = 0;
-    while(env[i] != NULL)
-        i++;
-    new_env = (char **)malloc((i - 1) * sizeof(char **));
-    //protect
+char	**del_env(char **env, char *variable)
+{
+	int		i;
+	char	**new_env;
 
-    i = 0;
-    while(env[i] != NULL)
-    {
-        if(ft_strncmp(env[i], variable, ft_strlen(variable) + 1) == 0)
-            new_env[i] =ft_strdup(env[i]);
-        i++;
-    }
-    new_env[i] = ft_strdup(variable);
-    //protect
-
-    //free original env
-    //might be free variable
-    return new_env;
+	i = 0;
+	if (variable == NULL || *variable == '\0')
+		return (env);
+	new_env = NULL;
+	while (env[i] != NULL)
+		i++;
+	new_env = del_env_helper(env, new_env, variable, i);
+	if (!new_env)
+		return (NULL);
+	free_envs(env, i);
+	return (new_env);
 }

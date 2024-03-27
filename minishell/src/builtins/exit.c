@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-void	ft_exit(t_tokens *tokens)
+void	ft_exit(t_tokens *tokens, t_shell *shell)
 {
 	int code;
 
@@ -12,6 +12,9 @@ void	ft_exit(t_tokens *tokens)
 	
 	ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
 	clear_history();
+	free(shell->input);
 	free_list(&tokens);
+	free_all_env(shell->env);
+	printf("exit code: %d\n", code);
 	exit(code);
 }

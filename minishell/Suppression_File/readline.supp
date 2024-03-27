@@ -1,9 +1,6 @@
 {
-    Readline still reachable
-    Memcheck:Leak
-    ...
-    fun:readline
-    ...
+   readline suppression...
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:*readline*
 }
-
-

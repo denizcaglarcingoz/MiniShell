@@ -2,6 +2,9 @@
 
 void	free_list(t_tokens **tokens)
 {
+	if (*tokens == NULL)
+		return ;
+
 	t_tokens	*curr;
 	t_tokens	*temp;
 
