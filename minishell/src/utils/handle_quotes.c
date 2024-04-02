@@ -1,5 +1,40 @@
-#include "minishell.h"
+//#include "minishell.h"
 //working on way to handle quotes for any str and return correct str...
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include "../../includes/minishell.h"
+
+int		count_s_quotes(char *str)//count s
+{
+	int		s_quotes;
+
+	s_quotes = 0;
+	while (*str)
+	{
+		if (*str == '\'')
+			s_quotes++;
+		str++;
+	}
+	return (s_quotes);
+}
+
+int		count_d_quotes(char *str)//count d
+{
+	int		s_quotes;
+
+	s_quotes = 0;
+	while (*str)
+	{
+		if (*str == '\"')
+			s_quotes++;
+		str++;
+	}
+	return (s_quotes);
+}
+
 char	*handle_env_var_helper_1(char *token_str, char *path, char *path_start, size_t *str_len)
 {
 	size_t	len;
@@ -10,10 +45,10 @@ char	*handle_env_var_helper_1(char *token_str, char *path, char *path_start, siz
 		len++;
 		token_str++;
 	}
-	path = ft_substr(path_start, 0, len);
+	path = ft_substr(path_start, 0, len);//use ft_
 	//protect
 	if (getenv(path))
-		str_len += ft_strlen(getenv(path));//add len
+		str_len += ft_strlen(getenv(path));//add len use ft_strlen
 	free(path);
 	return (token_str);
 }
@@ -46,49 +81,57 @@ char	*handle_quotes_1(char *token_str, int d_quote_count, int s_quote_count, siz
 		if (*token_str == '\"' && d_quote_count % 2 == 0)
 		{
 			token_str++;
-			while (*token_str != '\"')
+			while (*token_str != '\"' && *token_str)
 				token_str = handle_env_var_1(token_str, str_len);
 			token_str++;
 		}
 		else if (*token_str == '\'' && s_quote_count % 2 == 0)
 		{
 			token_str++;
-			while (*token_str != '\'')
+			while (*token_str != '\'' && *token_str)
 			{
 				write(1, token_str, 1);
 				token_str++;
 			}
+			
+			if (*token_str)
 			token_str++;
 		}
-		else
-			break ;
+		//else
+		//	break ;
 	}
 	return (token_str);
 }
-char	*handle_all_quotes(char *str)
+char	*handle_all_quotes(char *str, size_t *str_len)
 {
 	int	s_quotes;
 	int	d_quotes;
-	size_t str_len;//count len first
+	//size_t str_len;//count len first
 
-	str_len = 0;//count
+	//str_len = 0;//count
 	s_quotes = count_s_quotes(str);
 	d_quotes = count_d_quotes(str);
 	while (*str)
 	{
 		if(*str == '$')//for handling if the first is $
-			str = handle_env_var_1(str, &str_len);
-		str = handle_quotes_1(str, s_quotes, d_quotes, &str_len);	
+			str = handle_env_var_1(str, str_len);
+		str = handle_quotes_1(str, s_quotes, d_quotes, str_len);	
 	}
 	return (str);
 }
-//testing ---------------------
-int main(void)
-{
 
+
+//testing ---------------------
+/* int main(void)
+{
+	 char input[] = "$HOME is where the \"heart is'\"";
+    size_t str_len = 0;
+    handle_all_quotes(input, &str_len);
+    printf("Length: %zu\n", str_len);
+    return 0;
 
 	return (0);
-}
+} */
 /* static void	parse_and_print(char *token_str, int *p_flag)
 {
 	int		d_quote_count;
@@ -118,34 +161,6 @@ int main(void)
 			token_str++;
 	}
 } */
-
-int		count_s_quotes(char *str)//count s
-{
-	int		s_quotes;
-
-	s_quotes = 0;
-	while (*str)
-	{
-		if (*str == '\'')
-			s_quotes++;
-		str++;
-	}
-	return (s_quotes);
-}
-
-int		count_d_quotes(char *str)//count d
-{
-	int		s_quotes;
-
-	s_quotes = 0;
-	while (*str)
-	{
-		if (*str == '\"')
-			s_quotes++;
-		str++;
-	}
-	return (s_quotes);
-}
 
 
 

@@ -30,7 +30,7 @@ char *remove_quotes(char *str)
 
 } */
 
-void	ft_export(t_tokens *tokens, t_shell *shell)
+/* void	ft_export(t_tokens *tokens, t_shell *shell)
 {
 	char	*var;
 
@@ -46,4 +46,4 @@ void	ft_export(t_tokens *tokens, t_shell *shell)
 		tokens = tokens->next;
 	}
 
-}
+} */

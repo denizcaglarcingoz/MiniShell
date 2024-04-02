@@ -105,8 +105,8 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 		add_history(init_in);//free/ clear history clean at the end
 	free(init_in);
 	tokens = build_token_list(shell->input);//much protect, such leaks
-	//print_tokens(tokens);//test
-	//printf("--------\n");//test
+	print_tokens(tokens);//test
+	printf("--------\n");//test
 	check_and_run_builtins(tokens, shell);
 	reset_and_run(&tokens, shell);
 }
@@ -129,9 +129,9 @@ int	main(int ac, char **av, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	//print_intro();
-	print_env(shell.env);
-	shell.env = add_env(shell.env, "DENIZ=deniz/home/cd asdasdadasdasdDasdasd");//testing-------- both work!
-	shell.env = del_env(shell.env, "DENIZ=deniz/home/cd asdasdadasdasdDasdasd");
+	//print_env(shell.env);
+	//shell.env = add_env(shell.env, "DENIZ=deniz/home/cd asdasdadasdasdDasdasd");//testing-------- both work!
+	//shell.env = del_env(shell.env, "DENIZ=deniz/home/cd asdasdadasdasdDasdasd");
 	shell_loop(&shell);
 	return (0);
 }
