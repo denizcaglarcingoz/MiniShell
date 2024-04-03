@@ -24,6 +24,8 @@ typedef struct s_shell
 {
 	char	*input;
 	char	**env;
+	int		exit_status;
+	//char	*old_pwd;
 }	t_shell;
 
 typedef enum e_token_type
@@ -36,8 +38,6 @@ typedef enum e_token_type
 	GREATER,
 	D_LESS,
 	D_GREATER,
-	//L_PAR,
-	//R_PAR,
 	QUOTE,
 	D_QUOTE
 
@@ -53,6 +53,9 @@ typedef struct s_tokens
 /****SHELL****/
 void		shell_loop(t_shell *shell);
 
+size_t	get_expanded_len(char *str, t_shell *shell);//pass in shell struct for exit size and env...make get env for ours
+
+
 
 /****LIST_UTILS****/
 void		free_list(t_tokens **tokens);
@@ -61,11 +64,12 @@ t_tokens	*ft_last(t_tokens *tokens); //OR THIS?
 void		add_token(t_tokens **tokens, t_tokens *newnode);
 t_tokens	*build_token_list(char *input);
 
-/***FUNCTION_UTILS***/
+/***ENV_UTILS***/
 char	**get_env(void);
 void	print_env(char **env);
 char	**add_env(char **env, char *variable);
 char	**del_env(char **env, char *variable);
+char 	*ft_getenv(char *path, char **env);//adding a get function for our env list
 
 /****SIGNALS****/
 void		sigint_handler_int(int signum);

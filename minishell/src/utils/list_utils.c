@@ -15,6 +15,7 @@ void	free_list(t_tokens **tokens)
 	{
 		temp = curr->next;
 		free(curr->content);
+		curr->content = NULL;
 		free(curr);
 		curr = temp;
 	}

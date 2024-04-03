@@ -2,13 +2,13 @@
 
 void	free_envs(char **env, int i)
 {
+	int	j;
+
 	if (env == NULL)
 	{
 		printf("Empty Environmental Variable List\n");
 		return ;
 	}
-	int	j;
-
 	j = -1;
 	while (++j < i)
 		free(env[j]);
@@ -17,17 +17,25 @@ void	free_envs(char **env, int i)
 
 void	free_all_env(char **env)
 {
+	int	j;
+	int	env_len;
+
 	if (env == NULL)
 	{
 		printf("Empty Environmental Variable List\n");
 		return ;
 	}
-	int	i;
-
-	i = 0;
-	while (env[i] != NULL)
-		i++;
-	free_envs(env, i);
+	j = -1;
+	env_len = 0;
+	while (env[env_len])
+		env_len++;
+	while (++j < env_len)
+	{
+		free(env[j]);
+		env[j] = NULL;
+	}
+	free(env);
+	env = NULL;
 }
 
 void	print_env(char **env)
