@@ -15,7 +15,7 @@ t_tokens	*build_token_list(char *input)
 		if (*input == '|' || *input == '<' || *input == '>')
 			c_token = meta_content(c_token, &input);
 		else if (*input != ' ')
-			c_token = token_init_string(c_token, &input, D_QUOTE);
+			c_token = token_init_string(c_token, &input, STRING);
 		if (first_entry == 1)
 		{
 			first_token = c_token;

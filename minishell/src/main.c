@@ -33,6 +33,7 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 	char *init_in;
 	char *input;
 	t_tokens *tokens;
+	t_table *table;
 
 	init_in = readline("\033[1;94mminishell\033[1;92m$\033[0m ");
 	if (errno != 0 )
@@ -54,7 +55,11 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 		add_history(init_in);//free/ clear history.(reset) /// to keep up arrow button history add history is necessary // clean at the end
 	free(init_in);
 	tokens = build_token_list(input);
-	print_tokens(tokens);//test
+	//print_tokens(tokens);//test
+	//printf("--------\n");//test
+	table = parser(tokens);
+	printf("--------\n");//test
+	print_tables(table);
 	printf("--------\n");//test
 	check_and_run_builtins(tokens, env);
 	reset_and_run(&tokens, input, env);
@@ -81,4 +86,3 @@ int	main(int ac, char **av, char **envp)
 	shell_loop(env);
 	return (0);
 }
-

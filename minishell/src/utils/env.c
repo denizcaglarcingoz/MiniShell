@@ -51,7 +51,6 @@ char **add_env(char **env, char *variable)
 
     char **new_env;
 
-
     if (variable == NULL)
         return (env);
     

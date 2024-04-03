@@ -9,6 +9,8 @@
 		"term.h": "c",
 		"libft.h": "c",
 		"ioctl.h": "c",
-		"string.h": "c"
+		"string.h": "c",
+		"ncurses.h": "c",
+		"minishell.h": "c"
 	}
 }

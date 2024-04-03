@@ -16,6 +16,7 @@
 # include <ncurses.h>
 # include <sys/ioctl.h> 
 # include <termios.h>
+# include "parser.h"
 
 #define BUFFER_SIZE 48
 
@@ -85,5 +86,15 @@ void		print_tokens(t_tokens *tokens);
 /**is**/
 bool is_meta_char(char is);
 
+// PARSER
+t_table *parser(t_tokens *tokens);
+t_table *table_init(t_tokens *tokens, t_table *table);
+
+// TABLE ALLOCS
+t_table	*table_alloc(t_tokens *tokens);
+t_table	struct_null(t_table table);
+
+// TEST PRINT
+int print_tables(t_table *table);
 
 #endif
