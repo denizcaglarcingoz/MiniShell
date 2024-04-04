@@ -11,12 +11,11 @@ t_table *parser(t_tokens *tokens)
 	
 	table = NULL;
 	first_token = tokens;
-	if (tokens == NULL || tokens->content == NULL)
-		return (table);
+	if (tokens == NULL)
+		return (NULL);
 	table = table_alloc(tokens);
 	//if (table == NULL)
 		// free and exit;
-	
 	table = table_init(tokens, table);
 	return (table);
 }
@@ -27,14 +26,11 @@ int print_tables(t_table *table)
 	int j;
 
 	i = 0;
-	// printf("table_len = %d\n", table->table_len);
-	// printf("table[0].cmd = %s\n", table[0].cmd);
-	// printf("table[0].args = %s\n", table[0].args[0]);
-	// printf("table[0].out = %s\n", table[0].out[0]);
-	// printf("table[0].in = %s\n", table[0].in[0]);
-	while (table[i].cmd != NULL)
+	if (table == NULL)
+		return (0);
+	while (i < table->table_len)
 	{
-		printf("table[%d].cmd = %s\n", i, table[i].cmd);
+		//printf("table[%d].cmd = %s\n", i, table[i].cmd);
 		j = 0;
 		while (table[i].args[j] != NULL)
 		{

@@ -5,7 +5,6 @@
  
 typedef struct s_table
 {
-	char	*cmd;
 	char	**args;
 	char	**in;
 	char	**out;

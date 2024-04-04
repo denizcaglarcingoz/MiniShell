@@ -30,13 +30,12 @@ t_tokens *go_to_job_num(t_tokens *tokens, int table_num)
 	return (tokens);
 }
 
-t_table_content_len content_lens(t_tokens *tokens, int table_num, t_table_content_len t_c_len)
+t_table_content_len content_lens(t_tokens *tokens, t_table_content_len t_c_len)
 {
-	tokens = go_to_job_num(tokens, table_num);
 	while (tokens)
 	{
 		if (tokens->type == PIPE)
-			return (t_c_len);
+				return (t_c_len);
 		if (tokens->type == STRING)
 			t_c_len.args++;
 		else if(tokens->type == GREATER)
@@ -49,7 +48,7 @@ t_table_content_len content_lens(t_tokens *tokens, int table_num, t_table_conten
 			t_c_len.heredoc++;
 		if (tokens->type == LESS || tokens->type == GREATER ||
 				tokens->type == D_LESS || tokens->type == D_GREATER)
-		tokens = tokens->next;
+			tokens = tokens->next;
 		if (tokens != NULL)
 			tokens = tokens->next;
 	}
@@ -65,12 +64,12 @@ void set_to_null(t_table *table, t_table_content_len table_content_len)
 	table->heredoc[table_content_len.heredoc] = NULL;
 }
 
-void t_content_alloc(t_tokens *tokens, t_table *table, int table_num)
+void t_content_alloc(t_tokens *tokens, t_table *table)
 {
 	t_table_content_len table_content_len;
 
 	table_content_len = int_zero_init();
-	table_content_len = content_lens(tokens, table_num, table_content_len);
+	table_content_len = content_lens(tokens, table_content_len);
 	table->args = malloc(sizeof(char *) * (table_content_len.args + 1));
 	table->in = malloc(sizeof(char *) * (table_content_len.in + 1));
 	table->out = malloc(sizeof(char *) * (table_content_len.out + 1));
@@ -83,28 +82,6 @@ void t_content_alloc(t_tokens *tokens, t_table *table, int table_num)
 		//free tokens and table with function and exit
 	}
 	set_to_null(table, table_content_len);
-}
-
-t_tokens *cmd_init(t_tokens *tokens, t_table *table)
-{
-	if (tokens->type == STRING && (tokens->content)[0] == '$')
-	{
-		tokens = tokens->next;
-		cmd_init(tokens, table);
-	}
-	else if (tokens->type == STRING && (tokens->content)[0] != '$')
-	{	
-		table->cmd = ft_strdup(tokens->content);
-		if (table->cmd == NULL)
-		{
-			perror("cmd_init");
-			//free tokens and table with function and exit
-		}
-		tokens = tokens->next;
-	}
-	
-	printf("cmd = %s\n", table->cmd);
-	return (tokens);
 }
 
 t_tokens *table_content_init(t_tokens *tokens, t_table table)
@@ -144,7 +121,6 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 		{
 			tokens = tokens->next;
 			*table.append = ft_strdup(tokens->content);
-			printf("----------------------------append\n");
 			if (table.append == NULL)
 			{
 				perror("table_init");
@@ -187,8 +163,7 @@ t_table *table_init(t_tokens *tokens, t_table *table)
 	i = 0;
 	while(i < table->table_len)
 	{
-		tokens = cmd_init(tokens, &table[i]);
-		t_content_alloc(tokens, &table[i], i);
+		t_content_alloc(tokens, &table[i]);
 		tokens = table_content_init(tokens, table[i]);
 		i++;
 	}

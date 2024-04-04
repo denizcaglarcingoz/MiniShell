@@ -2,8 +2,6 @@
 
 t_table struct_null(t_table table)
 {
-	table.cmd = NULL;
-	table.cmd = NULL;
 	table.in = NULL;
 	table.out = NULL;
 	table.err = NULL;

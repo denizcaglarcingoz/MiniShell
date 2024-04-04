@@ -87,6 +87,7 @@ void		print_tokens(t_tokens *tokens);
 bool is_meta_char(char is);
 
 // PARSER
+t_tokens *grammer_check(t_tokens *tokens);
 t_table *parser(t_tokens *tokens);
 t_table *table_init(t_tokens *tokens, t_table *table);
 
