@@ -97,7 +97,7 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 		{
 			tokens = tokens->next;
 			*table.out = ft_strdup(tokens->content);
-			if (table.out == NULL)
+			if (*table.out == NULL)
 			{
 				perror("table_init");
 				//free tokens and table with function and exit
@@ -109,7 +109,7 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 		{
 			tokens = tokens->next;
 			*table.in = ft_strdup(tokens->content);
-			if (table.in == NULL)
+			if (*table.in == NULL)
 			{
 				perror("table_init");
 				//free tokens and table with function and exit
@@ -121,7 +121,7 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 		{
 			tokens = tokens->next;
 			*table.append = ft_strdup(tokens->content);
-			if (table.append == NULL)
+			if (*table.append == NULL)
 			{
 				perror("table_init");
 				//free tokens and table with function and exit
@@ -133,7 +133,7 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 		{
 			tokens = tokens->next;
 			*table.heredoc = ft_strdup(tokens->content);
-			if (table.heredoc == NULL)
+			if (*table.heredoc == NULL)
 			{
 				perror("table_init");
 				//free tokens and table with function and exit
@@ -143,8 +143,8 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 		}
 		else if (tokens->type == STRING)
 		{
-			*table.args = ft_strdup(tokens->content);
-			if (table.args == NULL)
+			*(table.args) = ft_strdup(tokens->content);
+			if (*table.args == NULL)
 			{
 				perror("table_init");
 				//free tokens and table with function and exit

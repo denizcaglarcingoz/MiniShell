@@ -24,8 +24,8 @@ t_tokens *grammer_check(t_tokens *tokens)
 	{
 		if (tokens->type == PIPE)
 		{
-			if (tokens->next == NULL)
-			return (error_print(tokens));
+			if (tokens->next == NULL || tokens->next->type == PIPE)
+				return (error_print(tokens));
 		}
 		else if (tokens->type == GREATER || tokens->type == D_GREATER ||
 				tokens->type == LESS || tokens->type == D_LESS)
