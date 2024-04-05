@@ -90,6 +90,7 @@ bool is_meta_char(char is);
 t_tokens *grammer_check(t_tokens *tokens);
 t_table *parser(t_tokens *tokens);
 t_table *table_init(t_tokens *tokens, t_table *table);
+void t_content_alloc(t_tokens *tokens, t_table *table);
 
 // TABLE ALLOCS
 t_table	*table_alloc(t_tokens *tokens);

@@ -14,22 +14,6 @@ t_table_content_len	int_zero_init()
 
 }
 
-t_tokens *go_to_job_num(t_tokens *tokens, int table_num)
-{
-	int pipe_quantity;
-
-	pipe_quantity = 0;
-	while (tokens != NULL)
-	{
-		if(pipe_quantity == table_num)
-			return (tokens);
-		if (tokens->type == PIPE)
-			pipe_quantity++;
-		tokens = tokens->next;
-	}
-	return (tokens);
-}
-
 t_table_content_len content_lens(t_tokens *tokens, t_table_content_len t_c_len)
 {
 	while (tokens)
@@ -84,89 +68,8 @@ void t_content_alloc(t_tokens *tokens, t_table *table)
 	set_to_null(table, table_content_len);
 }
 
-t_tokens *table_content_init(t_tokens *tokens, t_table table)
-{
-	while (tokens)
-	{
-		if(tokens->type == PIPE)
-		{
-			tokens = tokens->next;
-			return (tokens);
-		}
-		else if (tokens->type == GREATER)
-		{
-			tokens = tokens->next;
-			*table.out = ft_strdup(tokens->content);
-			if (*table.out == NULL)
-			{
-				perror("table_init");
-				//free tokens and table with function and exit
-			}
-			table.out++;
-			tokens = tokens->next;
-		}
-		else if (tokens->type == LESS)
-		{
-			tokens = tokens->next;
-			*table.in = ft_strdup(tokens->content);
-			if (*table.in == NULL)
-			{
-				perror("table_init");
-				//free tokens and table with function and exit
-			}
-			table.in++;
-			tokens = tokens->next;
-		}
-		else if (tokens->type == D_GREATER)
-		{
-			tokens = tokens->next;
-			*table.append = ft_strdup(tokens->content);
-			if (*table.append == NULL)
-			{
-				perror("table_init");
-				//free tokens and table with function and exit
-			}
-			table.append++;
-			tokens = tokens->next;
-		}
-		else if (tokens->type == D_LESS)
-		{
-			tokens = tokens->next;
-			*table.heredoc = ft_strdup(tokens->content);
-			if (*table.heredoc == NULL)
-			{
-				perror("table_init");
-				//free tokens and table with function and exit
-			}
-			table.heredoc++;
-			tokens = tokens->next;
-		}
-		else if (tokens->type == STRING)
-		{
-			*(table.args) = ft_strdup(tokens->content);
-			if (*table.args == NULL)
-			{
-				perror("table_init");
-				//free tokens and table with function and exit
-			}
-			table.args++;
-			tokens = tokens->next;
-		}
-	}
-	return (tokens);
-}
 
-t_table *table_init(t_tokens *tokens, t_table *table)
-{
-	int	i;
 
-	i = 0;
-	while(i < table->table_len)
-	{
-		t_content_alloc(tokens, &table[i]);
-		tokens = table_content_init(tokens, table[i]);
-		i++;
-	}
 
-	return (table);
-}
+
+
