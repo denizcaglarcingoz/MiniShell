@@ -11,7 +11,7 @@ char	*get_exit_status_len(char *str, size_t *total_len, t_shell *shell)//get fro
 	
 	ft_putstr_color_fd(1, exit_stat, BLUE);//testing..
 	free(exit_stat);
-	*total_len += exit_len;
+	*total_len += exit_len - 1;
 	str++; 
 	return (str);
 }
@@ -34,16 +34,17 @@ char	*get_var_len(char *str, size_t *total_len, t_shell *shell)
 	}
 	path = ft_substr(path_start, 0, len);
 	//protect
-	if (ft_getenv(path, shell->env))
+	if (ft_getenv(path, shell->env))//must protect against failure, maybe better inside ft_getenv function
 	{
-		ft_putstr_color_fd(1, getenv(path), GREEN);//testing	
-		(*total_len) += ft_strlen(getenv(path)) - 1; //look at why it is 1 too long..
+		//ft_putstr_color_fd(1, ft_getenv(path, shell->env), GREEN);//testing	
+		(*total_len) += ft_strlen(ft_getenv(path, shell->env)); //look at why it is 1 too long..
 	}
 	free(path);
+	(*total_len)--;
 	return (str);
 }
 
-size_t	get_expanded_len(char *str, t_shell *shell)//pass in shell struct for exit size and env...make get env for ours
+size_t	get_expanded_len(char *str, t_shell *shell)//pass in shell struct for exit size and env
 {
 	bool	in_s_quote;
 	bool	in_d_quote;
@@ -60,13 +61,13 @@ size_t	get_expanded_len(char *str, t_shell *shell)//pass in shell struct for exi
 			in_s_quote = !in_s_quote;
 		if (*str == '$' && *(str + 1) == '?' && !in_s_quote)
 		{
-			str = get_exit_status_len(str + 1, &total_len, shell);//todo
+			str = get_exit_status_len(str + 1, &total_len, shell);
 		}
 		else if (*str == '$' && !in_s_quote)
 			str = get_var_len(str + 1, &total_len, shell);
 		else
 		{	
-			write(1, str, 1);///testing
+			//write(1, str, 1);///testing
 			str++;
 		}
 		total_len++;

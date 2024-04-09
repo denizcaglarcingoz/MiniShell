@@ -40,7 +40,7 @@ void	parse_dollar(t_tokens *tokens, t_shell *shell)
 	}
 }
 
-void	check_and_run_builtins(t_tokens *tokens, t_shell *shell)
+void	check_and_run_builtins(t_tokens *tokens, t_shell *shell) // check builtins, check error /path, rerun under correct conditions( SHAM PARSING..)
 {
 	if (tokens == NULL)
 		return ;
@@ -48,10 +48,10 @@ void	check_and_run_builtins(t_tokens *tokens, t_shell *shell)
 		parse_dollar(tokens, shell);
 	else if (ft_strcmp(tokens->content, "exit") == 0) 
 		ft_exit(tokens, shell);
-	else if (ft_strcmp(tokens->content, "echo") == 0) // check builtins, check error /path, rerun under correct conditions( SHAM PARSING..)
+	else if (ft_strcmp(tokens->content, "echo") == 0)
 		ft_echo(tokens);
 	else if (ft_strcmp(tokens->content, "cd") == 0) 
-		ft_cd(tokens);
+		ft_cd(tokens, shell);
 	else if (ft_strcmp(tokens->content, "pwd") == 0) 
 		ft_pwd();
 	else if (ft_strcmp(tokens->content, "env") == 0) 
@@ -121,8 +121,16 @@ int	main(int ac, char **av, char **envp)
 	shell.env = get_env();// SHELL STRUCT AND PASS.
 	if (!shell.env)
 		exit(EXIT_FAILURE);
-	shell.exit_status = 123;//testing
-	get_expanded_len("here is $? stuff $USER", &shell);
+	//testing-----------
+	shell.exit_status = 0;//testing
+	/* size_t len = get_expanded_len("here is stuff $HOME", &shell);//test
+	printf("\n");
+	printf("exp len: %zu\n", len);
+	printf("act len: %zu\n", ft_strlen("here is stuff /home/dopeassprogramming")); */
+	char *exp = expander("here is stuff $HOME hey |", &shell);
+	printf("%s\n", exp);
+	printf("|");
+	//-----------------------------
 	(void)av;
 	(void)envp;
 	if (ac != 1)

@@ -61,11 +61,15 @@ char	*ft_getenv(char *path, char **env)
 		return (NULL);
 	}
 	path_names = NULL;
-	path_names = fill_path_names_env(path_names, env);
+	path_names = fill_path_names_env(path_names, env);//protect with clean exit here?
 	if (!path_names)
-		return (NULL);
+	{
+		printf("malloc error");
+		//free_all(); must look how to do, ft_exit? must pass lexer here currently for that
+		exit(EXIT_FAILURE);
+	}
 	i = 0;
-	while (ft_strcmp(path_names[i], path) != 0)
+	while (path_names[i] != NULL && ft_strcmp(path_names[i], path) != 0)
 		i++;
 	path_len = ft_strlen(path);
 	free_all_env(path_names);

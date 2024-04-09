@@ -54,6 +54,7 @@ typedef struct s_tokens
 void		shell_loop(t_shell *shell);
 
 size_t	get_expanded_len(char *str, t_shell *shell);//pass in shell struct for exit size and env...make get env for ours
+char	*expander(char *str, t_shell *shell);//pass in shell struct for exit size and env
 
 
 
@@ -78,7 +79,7 @@ void		sigint_handler_quit(int signum);
 /***BUILT-INS****/
 void	ft_exit(t_tokens *tokens, t_shell *shell);
 void	ft_echo(t_tokens *tokens);
-void	ft_cd(t_tokens *tokens);
+void	ft_cd(t_tokens *tokens, t_shell *shell);
 void	ft_pwd(void);
 
 /***LEXER UTILS***/

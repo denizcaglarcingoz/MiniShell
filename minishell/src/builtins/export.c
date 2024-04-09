@@ -1,16 +1,7 @@
 #include "minishell.h"
 // IN PROGRESS, MUST DO FULL QUOTE HANDLING FIRST!!!
-/* int		s_quo_count(char *str)
-{
-	while (*str)
-		if (*str == '\'')
 
-
-}
-
-
-
-
+/*
 char *remove_quotes(char *str)
 {
 	char 	*new_str;

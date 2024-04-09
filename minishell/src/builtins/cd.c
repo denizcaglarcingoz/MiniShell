@@ -1,20 +1,20 @@
 #include "../../includes/minishell.h"
 /* cd - = change to previous dir. dont
-	cd  or cd ~ = change to home dont need to handle see pdf
+	cd  or cd ~ = change to home dont need to handle see pdf //pdf says only relative or absolute path
 	cd ../ or .. = one level up rel v abs path?
 	cd ../../ = two lev up
 	*/
 //update env?
-void	ft_cd(t_tokens *tokens)
+void	ft_cd(t_tokens *tokens, t_shell *shell)
 {
 	char *path;
 
 	if (!tokens->next || *(tokens->next->content) == '~')//cd by itself goes to home.
-		path = getenv("HOME");
+		path = ft_getenv("HOME", shell->env);
 	else
 	{	
 		if (*(tokens->next->content) != '/')
-			path = getenv(tokens->next->content);
+			path = ft_getenv(tokens->next->content, shell->env);
 		else
 			path = tokens->next->content;
 	}
