@@ -1,46 +1,46 @@
 #include "minishell.h"
 
 
-char	*get_exit_status_len(char *str, size_t *total_len, t_shell *shell)//get from shellstruct in case of calling added var...
+char	*handle_exit_stat(char *str, size_t *total_len, t_shell *shell)//get from shellstruct in case of calling added var...
 {
 	char *exit_stat;
 	size_t	exit_len;
 
+	//printf("curr str: %c\n", *(str));
 	exit_stat = ft_itoa(shell->exit_status);
 	exit_len = ft_strlen(exit_stat);
 	
-	ft_putstr_color_fd(1, exit_stat, BLUE);//testing..
+	//ft_putstr_color_fd(1, exit_stat, BLUE);//testing..
 	free(exit_stat);
-	*total_len += exit_len - 1;
+	*total_len += exit_len;
 	str++; 
 	return (str);
 }
 
-char	*get_var_len(char *str, size_t *total_len, t_shell *shell)
+char	*handle_var(char *str, size_t *total_len, t_shell *shell)
 {
 	size_t	len;
 	char	*path;
 	char	*path_start;
 
 	//parse single dollar..
-	path_start = str;
 	
-	int exit_s = shell->exit_status;//for unused
-	exit_s++;//
+path_start = str;
+	len = 0;
 	while (ft_isalnum(*str) || *str == '_')
 	{
 		len++;
 		str++;
 	}
 	path = ft_substr(path_start, 0, len);
-	//protect
+//protect
 	if (ft_getenv(path, shell->env))//must protect against failure, maybe better inside ft_getenv function
 	{
+	//printf("here is the current char: %c\n", *str);
 		//ft_putstr_color_fd(1, ft_getenv(path, shell->env), GREEN);//testing	
 		(*total_len) += ft_strlen(ft_getenv(path, shell->env)); //look at why it is 1 too long..
 	}
 	free(path);
-	(*total_len)--;
 	return (str);
 }
 
@@ -59,18 +59,23 @@ size_t	get_expanded_len(char *str, t_shell *shell)//pass in shell struct for exi
 			in_d_quote = !in_d_quote;
 		if (*str == '\'' && !in_d_quote)
 			in_s_quote = !in_s_quote;
-		if (*str == '$' && *(str + 1) == '?' && !in_s_quote)
+		if (*str == '$' && *(str + 1) == '?' && !in_s_quote) //handle for if no str + 1;
 		{
-			str = get_exit_status_len(str + 1, &total_len, shell);
+			str = handle_exit_stat(str + 1, &total_len, shell);
 		}
 		else if (*str == '$' && !in_s_quote)
-			str = get_var_len(str + 1, &total_len, shell);
+			str = handle_var(str + 1, &total_len, shell);
 		else
 		{	
 			//write(1, str, 1);///testing
+			total_len++;
+			
 			str++;
+		//printf("no fault yet\n");
 		}
-		total_len++;
+	/* printf("here is the current char: %c\n", *str);
+	printf("here is the current total: %zu\n", total_len); */
+	//printf("no fault yet utils\n");
 	}
 	return (total_len);//then malloc and build...
 }

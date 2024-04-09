@@ -107,6 +107,17 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 	tokens = build_token_list(shell->input);//much protect, such leaks
 	//print_tokens(tokens);//test
 	//printf("--------\n");//test
+	
+	//testing-----------------------------------------------------------------------
+	// size_t len = get_expanded_len("here is $? stuff $HOME", &shell);//test
+	//printf("\n");
+	//printf("exp len: %zu\n", len);
+	//printf("act len: %zu\n", ft_strlen("here is 12 stuff /home/jhotchki"));
+	char *exp = expander(tokens->content, shell); //basic version is working, remove more quotes?
+	printf("%s\n", exp);
+	free(exp);
+	//printf("|");
+	//-----------------------------------------------------------------------------
 	check_and_run_builtins(tokens, shell);
 	reset_and_run(&tokens, shell);
 }
@@ -121,16 +132,7 @@ int	main(int ac, char **av, char **envp)
 	shell.env = get_env();// SHELL STRUCT AND PASS.
 	if (!shell.env)
 		exit(EXIT_FAILURE);
-	//testing-----------
 	shell.exit_status = 0;//testing
-	/* size_t len = get_expanded_len("here is stuff $HOME", &shell);//test
-	printf("\n");
-	printf("exp len: %zu\n", len);
-	printf("act len: %zu\n", ft_strlen("here is stuff /home/dopeassprogramming")); */
-	char *exp = expander("here is stuff $HOME hey |", &shell);
-	printf("%s\n", exp);
-	printf("|");
-	//-----------------------------
 	(void)av;
 	(void)envp;
 	if (ac != 1)

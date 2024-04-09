@@ -15,7 +15,7 @@ static char	**ft_allocate(char **path_names, char **env)
 	while (env[++i])
 	{
 		j = 0;
-		while (env[i][++j] != '=')
+		while (env[i][j] != '=')
 			j++;
 		path_names[i] = (char *)malloc((j + 1) * sizeof(char));
 		if (!path_names[i])
@@ -25,6 +25,7 @@ static char	**ft_allocate(char **path_names, char **env)
 		}
 	}
 	return (path_names);
+	//printf("no fault yet utils\n");
 }
 
 static char	**fill_path_names_env(char **path_names, char **env)
@@ -45,6 +46,7 @@ static char	**fill_path_names_env(char **path_names, char **env)
 		}
 		path_names[i][j] = '\0';
 	}
+
 	path_names[i] = NULL;
 	return (path_names);
 }
@@ -73,6 +75,7 @@ char	*ft_getenv(char *path, char **env)
 		i++;
 	path_len = ft_strlen(path);
 	free_all_env(path_names);
+	
 	if (!env[i])
 		return (NULL);
 	return (env[i] + path_len + 1);
