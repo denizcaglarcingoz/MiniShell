@@ -25,7 +25,6 @@ static char	**ft_allocate(char **path_names, char **env)
 		}
 	}
 	return (path_names);
-	//printf("no fault yet utils\n");
 }
 
 static char	**fill_path_names_env(char **path_names, char **env)

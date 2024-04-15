@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
 #include "minishell.h"
 
 void	free_d_str(char **str)
@@ -26,7 +21,7 @@ char	**append_path(char **str, char *path_add)
 	i = 0;
 	while(str[i])
 		i++;
-	new = (char **)malloc((i + 1) * sizeof(char*));	
+	new = (char **)malloc((i + 1) * sizeof(char*));
 	if (new == NULL)
 	{
 		perror("malloc");
@@ -35,7 +30,7 @@ char	**append_path(char **str, char *path_add)
 	i = 0;
 	while(str[i])
 	{
-		new[i] = ft_strjoin(str[i], path_add);
+		new[i] = ft_strjoin(str[i], path_add);// protect current protection strategy doesnt handle freeing 
 		i++;
 	}
 	new[i] = NULL;
@@ -84,7 +79,7 @@ int	exter_cmd_run(char *path, char **argv)
 		}
 		return (0);
 	}
-	all_paths = append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));
+	all_paths = append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));//must break up for correct freeing..
 	if (all_paths == NULL)
 		return (1);
 	if (path_run(all_paths, argv, environ) == 1)

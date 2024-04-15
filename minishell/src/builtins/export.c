@@ -27,12 +27,13 @@ char *remove_quotes(char *str)
 
 	if (tokens->next)
 		tokens = tokens->next;
-	else
-		return ;
+	//else
+	//	print_export_list();todo
 	while (tokens->type == STRING)
 	{
 		//check var!
-		var = remove_quotes(tokens->content);
+		//var = remove_quotes(tokens->content);
+		
 		add_env(shell->env, var);
 		tokens = tokens->next;
 	}

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_exit(t_tokens *tokens, t_shell *shell)
+void	ft_exit(t_tokens *tokens, t_shell *shell, t_table *table)
 {
 	int code;
 
@@ -15,6 +15,8 @@ void	ft_exit(t_tokens *tokens, t_shell *shell)
 	free(shell->input);
 	free_list(&tokens);
 	free_all_env(shell->env);
+	if (table)
+		free_t_content_alloc_and_table(table, shell->table_len);
 	printf("exit code: %d\n", code);
 	exit(code);
 }

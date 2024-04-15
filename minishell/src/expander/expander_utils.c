@@ -24,8 +24,7 @@ char	*handle_var(char *str, size_t *total_len, t_shell *shell)
 	char	*path_start;
 
 	//parse single dollar..
-	
-path_start = str;
+	path_start = str;
 	len = 0;
 	while (ft_isalnum(*str) || *str == '_')
 	{
@@ -33,18 +32,14 @@ path_start = str;
 		str++;
 	}
 	path = ft_substr(path_start, 0, len);
-//protect
+		//protect
 	if (ft_getenv(path, shell->env))//must protect against failure, maybe better inside ft_getenv function
-	{
-	//printf("here is the current char: %c\n", *str);
-		//ft_putstr_color_fd(1, ft_getenv(path, shell->env), GREEN);//testing	
-		(*total_len) += ft_strlen(ft_getenv(path, shell->env)); //look at why it is 1 too long..
-	}
+		(*total_len) += ft_strlen(ft_getenv(path, shell->env));
 	free(path);
 	return (str);
 }
 
-size_t	get_expanded_len(char *str, t_shell *shell)//pass in shell struct for exit size and env
+size_t	get_expanded_len(char *str, t_shell *shell)
 {
 	bool	in_s_quote;
 	bool	in_d_quote;
@@ -67,15 +62,15 @@ size_t	get_expanded_len(char *str, t_shell *shell)//pass in shell struct for exi
 			str = handle_var(str + 1, &total_len, shell);
 		else
 		{	
-			//write(1, str, 1);///testing
 			total_len++;
-			
 			str++;
-		//printf("no fault yet\n");
 		}
+	}
+	return (total_len);
+}
+			//write(1, str, 1);///testing
 	/* printf("here is the current char: %c\n", *str);
 	printf("here is the current total: %zu\n", total_len); */
 	//printf("no fault yet utils\n");
-	}
-	return (total_len);//then malloc and build...
-}
+	//printf("here is the current char: %c\n", *str);
+		//ft_putstr_color_fd(1, ft_getenv(path, shell->env), GREEN);//testing	

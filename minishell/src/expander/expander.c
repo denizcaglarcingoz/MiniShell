@@ -63,6 +63,18 @@ char *expander(char *str, t_shell *shell) // pass in shell struct for exit size 
 	str_start = str;
 	while (*str)
 	{
+		/* if (*str == '\"' && !in_s_quote)
+		{
+			in_d_quote = !in_d_quote;
+			str++;
+			continue;
+		}
+		if (*str == '\'' && !in_d_quote)
+		{
+			in_s_quote = !in_s_quote;
+			str++;
+			continue;
+		} */
 		if (*str == '\"' && !in_s_quote)
 			in_d_quote = !in_d_quote;
 		if (*str == '\'' && !in_d_quote)

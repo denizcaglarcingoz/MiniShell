@@ -8,7 +8,9 @@
 void	ft_cd(t_tokens *tokens, t_shell *shell)
 {
 	char *path;
+	char cwd[PATH_MAX];
 
+	cwd = getcwd(cwd, sizeof(cwd));
 	if (!tokens->next || *(tokens->next->content) == '~')//cd by itself goes to home.
 		path = ft_getenv("HOME", shell->env);
 	else
@@ -24,9 +26,10 @@ void	ft_cd(t_tokens *tokens, t_shell *shell)
 		return ;
 	}
 	//test print----------------------
-	char cwd[PATH_MAX];
+/* 	char cwd[PATH_MAX];
 	getcwd(cwd, sizeof(cwd));
+	//printf(CYAN"current directory: %s\n"RESET, cwd);
 	ft_putstr_color_fd(1, "current directory: ", MAGENTA);
 	ft_putstr_color_fd(1, cwd, CYAN);
-	ft_putchar_fd('\n', 1);
+	ft_putchar_fd('\n', 1); */
 }
