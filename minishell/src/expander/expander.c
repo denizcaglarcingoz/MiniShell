@@ -91,7 +91,7 @@ char *expander(char *str, t_shell *shell) // pass in shell struct for exit size 
 		}
 	}
 	*exp_curr = '\0';
-	//free(str_start); to be used with malloced inputs.
+	free(str_start);
 	return (expanded);
 }
 	//printf("no fault yet\n");

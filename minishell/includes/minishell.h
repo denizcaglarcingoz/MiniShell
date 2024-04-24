@@ -12,6 +12,7 @@
 # include <errno.h>
 # include <signal.h>
 # include <limits.h>
+#include <sys/wait.h>
 # include <termcap.h>//what are these last four doing?
 # include <ncurses.h>
 # include <sys/ioctl.h> 
@@ -78,16 +79,20 @@ t_table		struct_null(t_table table);
 // test print
 int			print_tables(t_table *table);
 
+/****EXECUTOR****/
+void	executor(t_table *table, t_shell *shell);
+
 
 /****SIGNALS****/
 void	sigint_handler_int(int signum);
 void	sigint_handler_quit(int signum);
 
 /***BUILT-INS****/
-void	check_and_run_builtins(t_tokens *tokens, t_shell *shell, t_table *table);
-void	ft_exit(t_tokens *tokens, t_shell *shell, t_table *table);
+int		check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell);
+void	ft_exit(t_table *table, char **full_cmd, t_shell *shell);
+
 void	ft_echo(t_tokens *tokens);
-void	ft_cd(t_tokens *tokens, t_shell *shell);
+void	ft_cd(t_table *table, char **full_cmd, t_shell *shell);
 void	ft_pwd(void);
 
 /***ENV_UTILS***/

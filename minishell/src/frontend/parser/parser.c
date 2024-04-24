@@ -4,19 +4,19 @@
 // voic expand_check(t_tokens *tokens, t_table *table) -- $NO echo deniz
 t_table	*parser(t_tokens *tokens, t_shell *shell)
 {
-	t_tokens	*first_token;
+//	t_tokens	*first_token; unused
 	t_table		*table;
 
 	table = NULL;
-	first_token = tokens;
+//	first_token = tokens;
 	if (tokens == NULL)
 		return (NULL);
 	table = table_alloc(tokens, shell);
-	if (table == NULL)
-		ft_exit(first_token, shell, table);
+/* 	if (table == NULL)
+		ft_exit(first_token, shell, table); */
 	table = table_init(tokens, table);
-	if (table == NULL)
-		ft_exit(first_token, shell, table);
+/* 	if (table == NULL)
+		ft_exit(first_token, shell, table); */
 	return (table);
 }
 

@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	parse_dollar(t_tokens *tokens, t_shell *shell, t_table *table)
+/* void	parse_dollar(t_tokens *tokens, t_shell *shell, t_table *table)
 {
 	char *path;
 	DIR *dir;
@@ -30,31 +30,33 @@ void	parse_dollar(t_tokens *tokens, t_shell *shell, t_table *table)
 		if (!(*(tokens->content) == '$' && *(tokens->content + 1)))
 			printf(RED"%s: command not found\n"RESET, tokens->content);
 	}
-}
+} */
 
-void	check_and_run_builtins(t_tokens *tokens, t_shell *shell, t_table *table) // check builtins, check error /path, rerun under correct conditions( SHAM PARSING..)
+int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell) // check builtins, check error /path, rerun under correct conditions( SHAM PARSING..)
 {
-	if (tokens == NULL)
-		return ;
-	if (*(tokens->content) == '$')//handle with dollar sign.
-		parse_dollar(tokens, shell, table);
-	else if (ft_strcmp(tokens->content, "exit") == 0) 
-		ft_exit(tokens, shell, table);
-	else if (ft_strcmp(tokens->content, "echo") == 0)
-		ft_echo(tokens);
-	else if (ft_strcmp(tokens->content, "cd") == 0) 
-		ft_cd(tokens, shell);
-	else if (ft_strcmp(tokens->content, "pwd") == 0) 
+	//if (tokens == NULL)
+	//	return ;
+//	if (**full_cmd == '$')//handle with dollar sign.
+//		parse_dollar(table, shell);
+	if (ft_strcmp(full_cmd[0], "exit") == 0) 
+		ft_exit(table, full_cmd, shell);
+	else if (ft_strcmp(full_cmd[0], "pwd") == 0) 
 		ft_pwd();
-	else if (ft_strcmp(tokens->content, "env") == 0) 
+//	else if (ft_strcmp(full_cmd[0], "echo") == 0)
+//		ft_echo(table, full_cmd, shell);
+	else if (ft_strcmp(full_cmd[0], "cd") == 0) 
+		ft_cd(table, full_cmd, shell);
+/* 	else if (ft_strcmp(tokens->content, "env") == 0) 
 		print_env(shell->env);
 	else
 	{
 		if (!(*(tokens->content) == '$' && *(tokens->content + 1)))
 			printf(RED"%s: command not found\n"RESET, tokens->content);
-	}
+	} */
+	if ((ft_strcmp(full_cmd[0], "cd") == 0) || (ft_strcmp(full_cmd[0], "pwd") == 0))//export and unset too
+		return (2);
+	return (0);
 	//else check against other commands if non exist then print not a command
-	//function takes any node from list as a start.
 	//check command against all builtins here, then against all other cmds in next function, if no match invalid	
 }
 
@@ -84,27 +86,28 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 	if (ft_strcmp(shell->input, "") != 0)
 		add_history(init_in);
 	free(init_in);
-	tokens = build_token_list(shell->input);//mem safe now?
-	if (tokens == NULL)
-		ft_exit(tokens, shell, table);		
+	tokens = build_token_list(shell->input);//mem safe with frees and exit if null.
+	//if (tokens == NULL)
+	//	ft_exit(table, );		
 	tokens = grammer_check(tokens);
 	if (tokens == NULL)
 		reset_and_run(&tokens, shell, table);
-	table = parser(tokens, shell);//mem safe now?
+	table = parser(tokens, shell);//redo mem safe. exit has changed clear on null return
+	free_list(&tokens); //free here
+
 	///PARSE AND TABLES TESTING-----------------
 	printf("\n--------\n");//test
 	print_tables(table);
 	printf("\n--------\n");//test
 	//-------------------------------------
-	
+	executor(table, shell);// testing the executor here.. not totally fin.
 	
 	//EXPANDER TESTING-----------------------------------------------------------------------
-		//char *exp = expander(tokens->content, shell); //basic version is working, remove more quotes?
+		//char *exp = expander(tokens->content, shell); //basic version is working, must remove exraneous quotes when needed
 	//printf("%s\n", exp);
 	//free(exp);
 	//printf("|");
 	//-----------------------------------------------------------------------------
-	check_and_run_builtins(tokens, shell, table);
 	reset_and_run(&tokens, shell, table);
 }
 

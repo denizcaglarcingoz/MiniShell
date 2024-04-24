@@ -60,7 +60,7 @@ void	free_t_content_alloc_and_table(t_table *table, int i)
 	table = NULL;
 }
 
-void	free_content_first_allocs_only(t_table table)
+void	free_content_first_allocs_only(t_table table)//do i need this?
 {
 	free(table.args);
 	free(table.in);
