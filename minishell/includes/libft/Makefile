@@ -19,7 +19,7 @@ SRCS := ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strl
    	ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
 	libftprintf/ft_error.c libftprintf/ft_get_width.c libftprintf/ft_print_chars.c libftprintf/ft_print_hex.c \
 	libftprintf/ft_print_nbrs.c libftprintf/ft_print_ptr.c libftprintf/ft_printf_utils.c libftprintf/ft_printf.c \
-	ft_quicksort.c ft_atof.c  ft_atol.c ft_putstr_color.c ft_strcmp.c
+	ft_quicksort.c ft_atof.c  ft_atol.c ft_putstr_color.c ft_strcmp.c ft_strcpy.c ft_strcat.c
 
 BONUS_SRCS := ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c \
 	ft_lstiter.c ft_lstmap.c 

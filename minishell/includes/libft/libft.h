@@ -59,7 +59,6 @@ int		ft_putchar_fd(char c, int fd);
 int		ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
-int		ft_strcmp(char *s1, char *s2);
 
 /********MORE FUNCTIONS********/
 
@@ -67,8 +66,9 @@ void	ft_quicksort(int *tab, int start, int end);
 long	ft_atol(const char *nptr);
 double	ft_atof(char *s);
 int		ft_putstr_color_fd(int fd, char *s, char *color);
-
-
+char	*ft_strcpy(char *dest, const char *src);
+int		ft_strcmp(char *s1, char *s2);
+char	*ft_strcat(char *dest, char *src);
 
 /********STRUCTURES**********/
 

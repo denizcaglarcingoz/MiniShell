@@ -88,6 +88,7 @@ void	sigint_handler_int(int signum);
 void	sigint_handler_quit(int signum);
 
 /***BUILT-INS****/
+int		check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell);
 int		check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell);
 void	ft_exit(t_table *table, char **full_cmd, t_shell *shell);
 

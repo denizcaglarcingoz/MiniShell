@@ -32,28 +32,41 @@
 	}
 } */
 
-int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell) // check builtins, check error /path, rerun under correct conditions( SHAM PARSING..)
+
+int	check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell)
+{ 
+	(void)table;
+	if (ft_strcmp(full_cmd[0], "pwd") == 0) 
+	{
+		ft_pwd();
+		return (1);
+	}
+	else if (ft_strcmp(full_cmd[0], "env") == 0) 
+	{
+		print_env(shell->env);
+		return (1);
+	}
+	return (0);
+}
+
+int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell)
 {
 	//if (tokens == NULL)
 	//	return ;
-//	if (**full_cmd == '$')//handle with dollar sign.
+//	if (**full_cmd == '$')//handle with dollar sign. receives expanded already.
 //		parse_dollar(table, shell);
 	if (ft_strcmp(full_cmd[0], "exit") == 0) 
 		ft_exit(table, full_cmd, shell);
-	else if (ft_strcmp(full_cmd[0], "pwd") == 0) 
-		ft_pwd();
-//	else if (ft_strcmp(full_cmd[0], "echo") == 0)
-//		ft_echo(table, full_cmd, shell);
 	else if (ft_strcmp(full_cmd[0], "cd") == 0) 
 		ft_cd(table, full_cmd, shell);
-/* 	else if (ft_strcmp(tokens->content, "env") == 0) 
-		print_env(shell->env);
-	else
+//	else if (ft_strcmp(full_cmd[0], "echo") == 0)
+//		ft_echo(table, full_cmd, shell);
+/* 	else
 	{
 		if (!(*(tokens->content) == '$' && *(tokens->content + 1)))
 			printf(RED"%s: command not found\n"RESET, tokens->content);
 	} */
-	if ((ft_strcmp(full_cmd[0], "cd") == 0) || (ft_strcmp(full_cmd[0], "pwd") == 0))//export and unset too
+	if ((ft_strcmp(full_cmd[0], "cd") == 0) || (ft_strcmp(full_cmd[0], "exit") == 0))//export and unset, exit, cd.
 		return (2);
 	return (0);
 	//else check against other commands if non exist then print not a command

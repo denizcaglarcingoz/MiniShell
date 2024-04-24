@@ -98,7 +98,7 @@ void	executor(t_table *table, t_shell *shell)
 	{
 		table[i].args = return_expanded((table[i].args), shell);
 		if (check_and_run_builtins(table, table[i].args, shell) == 2)//for some built ins, should finish without continuing, like pwd etc.
-			return ;//return for certain builtins
+				return ;//return for certain builtins
 		if (pipe(p_fd) == -1)
 			perror("pipe");//handle
 		pid = fork();
@@ -112,7 +112,9 @@ void	executor(t_table *table, t_shell *shell)
 			if (dup2(p_fd[1], STDOUT_FILENO) == -1)
 				perror("dup2");//handle
 			close(p_fd[1]);
-			exec_cmd(table[i].args, environ);
+			if (!check_and_run_builtins_2(table, table[i].args, shell))
+				exec_cmd(table[i].args, environ);
+		exit(EXIT_SUCCESS);
 		}
 		else
 		{
