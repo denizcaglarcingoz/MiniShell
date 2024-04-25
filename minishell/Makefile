@@ -8,7 +8,7 @@ INCLUDES = $(wildcard $(INC_DIR)/*)
 SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*/*.c)  $(wildcard $(SRC_DIR)/*/*/*.c)
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
 #-fPIE in compile need for at home?
-CFLAGS := -Wall -Wextra -Werror -fPIE
+CFLAGS := -Wall -Wextra -Werror -fPIE -g
 
 RM := rm -f
 

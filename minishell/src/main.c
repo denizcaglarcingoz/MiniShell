@@ -35,12 +35,14 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 	t_tokens *tokens;
 	t_table *table;
 
+	errno = 0;
 	init_in = readline("\033[1;94mminishell\033[1;92m$\033[0m ");
 	if (errno != 0 )
 	{
 		ft_putstr_color_fd(2, "Malloc Error", "\033[1;94");
 		clear_history();
 		free(init_in);
+		printf("readline errno: %d\n", errno);
 		exit(EXIT_FAILURE);
 	}
 	input = ft_strtrim(init_in, " ");
@@ -59,11 +61,12 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 	// printf("--------\n");//test
 	tokens = grammer_check(tokens);
 	table = parser(tokens);
-	printf("\n--------\n");//test
+	//printf("\n--------\n");//test
 	print_tables(table);
 	printf("\n--------\n");//test
-	check_and_run_builtins(tokens, env);
-	reset_and_run(&tokens, input, env);
+	execution(table);
+	//check_and_run_builtins(tokens, env);
+	reset_and_run(&(tokens), input, env);
 }
 
 int	main(int ac, char **av, char **envp)

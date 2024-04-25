@@ -2,11 +2,27 @@
 
 t_table struct_null(t_table table)
 {
+	table.args = NULL;
 	table.in = NULL;
 	table.out = NULL;
+	table.append = NULL;
+	table.heredoc = NULL;
 	table.err = NULL;
 	table.pipe = NULL;
+	table.my_stdin = NULL;
 	return (table);
+}
+
+void t_table_len_assign(t_table *table, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{	
+		table[i].table_len = len;
+		i++;
+	}
 }
 
 t_table	*table_alloc(t_tokens *tokens)
@@ -27,7 +43,7 @@ t_table	*table_alloc(t_tokens *tokens)
 		perror("table_alloc");
 		return (NULL);
 	}
-	table->table_len = len + 1;
 	table[len + 1] = struct_null(table[len + 1]);
+	t_table_len_assign(table, len + 1);
 	return (table);
 }

@@ -17,35 +17,14 @@
 # include <sys/ioctl.h> 
 # include <termios.h>
 # include "parser.h"
+# include "lexer.h"
+# include <sys/wait.h>
 
-#define BUFFER_SIZE 48
+#define BUFFER_SIZE 4084
 
-typedef enum e_token_type
-{
-	INITIAL, //THE FIRST PART UNTIL THE SPACE --COMMAND OR PATH ETC
-	WHITESPACE,
-	PIPE,
-	STRING,
-	LESS,
-	GREATER,
-	D_LESS,
-	D_GREATER,
-	L_PAR,
-	R_PAR,
-	QUOTE,
-	D_QUOTE
-
-}	t_token_type;
-
-typedef struct s_tokens
-{
-	t_token_type	type;
-	char			*content;
-	struct s_tokens	*next;
-}	t_tokens;
 
 /****SHELL****/
-void		shell_loop(char **env);
+void	shell_loop(char **env);
 
 
 /****LIST_UTILS****/
@@ -84,19 +63,48 @@ void		print_intro(void);
 void		print_tokens(t_tokens *tokens);
 
 /**is**/
-bool is_meta_char(char is);
+bool		is_meta_char(char is);
 
-// PARSER
-t_tokens *grammer_check(t_tokens *tokens);
-t_table *parser(t_tokens *tokens);
-t_table *table_init(t_tokens *tokens, t_table *table);
+//	PARSER
+t_tokens	*grammer_check(t_tokens *tokens);
+t_table		*parser(t_tokens *tokens);
+t_table		*table_init(t_tokens *tokens, t_table *table);
 void t_content_alloc(t_tokens *tokens, t_table *table);
+	//PARSER TABLE ALLOCS
+t_table		*table_alloc(t_tokens *tokens);
+t_table		struct_null(t_table table);
+	//PARSER TEST PRINT
+int			print_tables(t_table *table);
 
-// TABLE ALLOCS
-t_table	*table_alloc(t_tokens *tokens);
-t_table	struct_null(t_table table);
+//	EXECUTION
+void			execution(t_table *exp_table);
+void			single_exec(t_table exp_table, int table_id);
+void			pipe_execution(t_table *exp_table);
+void			pipe_exec_run(t_table exp_table, int pipefd1, int table_id);
+void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
+void			fork_fail(t_table *exp_table);
+char			*check_in(t_table exp_table);
+char			**check_hdoc(t_table exp_table);
+int				output_check(t_table exp_table, int table_id);
+void			inp_cmd_run(t_table exp_table, char *in, char **hdoc);
+char 			*temp_hdoc(char *hdoc);
+char	*pipe_exter_cmd_run(char *path, char **argv, int is_out);
 
-// TEST PRINT
-int print_tables(t_table *table);
+	//EXECUTION EXECPATH
+char			*exter_cmd_run(char *path, char **argv);
+	
+	// EXECUTION REDIRECTIONS
+char			*hdoc_inp(char *h_name);
+int				append_file(char *file_name, char *app_file);
+int				output_file(char *file_name, char *out_file);
+	
+	// EXECUTION UTILS
+t_tokens		*start_of_pipe(t_tokens *tokens, int table_id);
+char 			*read_file(int fd);
+int				is_builtin(char *cmd);
+t_token_type	out_o_app(t_table exp_table, int table_id);
+t_token_type	in_o_hdoc(t_table exp_table, int table_id);
+char			*last_str(char **strs);
+
 
 #endif
