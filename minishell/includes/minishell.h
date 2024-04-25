@@ -80,7 +80,7 @@ int			print_tables(t_table *table);
 void			execution(t_table *exp_table);
 void			single_exec(t_table exp_table, int table_id);
 void			pipe_execution(t_table *exp_table);
-void			pipe_exec_run(t_table exp_table, int pipefd1, int table_id);
+void			pipe_exec_run(t_table exp_table, int table_id);
 void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
 void			fork_fail(t_table *exp_table);
 char			*check_in(t_table exp_table);

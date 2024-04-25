@@ -11,6 +11,7 @@
 		"ioctl.h": "c",
 		"string.h": "c",
 		"ncurses.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"atomic": "c"
 	}
 }

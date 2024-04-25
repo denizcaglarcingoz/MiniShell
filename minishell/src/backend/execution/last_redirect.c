@@ -53,7 +53,6 @@ t_token_type out_o_app(t_table exp_table, int table_id)
 		return (NO_TYPE);
 	if (first->type== PIPE)
 		first = first->next;
-	printf("first->type: %s\n", first->content);
 	i = 2;
 	while(first)
 	{

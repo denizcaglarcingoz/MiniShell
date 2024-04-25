@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/25 18:45:37 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/04/25 21:29:46 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,14 @@ int	output_check(t_table exp_table, int table_id)
 
 	if (exp_table.out[0] != NULL || exp_table.append[0] != NULL)
 	{
-		printf("table_id: %d\n", table_id);	
 		t_type = out_o_app(exp_table, table_id);
 		if (t_type == GREATER)
-		{	
-			printf("in output\n");
 			out = last_str(exp_table.out);
-		
-		}
 		if (t_type == D_GREATER)
-		{
-			printf("in append\n");
 			out = last_str(exp_table.append);
-		}
-		printf("out: %s\n", out);
 		fd = open(out, O_RDWR | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-		{	
-			printf("minishell: %s: %s\n", out, strerror(errno));
-			return (perror("open"), 0);}
+			return (perror("output_check_open"), 0);
 		dup2(fd, STDOUT_FILENO);
 		return (1);
 	}

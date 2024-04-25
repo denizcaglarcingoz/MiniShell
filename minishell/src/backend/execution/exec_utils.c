@@ -64,7 +64,6 @@ char *last_str(char **strs)
 	i = 0;
 	if (strs[0] == NULL)
 		return (NULL);
-	printf("inside last_str\n");
 	while (strs[i] != NULL)
 			i++;
 	return (strs[i - 1]);
