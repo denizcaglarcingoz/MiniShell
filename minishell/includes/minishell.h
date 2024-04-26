@@ -77,7 +77,9 @@ t_table		struct_null(t_table table);
 int			print_tables(t_table *table);
 
 	//EXPANSION
-t_tokens	*expandor(t_tokens *tokens);
+t_tokens		*expandor(t_tokens *tokens);
+char 			*ft_strjoin_char(char *s1, char c);
+bool			is_alfa_num(char c);
 
 //	EXECUTION
 void			execution(t_table *exp_table);

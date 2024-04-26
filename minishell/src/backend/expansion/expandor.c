@@ -1,25 +1,5 @@
 #include "minishell.h"
 
-char *ft_strjoin_char(char *s1, char c)
-{
-	char	*str;
-	int		i;
-
-	i = 0;
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 2));
-	if (!str)
-		return (NULL);
-	while (s1[i])
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	str[i] = c;
-	str[i + 1] = '\0';
-	free(s1);
-	return (str);
-}
-
 char	*expand(char *exp)
 {
 	char	*new_exp;
@@ -41,19 +21,6 @@ char	*expand(char *exp)
 	return (new_exp);
 }
 
-bool is_alfa_num(char c)
-{
-	if (c >= '0' && c <= '9')
-		return (true);
-	if (c >= 'A' && c <= 'Z')
-		return (true);
-	if (c >= 'a' && c <= 'z')
-		return (true);
-	if (c == '_')
-		return (true);
-	return (false);
-}
-
 char	*expansion_dollar(char **content, int *i, char *new_content)
 {
 	char	*exp;
@@ -70,6 +37,7 @@ char	*expansion_dollar(char **content, int *i, char *new_content)
 	free(exp);
 	return (new_content);
 }
+
 char *expansion_d_quo(char **content, int *i, char *new_content)
 {
 	(*i)++;
@@ -118,7 +86,8 @@ void	expansion_check(char **content)
 			new_content = ft_strjoin_char(new_content, (*content)[i]);
 		if (!(*content)[i])
 			break ;
-		i++;
+		if ((*content)[i] != '$')
+			i++;
 	}
 	free(*content);
 	*content = new_content;
