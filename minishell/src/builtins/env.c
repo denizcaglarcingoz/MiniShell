@@ -49,6 +49,17 @@ char	**add_env(char **env, char *variable)
 	return (new_env);
 }
 
+
+int	compare_names(char *name, char *var)
+{
+	while (*name != '=' && (*name == *var))
+	{
+		name++;
+		var++;
+	}
+	return (*name - *var);
+}
+
 static char	**del_env_helper(char **env, char **new_env, \
 	char *variable, int size)
 {
@@ -62,7 +73,7 @@ static char	**del_env_helper(char **env, char **new_env, \
 		return (NULL);
 	while (++i < size)
 	{
-		if (ft_strcmp(env[i], variable) != 0)
+		if (compare_names(env[i], variable) != 0)
 		{
 			new_env[j] = ft_strdup(env[i]);
 			if (!new_env[j])

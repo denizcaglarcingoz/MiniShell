@@ -66,7 +66,7 @@ char	*ft_getenv(char *path, char **env)
 	if (!path_names)
 	{
 		printf("malloc error");
-		//free_all(); must look how to do, ft_exit? must pass lexer here currently for that
+		//free_all(); must look how to do, ft_exit? 
 		exit(EXIT_FAILURE);
 	}
 	i = 0;

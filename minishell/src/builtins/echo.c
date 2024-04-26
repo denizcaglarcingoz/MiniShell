@@ -1,10 +1,44 @@
 #include "minishell.h"
+//test print
+/* char **print_cmd(char **cmd)
+{
+	char **temp = cmd;
+	while (temp)
+	{
+		ft_putstr_fd(*temp, 1);
+		ft_putchar_fd('\n', 1);
+		temp++;
+	}
+	return cmd;
+} */
+	//full_cmd = print_cmd(full_cmd);
 
-//SUPER SECRET CODE TO KEEP DENIZ FROM HARVESTING MY MIND-FRUITS.
-/**todo**/
+int	ft_echo(char **full_cmd)
+{
+	bool	flag;
+	
+	flag = false;
+	full_cmd++;
+	if (*full_cmd && !ft_strcmp(*full_cmd, "-n"))
+	{
+		flag = true;
+		full_cmd++;
+	}
+	while (*full_cmd && **full_cmd)
+	{
+		ft_putstr_fd(*full_cmd, 1);
+		full_cmd++;
+		if(*full_cmd)
+			ft_putchar_fd(' ', 1);
+	}
+	if (!flag)
+		ft_putchar_fd('\n', 1);
+	return (0);
+}
+
 //Seems mostly good, further testing to be sure... 
 //use quote handling for other places in minishell as well., some weird behaviours of '$' in bash to look into...
-char	*handle_env_var_helper(char *token_str, char *path, char *path_start, int *p_flag)
+/* char	*handle_env_var_helper(char *token_str, char *path, char *path_start, int *p_flag)
 {
 	size_t	len;
 
@@ -127,3 +161,4 @@ void	ft_echo(t_tokens *tokens)
 	if (!flag)
 		ft_putchar_fd('\n', 1);
 }
+ */

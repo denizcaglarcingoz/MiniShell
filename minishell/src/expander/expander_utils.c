@@ -1,16 +1,12 @@
 #include "minishell.h"
 
-
 char	*handle_exit_stat(char *str, size_t *total_len, t_shell *shell)//get from shellstruct in case of calling added var...
 {
-	char *exit_stat;
+	char	*exit_stat;
 	size_t	exit_len;
 
-	//printf("curr str: %c\n", *(str));
 	exit_stat = ft_itoa(shell->exit_status);
 	exit_len = ft_strlen(exit_stat);
-	
-	//ft_putstr_color_fd(1, exit_stat, BLUE);//testing..
 	free(exit_stat);
 	*total_len += exit_len;
 	str++; 
@@ -54,10 +50,8 @@ size_t	get_expanded_len(char *str, t_shell *shell)
 			in_d_quote = !in_d_quote;
 		if (*str == '\'' && !in_d_quote)
 			in_s_quote = !in_s_quote;
-		if (*str == '$' && *(str + 1) == '?' && !in_s_quote) //handle for if no str + 1;
-		{
+		if (*str == '$' && *(str + 1) == '?' && !in_s_quote) 
 			str = handle_exit_stat(str + 1, &total_len, shell);
-		}
 		else if (*str == '$' && !in_s_quote)
 			str = handle_var(str + 1, &total_len, shell);
 		else

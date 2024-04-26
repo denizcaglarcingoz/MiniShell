@@ -1,0 +1,22 @@
+# include "minishell.h"
+
+int	ft_unset(t_table *table, char **full_cmd, t_shell *shell)
+{
+	int	 status;
+	int		i;
+
+	(void)table;
+	status = 0;
+	i = 0;
+		while (full_cmd[++i])
+		{
+			if (!check_valid_id(full_cmd[i]))
+				status = invalid_id(full_cmd[i]);
+			else
+			{	
+				shell->env = del_env(shell->env, full_cmd[i]);//return_val	
+				shell->exported = del_env(shell->exported, full_cmd[i]);//return value...
+			}		
+		}
+	return (status);
+}

@@ -26,9 +26,9 @@ typedef struct s_shell
 {
 	char	*input;
 	char	**env;
+	char	**exported;//todo
 	int		exit_status;
 	int		table_len;
-	//char	*old_pwd;
 }	t_shell;
 
 typedef enum e_token_type
@@ -88,13 +88,18 @@ void	sigint_handler_int(int signum);
 void	sigint_handler_quit(int signum);
 
 /***BUILT-INS****/
+char	**parse_dollar(t_table *table, char **full_cmd, t_shell *shell);
+
 int		check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell);
 int		check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell);
-void	ft_exit(t_table *table, char **full_cmd, t_shell *shell);
 
-void	ft_echo(t_tokens *tokens);
-void	ft_cd(t_table *table, char **full_cmd, t_shell *shell);
-void	ft_pwd(void);
+int		ft_echo(char **full_cmd);
+int		ft_cd(char **full_cmd, t_shell *shell);
+int		ft_pwd(void);
+int		ft_exit(t_table *table, char **full_cmd, t_shell *shell);
+int		ft_export(char **full_cmd, t_shell *shell);
+int		ft_unset(t_table *table, char **full_cmd, t_shell *shell);
+
 
 /***ENV_UTILS***/
 char	**get_env(void);
@@ -103,6 +108,8 @@ char	**add_env(char **env, char *variable);
 char	**del_env(char **env, char *variable);
 char 	*ft_getenv(char *path, char **env);
 
+int		check_valid_id(char *s);
+int		invalid_id(char *id);
 
 
 /***OTHER***/
