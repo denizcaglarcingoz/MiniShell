@@ -57,9 +57,10 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 		add_history(init_in);//free/ clear history.(reset) /// to keep up arrow button history add history is necessary // clean at the end
 	free(init_in);
 	tokens = build_token_list(input);
-	// print_tokens(tokens);//test
 	// printf("--------\n");//test
 	tokens = grammer_check(tokens);
+	tokens = expandor(tokens);
+	print_tokens(tokens);//test
 	table = parser(tokens);
 	//printf("\n--------\n");//test
 	print_tables(table);
@@ -79,8 +80,9 @@ int	main(int ac, char **av, char **envp)
 
 	env = get_env();// SHELL STRUCT AND PASS.
 	(void)av;
+
 	(void)envp;
-	
+
 	if (ac != 1)
 	{
 		ft_putstr_color_fd(2, "./minishell takes no arguments\n", "\033[1;91m");

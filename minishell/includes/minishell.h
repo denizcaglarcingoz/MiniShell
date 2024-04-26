@@ -76,6 +76,9 @@ t_table		struct_null(t_table table);
 	//PARSER TEST PRINT
 int			print_tables(t_table *table);
 
+	//EXPANSION
+t_tokens	*expandor(t_tokens *tokens);
+
 //	EXECUTION
 void			execution(t_table *exp_table);
 void			single_exec(t_table exp_table, int table_id);

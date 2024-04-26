@@ -59,6 +59,7 @@
   "files.associations": {
 	"minishell.h": "c",
 	"stdio.h": "c",
-	"*.tcc": "c"
+	"*.tcc": "c",
+	"lexer.h": "c"
 }
 }
