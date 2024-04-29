@@ -21,15 +21,15 @@ char	*expand(char *exp)
 	return (new_exp);
 }
 
-char	*expansion_dollar(char **content, int *i, char *new_content)
+char	*expansion_dollar(char *content, int *i, char *new_content)
 {
 	char	*exp;
 
-	exp = ft_strdup("\0");
+	exp = ft_strdup("");
 	(*i)++;
-	while ((*content)[*i] && is_alfa_num((*content)[*i]) == true)
+	while (content[*i] && is_alfa_num(content[*i]) == true)
 	{
-		exp = ft_strjoin_char(exp, (*content)[*i]);
+		exp = ft_strjoin_char(exp, content[*i]);
 		(*i)++;
 	}
 	exp = expand(exp);
@@ -38,59 +38,62 @@ char	*expansion_dollar(char **content, int *i, char *new_content)
 	return (new_content);
 }
 
-char *expansion_d_quo(char **content, int *i, char *new_content)
+char *expansion_d_quo(char *content, int *i, char *new_content)
 {
 	(*i)++;
-	while ((*content)[*i] && (*content)[*i] != '"')
+	while (content[*i] && content[*i] != '"')
 	{
-		if ((*content)[*i] == '$')
+		if (content[*i] == '$')
 			new_content = expansion_dollar(content, i, new_content);
-		if (!(*content)[*i] || (*content)[*i] == '"')
+		if (!content[*i] || content[*i] == '"')
 			break ;
-		if ((*content)[*i] != '$')
+		if (content[*i] != '$')
 		{	
-			new_content = ft_strjoin_char(new_content, (*content)[*i]);
+			new_content = ft_strjoin_char(new_content, content[*i]);
 			(*i)++;
 		}
 	}
 	return (new_content);
 }
 
-char *expansion_s_quo(char **content, int *i, char *new_content)
+char *expansion_s_quo(char *content, int *i, char *new_content)
 {
 	(*i)++;
-	while ((*content)[*i] && (*content)[*i] != '\'')
+	while (content[*i] && content[*i] != '\'')
 	{
-		new_content = ft_strjoin_char(new_content, (*content)[*i]);
+		new_content = ft_strjoin_char(new_content, content[*i]);
 		(*i)++;
 	}
 	return (new_content);
 }
 
-void	expansion_check(char **content)
+char	*expansion_check(char *content)
 {
 	char	*new_content;
 	int		i;
 
 	i = 0;
 	new_content = ft_strdup("\0");
-	while((*content)[i])
+		// protect this
+	if (content == NULL)
+		return NULL;
+	while(content[i])
 	{
-		if ((*content)[i] == '$')
+		if (content[i] == '$')
 			new_content = expansion_dollar(content, &i, new_content);
-		else if ((*content)[i] == '"')
+		else if (content[i] == '"')
 			new_content = expansion_d_quo(content, &i, new_content);
-		else if ((*content)[i] == '\'')
+		else if (content[i] == '\'')
 			new_content = expansion_s_quo(content, &i, new_content);
-		if ((*content)[i] != '$' && (*content)[i] != '"' && (*content)[i] != '\'')
-			new_content = ft_strjoin_char(new_content, (*content)[i]);
-		if (!(*content)[i])
+		if (content[i] != '$' && content[i] != '"' && content[i] != '\'')
+			new_content = ft_strjoin_char(new_content, content[i]);
+		if (!content[i])
 			break ;
-		if ((*content)[i] != '$')
+		if (content[i] != '$')
 			i++;
 	}
-	free(*content);
-	*content = new_content;
+	free(content);
+	return (new_content);
 }
 
 bool content_check(char *content)
@@ -129,28 +132,54 @@ bool content_check(char *content)
 	return (true);
 }
 
-t_tokens	*expandor(t_tokens *tokens)
-{
-	int			i;
-	t_tokens	*token_start;
 
+bool check_in_expandor(t_table exp_table)
+{
+	int i;
+	
 	i = 0;
-	token_start = tokens;
-	while (tokens)
+	while (exp_table.in[i] != NULL)
 	{
-		if (tokens->type == STRING)
-		{	
-			if (content_check((tokens->content)) == false)
-			{
-				printf("minishell: syntax error\n");
-				//free_tokens(tokens_start);
-				return (NULL);
-			}
-			expansion_check(&(tokens->content));
+		if (access(exp_table.in[i], F_OK) == -1)
+		{
+			printf("bash: %s: syntax error: no such file\n", exp_table.in[i]);
+			return (false);
 		}
-		tokens = tokens->next;
+		i++;
 	}
-	return (token_start);
+	return (true);
+}
+
+t_table	expandor(t_table table)
+{
+	if (arg_expand(&(table.args)) == false)
+	{
+		table.args[0] = NULL;
+		return (table);
+	}
+	if (redir_expand(table.in) == false)
+	{	
+		table.args[0] = NULL;
+		return (table);
+	}
+	if (redir_expand(table.out) == false)
+	{
+		table.args[0] = NULL;
+		return (table);
+	}
+	if (redir_expand(table.append) == false)
+	{	
+		table.args[0] = NULL;
+		return (table);
+	}
+	if (check_in_expandor(table) == false)
+	{	
+		table.args[0] = NULL;
+		return (table);
+	}
+	// printf("after expansion\n");
+	//print_tables(&table);
+	return (table);
 }
 
 // typedef struct s_tokens

@@ -31,7 +31,7 @@ define print_colored
 	@echo "$(COLOR_GREEN)$(1)$(COLOR_BLUE)$(2)$(COLOR_RESET)$(3)"
 endef
 
-.SILENT:
+#.SILENT:
 
 all: $(LIBFT_ARCH) $(NAME)
 
@@ -40,7 +40,7 @@ all: $(LIBFT_ARCH) $(NAME)
 $(OBS): %.o : %.c
 	$(CC) $(CFLAGS) -Iincludes -c $< -o $@
 
-$(NAME): $(OBS)
+$(NAME): $(OBJ)
 	$(CC) $^ -L$(LIBFT_PATH)  -lft -lreadline -lhistory -o $@ 
 	$(call print_colored, "[SUCCESS]", "./$(NAME)", "Ready")
 

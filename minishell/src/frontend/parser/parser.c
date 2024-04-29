@@ -26,6 +26,16 @@ t_table *parser(t_tokens *tokens)
 	return (table);
 }
 
+size_t	ft_strlen_double(char **s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
 int print_tables(t_table *table)
 {
 	int i;
@@ -41,6 +51,7 @@ int print_tables(t_table *table)
 		while (table[i].args[j] != NULL)
 		{
 			printf("table[%d].args[%d] = %s\n", i, j, table[i].args[j]);
+			// printf("table[%d].args_len = %zu\n", i, ft_strlen_double(table[i].args));
 			j++;
 		}
 		j = 0;
@@ -53,6 +64,7 @@ int print_tables(t_table *table)
 		while (table[i].out[j] != NULL)
 		{
 			printf("table[%d].out[%d] = %s\n", i, j, table[i].out[j]);
+			// printf("table[%d].out_len = %zu\n", i, ft_strlen_double(table[i].out));
 			j++;
 		}
 		j = 0;

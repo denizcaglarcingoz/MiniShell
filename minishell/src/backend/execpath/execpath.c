@@ -57,88 +57,58 @@ char	**append_path(char **str, char *path_add)
 
 char	*path_run(char **all_paths, char **argv, char **environ)
 {
-	int		pipefd[2];
 	int		i;
-	int		j;
 	pid_t	pid;
 	i = 0;
 	
-	j = 0;
 	while (all_paths[i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0)
 		{	
-			j = 1;
-			pipe_init_exec(pipefd);
 			if ((pid = fork()) == -1)
-				return (NULL);
+				return ("fork failed\n");
 			if (pid == 0)	
 			{
-				if (execve(all_paths[i], argv, environ) == -1)
-				{	
-					free_d_str(all_paths);
-					return (NULL);
-				}
-				printf("execve failed\n");
-				exit(0);
+				execve(all_paths[i], argv, environ);
+				free_d_str(all_paths);
+				// free tables
+				perror("execve failed\n");
+				return ("execve failed\n");
 			}
 			else
-			{	
 				wait(NULL);
-				break ;
-			}
-			
+			break ;
 		}
 		i++;
 	}
- 		close(pipefd[0]);
-	close(pipefd[1]);
 	free_d_str(all_paths);
 	return (NULL);
 }
 
 char	*exter_cmd_run(char *path, char **argv)
 {
-	extern char	**environ;
+	char	**environ;
 	char		**all_paths;
-	int		pipefd[2];
 	pid_t	pid;
-	char	BUFFER[BUFFER_SIZE];
-	int		count_read;
-	char	*read_str;
 
+	environ = get_full_env(0);
 	if (argv[0] == NULL)
 		return (NULL);
 	if (access(path, X_OK) == 0)
 	{
-		printf("--------------------------------inside access\n");
-		pipe_init_exec(pipefd);
 		if ((pid = fork()) == -1)
-		{	
-			// fork_fail(exp_table);
+		{	// fork_fail(exp_table);
 		}
 		if (pid == 0)	
 		{
-			close(pipefd[0]);
-			if (execve(path, argv, environ) == -1)
-			{
-				perror("execve");
-				return (NULL);
-			}
-			close(pipefd[1]);
+
+			execve(path, argv, environ);
+			// free tables
+			printf("execve failed\n");
 			exit(0);
-		}else
-		{
-			close(pipefd[1]);
-			while ((count_read = read(pipefd[0], BUFFER, BUFFER_SIZE)) > 0)
-			{
-				BUFFER[count_read] = '\0';
-				read_str = ft_strjoin(read_str, BUFFER);
-				// protect this
-			}
-			wait(NULL);
-			return (read_str);
 		}
+		else
+			return (wait(NULL), NULL);
 	}
 	all_paths = append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));
 	if (all_paths == NULL)

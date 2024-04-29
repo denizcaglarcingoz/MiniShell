@@ -32,8 +32,10 @@ t_tokens *table_content_init(t_tokens *tokens, t_table table)
 			table.append = content_dup(table.append, &tokens, D_GREATER);
 		else if (tokens->type == D_LESS)
 			table.heredoc = content_dup(table.heredoc, &tokens, D_LESS);
-		else if (tokens->type == STRING)
+		else if (tokens->type == STRING && ft_strlen(tokens->content) > 0)
 			table.args = content_dup(table.args, &tokens, STRING);
+		else if (tokens->type == STRING && ft_strlen(tokens->content) == 0)
+			tokens = tokens->next;
 	}
 	return (tokens);
 }

@@ -60,6 +60,7 @@
 	"minishell.h": "c",
 	"stdio.h": "c",
 	"*.tcc": "c",
-	"lexer.h": "c"
+	"lexer.h": "c",
+	"cstdlib": "c"
 }
 }

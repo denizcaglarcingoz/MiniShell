@@ -3,6 +3,7 @@
 char *ft_strjoin_char(char *s1, char c)
 {
 	char	*str;
+	char	*temp;
 	int		i;
 
 	i = 0;
@@ -16,7 +17,9 @@ char *ft_strjoin_char(char *s1, char c)
 	}
 	str[i] = c;
 	str[i + 1] = '\0';
-	free(s1);
+	temp = s1;
+	s1 = str;
+	free(temp);
 	return (str);
 }
 

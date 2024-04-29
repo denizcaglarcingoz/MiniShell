@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/25 21:29:46 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/04/28 22:47:45 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	output_check(t_table exp_table, int table_id)
 	int fd;
 	char *out;
 
+	fd = -1;
 	if (exp_table.out[0] != NULL || exp_table.append[0] != NULL)
 	{
 		t_type = out_o_app(exp_table, table_id);
@@ -69,32 +70,35 @@ int	output_check(t_table exp_table, int table_id)
 		if (fd == -1)
 			return (perror("output_check_open"), 0);
 		dup2(fd, STDOUT_FILENO);
-		return (1);
+		return (fd);
 	}
 	return (0);
 }
 
-void	single_exec(t_table exp_table, int table_id)
+void	single_exec(t_table table, int table_id)
 {
 	char **hdoc;
 	char *in;
 	int out_fd;
 	int	is_out;
 
-	// if (is_builtin(exp_table.args[0]) == 1) // run_builtin is a function that is inside of builtins
-	// 	return(run_builtin());
 	out_fd = dup(STDOUT_FILENO);
-	hdoc = check_hdoc(exp_table);
-	in = check_in(exp_table);
-	is_out = output_check(exp_table, table_id);
-	if (exp_table.args[1] == NULL && exp_table.in[0] == NULL && exp_table.heredoc[0] == NULL &&
-			exp_table.my_stdin[0] != NULL)
-		exter_cmd_run(exp_table.args[0], exp_table.args);
-	else if (exp_table.args[1] != NULL || (exp_table.in[0] == NULL && exp_table.heredoc[0] == NULL))
-		exter_cmd_run(exp_table.args[0], exp_table.args);
+	table = expandor(table);
+	if (table.args[0] == NULL)
+		return ;
+	hdoc = check_hdoc(table);
+	in = check_in(table);
+	is_out = output_check(table, table_id);
+	if (is_builtin(table.args[0]) == 1) // run_builtin is a function that is inside of builtins
+		run_builtin(table);
+	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
+		exter_cmd_run(table.args[0], table.args);
 	else
-		inp_cmd_run(exp_table, in, hdoc);
-	if (is_out == 1)
+		inp_cmd_run(table, in, hdoc);
+	if (is_out != 0)
+	{	
 		dup2(out_fd, STDOUT_FILENO);
+		close(is_out);
+	}
 	close(out_fd);
 }

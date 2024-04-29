@@ -1,20 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
+
 #include "minishell.h"
-
-
-void	pipe_pipe_init_exec(int pipefd[2])
-{
-	if (pipe(pipefd) == -1)
-		{
-    		perror("Pipe creation failed");
-			//free_table(exp_table);
-    		exit(EXIT_FAILURE);
-		}
-}
 
 void	pipe_free_d_str(char **str)
 {
@@ -57,100 +42,43 @@ char	**pipe_append_path(char **str, char *path_add)
 
 char	*pipe_path_run(char **all_paths, char **argv, char **environ, int is_out)
 {
-	int		pipefd[2];
 	int		i;
-	int		j;
-	pid_t	pid;
 	i = 0;
 	
-	j = 0;
+	if (is_out == 2)
+	{return (NULL);}
 	while (all_paths[i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0)
 		{	
-			j = 1;
-			pipe_pipe_init_exec(pipefd);
-			if ((pid = fork()) == -1)
-				return (NULL);
-			if (pid == 0)	
-			{
-				close(pipefd[0]);
-				if (is_out == 0)  // Close the reading end in the child
-       				dup2(pipefd[1], STDOUT_FILENO);
-				else
-					write(pipefd[1], "", 0);  // Redirect stdout to the pipe
-       			close(pipefd[1]);
-				if (execve(all_paths[i], argv, environ) == -1)
-				{	
-					pipe_free_d_str(all_paths);
-					return (NULL);
-				}
-				printf("execve failed\n");
-				exit(0);
-			}
-			else
-			{	
-				close(pipefd[1]);  // Close the writing end in the parent
-       			// if (is_out == 0)
-					dup2(pipefd[0], STDIN_FILENO);
-				// else if (is_out == 1)
-					// close(STDIN_FILENO); // Redirect stdin to the pipe
-       			close(pipefd[0]);
-				wait(NULL);
-				break ;
-			}
-			
+
+			if (execve(all_paths[i], argv, environ) == -1)
+			pipe_free_d_str(all_paths);
+			printf("execve failed\n");
+			exit(0);
 		}
 		i++;
 	}
- 		close(pipefd[0]);
-	close(pipefd[1]);
-	pipe_free_d_str(all_paths);
+
 	return (NULL);
 }
 
 char	*pipe_exter_cmd_run(char *path, char **argv, int is_out)
 {
-	extern char	**environ;
-	char		**all_paths;
-	int		pipefd[2];
-	pid_t	pid;
-	char	BUFFER[BUFFER_SIZE];
-	int		count_read;
-	char	*read_str;
+	char	**environ;
+	char	**all_paths;
 
+	environ = get_full_env(0);
 	if (argv[0] == NULL)
 		return (NULL);
 	if (access(path, X_OK) == 0)
 	{
-		printf("--------------------------------inside access\n");
-		pipe_pipe_init_exec(pipefd);
-		if ((pid = fork()) == -1)
-		{	
-			// fork_fail(exp_table);
-		}
-		if (pid == 0)	
+		if (execve(path, argv, environ) == -1)
 		{
-			close(pipefd[0]);
-			if (execve(path, argv, environ) == -1)
-			{
-				perror("execve");
-				return (NULL);
-			}
-			close(pipefd[1]);
-			exit(0);
-		}else
-		{
-			close(pipefd[1]);
-			while ((count_read = read(pipefd[0], BUFFER, BUFFER_SIZE)) > 0)
-			{
-				BUFFER[count_read] = '\0';
-				read_str = ft_strjoin(read_str, BUFFER);
-				// protect this
-			}
-			wait(NULL);
-			return (read_str);
+			perror("execve");
+			return (NULL);
 		}
+		exit(0);
 	}
 	all_paths = pipe_append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));
 	if (all_paths == NULL)

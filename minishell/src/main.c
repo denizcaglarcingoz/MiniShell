@@ -5,19 +5,19 @@ void	check_and_run_builtins(t_tokens *tokens, char **env)
 	if (tokens == NULL)
 		return ;
     (void)env;
-	if (ft_strcmp(tokens->content, "exit") == 0) 
-		ft_exit(tokens);
-	else if (ft_strcmp(tokens->content, "echo") == 0) //maybe after error check, check builtins, do else
-		ft_echo(tokens);
-	else if (ft_strcmp(tokens->content, "cd") == 0) 
-		ft_cd(tokens);
-	else if (ft_strcmp(tokens->content, "pwd") == 0) 
-		ft_pwd();
+	// if (ft_strcmp(tokens->content, "exit") == 0) 
+	// 	ft_exit(tokens);
+	// else if (ft_strcmp(tokens->content, "echo") == 0) //maybe after error check, check builtins, do else
+	// 	ft_echo(tokens);
+	// else if (ft_strcmp(tokens->content, "cd") == 0) 
+	// 	ft_cd(tokens);
+	// else if (ft_strcmp(tokens->content, "pwd") == 0) 
+	// ft_pwd();
 	//function takes any node from list as a start.
 	//check command against all builtins here, then against all other cmds in next function, if no match invalid	
 }
 
-void	reset_and_run(t_tokens **tokens, char *input, char **env)
+void	reset_and_run(t_tokens **tokens, char *input)
 {
 	//RESET FOR NEXT PASS, AND CALL LOOP AGAIN
 	free(input);	
@@ -25,21 +25,21 @@ void	reset_and_run(t_tokens **tokens, char *input, char **env)
 	printf("--------"); */
 	if (*tokens != NULL)
 		free_list(tokens);
-	shell_loop(env);
+	shell_loop();
 }
 
-void	shell_loop(char **env)//at completion of execution reset all data and recall this.
+void	shell_loop()//at completion of execution reset all data and recall this.
 {
-	char *init_in;
-	char *input;
-	t_tokens *tokens;
-	t_table *table;
+	char		*init_in;
+	char		*input;
+	t_tokens	*tokens;
+	t_table		*table;
 
 	errno = 0;
-	init_in = readline("\033[1;94mminishell\033[1;92m$\033[0m ");
+	init_in = readline("\001\033[1;94m\002minishell\001\033[1;92m\002$\001\033[0m\002 ");
 	if (errno != 0 )
 	{
-		ft_putstr_color_fd(2, "Malloc Error", "\033[1;94");
+		perror(strerror(errno));
 		clear_history();
 		free(init_in);
 		printf("readline errno: %d\n", errno);
@@ -59,36 +59,31 @@ void	shell_loop(char **env)//at completion of execution reset all data and recal
 	tokens = build_token_list(input);
 	// printf("--------\n");//test
 	tokens = grammer_check(tokens);
-	tokens = expandor(tokens);
-	print_tokens(tokens);//test
+	//print_tokens(tokens);//test
+	// tokens = expandor(tokens);
+	// print_tokens(tokens);//test
 	table = parser(tokens);
 	//printf("\n--------\n");//test
-	print_tables(table);
-	printf("\n--------\n");//test
+	// print_tables(table);
+	// printf("\n--------\n");//test
 	execution(table);
 	//check_and_run_builtins(tokens, env);
-	reset_and_run(&(tokens), input, env);
+	reset_and_run(&(tokens), input);
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	char **env;
-	//t_shell *shell;
-	//shell = NULL;
 	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
 
-	env = get_env();// SHELL STRUCT AND PASS.
 	(void)av;
-
-	(void)envp;
-
 	if (ac != 1)
 	{
 		ft_putstr_color_fd(2, "./minishell takes no arguments\n", "\033[1;91m");
 		exit(EXIT_FAILURE);
 	}
-	//print_intro();
-	shell_loop(env);
+	if (get_full_env(ft_d_strdup(envp)) == 0)// SHELL STRUCT AND PASS.
+		return (printf("Env Malloc Err\n"), EXIT_FAILURE);
+	shell_loop();
 	return (0);
 }

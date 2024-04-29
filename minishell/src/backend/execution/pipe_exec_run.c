@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/25 21:28:30 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/04/29 13:07:07 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,21 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out)
 		unlink(inp);
 	close(fd);
 }
-void	pipe_exec_run(t_table exp_table, int table_id)
+void	pipe_exec_run(t_table table, int table_id, char **hdoc)
 {
-	char **hdoc;
 	char *in;
-	// int out_fd;
 	int	is_out;
 
-	// if (is_builtin(exp_table.args[0]) == 1) // run_builtin is a function that is inside of builtins
-	// 	return(run_builtin());
-	hdoc = check_hdoc(exp_table);
-	in = check_in(exp_table);
-	is_out = output_check(exp_table, table_id);
-	if (exp_table.args[1] == NULL && exp_table.in[0] == NULL && exp_table.heredoc[0] == NULL &&
-			exp_table.my_stdin[0] != NULL)
-		pipe_exter_cmd_run(exp_table.args[0], exp_table.args, is_out);
-	else if (exp_table.args[1] != NULL || (exp_table.in[0] == NULL && exp_table.heredoc[0] == NULL))
-		pipe_exter_cmd_run(exp_table.args[0], exp_table.args, is_out);
+	in = check_in(table);
+	is_out = output_check(table, table_id);
+	if (is_builtin(table.args[0]) == 1) // run_builtin is a function that is inside of builtins
+	{	
+		run_builtin(table);
+		// clean up
+		exit(0);
+	}
+	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
+		pipe_exter_cmd_run(table.args[0], table.args, is_out);
 	else
-		pipe_inp_cmd_run(exp_table, in, hdoc, is_out);
+		pipe_inp_cmd_run(table, in, hdoc, is_out);
 }

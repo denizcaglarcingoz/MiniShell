@@ -41,20 +41,17 @@ char *read_file(int fd)
 
 int	is_builtin(char *cmd)
 {
-	int i;
-
-	i = 0;
 	if (cmd == NULL)
 		return (0);
-	if (ft_strcmp(cmd, "exit") == 0) 
-		i++;
-	else if (ft_strcmp(cmd, "echo") == 0)
-		i++;
-	else if (ft_strcmp(cmd, "cd") == 0) 
-		i++;
-	else if (ft_strcmp(cmd, "pwd") == 0) 
-		i++;
-	return (i);
+	if (ft_strcmp(cmd, "exit") == 0 && ft_strlen(cmd) == 4)
+		return (1);
+	else if (ft_strcmp(cmd, "echo") == 0 && ft_strlen(cmd) == 4)
+		return (1);
+	else if (ft_strcmp(cmd, "cd") == 0 && ft_strlen(cmd) == 2)
+		return (1);
+	else if (ft_strcmp(cmd, "pwd") == 0 && ft_strlen(cmd) == 3)
+		return (1);
+	return (0);
 }
 
 char *last_str(char **strs)
