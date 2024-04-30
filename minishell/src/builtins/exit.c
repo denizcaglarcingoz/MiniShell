@@ -53,17 +53,15 @@ int	ft_exit(t_table *table, char **full_cmd, t_shell *shell)
 		}
 		else
 		{
-			code = ft_atol(full_cmd[1]);// handle for negaitves as well 
-		//	if (code < 0)
-		//		code = code 
-			if (code > 255) 
-				code = code % 256;
+			code = (ft_atol(full_cmd[1]) % 256);
+			if (code < 0)
+				code += 256; 
 		}
 	}
 	else
 		code = 0;
 	final_free(table, shell);
-	printf("exit code: %li\n", code);//-------------
+	printf("exit code: %d\n", code);//-------------
 	exit(code);
-	return (1);
+	return (code);
 }

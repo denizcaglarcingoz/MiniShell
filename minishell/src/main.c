@@ -106,6 +106,12 @@ int	main(int ac, char **av)
 	(void)av;
 	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
+	shell.exit_status = 0;//testing must truly handle exit status
+	if (ac != 1)
+	{
+		ft_putstr_color_fd(2, "./minishell takes no arguments\n", "\033[1;91m");
+		exit(EXIT_FAILURE);
+	}
 	shell.env = get_env();
 	if (!shell.env)
 		exit(EXIT_FAILURE);
@@ -113,12 +119,6 @@ int	main(int ac, char **av)
 	if (!shell.exported)
 	{
 		free_all_env(shell.env);
-		exit(EXIT_FAILURE);
-	}
-	shell.exit_status = 0;//testing must truly handle exit status
-	if (ac != 1)
-	{
-		ft_putstr_color_fd(2, "./minishell takes no arguments\n", "\033[1;91m");
 		exit(EXIT_FAILURE);
 	}
 

@@ -10,12 +10,17 @@ int	ft_unset(t_table *table, char **full_cmd, t_shell *shell)
 	i = 0;
 		while (full_cmd[++i])
 		{
-			if (!check_valid_id(full_cmd[i]))
-				status = invalid_id(full_cmd[i]);
+			/* if (!check_valid_id(full_cmd[i]))
+				status = invalid_id(full_cmd[i]); */
+			if (ft_getenv(full_cmd[i], shell->env) == NULL)
+				continue ;
 			else
 			{	
-				shell->env = del_env(shell->env, full_cmd[i]);//return_val	
-				shell->exported = del_env(shell->exported, full_cmd[i]);//return value...
+				shell->env = del_env(shell->env, full_cmd[i]);
+				shell->exported = del_env(shell->exported, full_cmd[i]);
+				//if (shell->env == NULL || shell->exported == NULL)
+				//	free_all_and_exit
+				//	ft_putstr_color_fd(1, "null\n", BOLD_BLUE);//test
 			}		
 		}
 	return (status);

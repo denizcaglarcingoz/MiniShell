@@ -66,7 +66,7 @@ char	*ft_getenv(char *path, char **env)
 	if (!path_names)
 	{
 		printf("malloc error");
-		//free_all(); must look how to do, ft_exit? 
+		//free_all(); must look how to do, ft_exit?, nah use final free and exit
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
@@ -74,8 +74,7 @@ char	*ft_getenv(char *path, char **env)
 		i++;
 	path_len = ft_strlen(path);
 	free_all_env(path_names);
-	
-	if (!env[i])
+	if (!env[i]) //non exitstence
 		return (NULL);
 	return (env[i] + path_len + 1);
 }
