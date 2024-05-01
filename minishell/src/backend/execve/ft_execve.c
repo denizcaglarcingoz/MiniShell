@@ -16,19 +16,6 @@ void	pipe_init_exec(int pipefd[2])
 		}
 }
 
-void	free_d_str(char **str)
-{
-	int	i;
-
-	i = 0;
-	while(str[i] != NULL)
-	{
-		free(str[i]);
-		i++;	
-	}
-	free(str);
-}
-
 char	**append_path(char **str, char *path_add)
 {
 	char	**new;
@@ -63,8 +50,8 @@ char	*path_run(char **all_paths, char **argv, char **environ)
 	
 	while (all_paths[i] != NULL)
 	{
-		if (access(all_paths[i], X_OK) == 0)
-		{	
+		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0)
+		{
 			if ((pid = fork()) == -1)
 				return ("fork failed\n");
 			if (pid == 0)	
@@ -73,19 +60,25 @@ char	*path_run(char **all_paths, char **argv, char **environ)
 				free_d_str(all_paths);
 				// free tables
 				perror("execve failed\n");
-				return ("execve failed\n");
+				exit(127);
 			}
 			else
+			{
 				wait(NULL);
-			break ;
+				free_d_str(all_paths);
+				return (NULL) ;
+			}
 		}
 		i++;
 	}
+	write(2, argv[0], ft_strlen(argv[0]));
+	if (ft_strlen(argv[0]) > 0)
+		write(2, "command not found\n", 18);
 	free_d_str(all_paths);
 	return (NULL);
 }
 
-char	*exter_cmd_run(char *path, char **argv)
+char	*ft_execve(char *path, char **argv)
 {
 	char	**environ;
 	char		**all_paths;
@@ -97,43 +90,17 @@ char	*exter_cmd_run(char *path, char **argv)
 	if (access(path, X_OK) == 0)
 	{
 		if ((pid = fork()) == -1)
-		{	// fork_fail(exp_table);
-		}
+			return (perror("execve failed\n"), "fork failed\n");
 		if (pid == 0)	
 		{
-
 			execve(path, argv, environ);
-			// free tables
-			printf("execve failed\n");
-			exit(0);
+			return (perror("execve failed\n"), "fork failed\n");
 		}
 		else
 			return (wait(NULL), NULL);
 	}
-	all_paths = append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));
+	all_paths = append_path(ft_split(get_env("PATH"), ':'), ft_strjoin("/", path));
 	if (all_paths == NULL)
-		return (NULL);
+		return ("malloc failed\n");
 	return (path_run(all_paths, argv, environ));
 }
-
-// TEST
-
-// int main(int argc, char **argv)
-// {
-// 	if (argc < 3)
-// 	{
-// 		printf("Not enough arg\n");
-// 		return (1);
-// 	}
-// 	int x = 0;
-// 	while (argv[x] != NULL)
-// 	{
-// 		write(1, argv[x], ft_strlen(argv[x]));
-// 		write(1, "\n", 1);
-// 		x++;
-// 	}
-// 	exter_cmd_run(argv[1], argv);
-// 	return (0);
-// }
-
-

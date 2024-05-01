@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/29 13:07:07 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/04/29 19:57:31 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out)
 	}
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
-	return_out = pipe_exter_cmd_run(exp_table.args[0], exp_table.args, is_out);
+	return_out = ft_pipe_execve(exp_table.args[0], exp_table.args, is_out);
 	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);
 	close(fd);
 }
+
 void	pipe_exec_run(t_table table, int table_id, char **hdoc)
 {
 	char *in;
@@ -46,14 +47,14 @@ void	pipe_exec_run(t_table table, int table_id, char **hdoc)
 
 	in = check_in(table);
 	is_out = output_check(table, table_id);
-	if (is_builtin(table.args[0]) == 1) // run_builtin is a function that is inside of builtins
+	if (is_builtin(table.args[0]) == 1)
 	{	
 		run_builtin(table);
 		// clean up
 		exit(0);
 	}
 	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
-		pipe_exter_cmd_run(table.args[0], table.args, is_out);
+		ft_pipe_execve(table.args[0], table.args, is_out);
 	else
 		pipe_inp_cmd_run(table, in, hdoc, is_out);
 }

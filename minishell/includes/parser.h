@@ -6,16 +6,13 @@
 
 typedef struct s_table
 {
-	char	**args;
-	char	**in;
-	char	**out;
-	char	**my_stdin;
-	char	**append;
-	char	**heredoc;
-	char	*err;
-	char	*pipe;
-	int		job_len;
-	int		table_len;
+	char		**args;
+	char		**in;
+	char		**out;
+	char		**append;
+	char		**heredoc;
+	int			job_len;
+	int			table_len;
 	t_tokens	*tokens;
 }	t_table;
 
@@ -28,7 +25,5 @@ typedef struct s_table_content_len
 	int	heredoc;
 	int	err;
 }	t_table_content_len;
-
-
 
 #endif

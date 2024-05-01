@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 07:32:50 by jhotchki          #+#    #+#             */
-/*   Updated: 2023/09/23 09:51:30 by jhotchki         ###   ########.fr       */
+/*   Updated: 2024/04/29 23:47:09 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,14 @@ char	**ft_split(const char *s, char c)
 	size_t	count;
 	char	**split;
 
+	if (s == NULL)
+		return (NULL);
 	count = str_count((char *)s, c);
 	split = (char **)malloc(((count + 1) * sizeof (char *)));
 	if (split == NULL)
 		return (NULL);
 	split = ft_allocate(split, s, c);
+	free((char *)s);
 	return (split);
 }
 /*int	main(void)

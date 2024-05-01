@@ -7,9 +7,6 @@ t_table struct_null(t_table table)
 	table.out = NULL;
 	table.append = NULL;
 	table.heredoc = NULL;
-	table.err = NULL;
-	table.pipe = NULL;
-	table.my_stdin = NULL;
 	return (table);
 }
 

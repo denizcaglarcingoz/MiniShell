@@ -1,11 +1,5 @@
 #include "minishell.h"
 
-void free_table(t_table *exp_table)
-{
-	free(exp_table);
-	// proper free
-}
-
 void	pipe_init(t_table *exp_table, int pipefd[2])
 {
 	if (pipe(pipefd) == -1)
@@ -23,7 +17,7 @@ void	fork_fail(t_table *exp_table)
 	exit(EXIT_FAILURE);
 }
 
-void	pipe_execution(t_table *tables)
+t_table	*pipe_execution(t_table *tables)
 {
 	int		pipefd[2];
 	int 	in_fd;
@@ -66,6 +60,9 @@ void	pipe_execution(t_table *tables)
 				pipe_exec_run(tables[i], i, hdoc);
 			write(2, tables[i].args[0], ft_strlen(tables[i].args[0]));
 			write (2, ": command not found\n", 21);
+			free_list(tables[i].tokens);
+			free_table(tables);
+			free_env();
 			exit(127);
 		}
 		else
@@ -77,16 +74,14 @@ void	pipe_execution(t_table *tables)
 		}
 		i++;
 	}
-	i = 0;
-	dup2(in_fd, STDIN_FILENO);
 	close(in_fd);
-	close(prev_read_fd);
-	close(pipefd[1]);
 	close(pipefd[0]);
 	// free_table(tables);
+	i = 0;
 	while ( i < tables->table_len)
 	{
 		wait(NULL);
 		i++;
 	}
+	return (tables);
 }

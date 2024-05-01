@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 17:16:51 by jhotchki          #+#    #+#             */
-/*   Updated: 2023/09/18 15:56:34 by jhotchki         ###   ########.fr       */
+/*   Updated: 2024/04/29 23:32:29 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char	*s12;
 	char	*result;
 
-	if (!s1)
-		return (NULL);
+	if (!s1 || *s1 == '\0')
+		return ("");
 	if (!set)
 		return (ft_strdup(s1));
 	s12 = (char *)s1;

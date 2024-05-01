@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	**free_env(char **env, int i)
+char	**free_fail_env(char **env, int i)
 {
 	while (i >= 0)
 	{
@@ -27,7 +27,7 @@ char	**ft_d_strdup(char **env)
 	{
 		new_env[i] = ft_strdup(env[i]);
 		if (!new_env[i])
-			return (free_env(new_env, i - 1));
+			return (free_fail_env(new_env, i - 1));
 		i++;
 	}
 	new_env[i] = 0;

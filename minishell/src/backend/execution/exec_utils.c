@@ -43,13 +43,15 @@ int	is_builtin(char *cmd)
 {
 	if (cmd == NULL)
 		return (0);
-	if (ft_strcmp(cmd, "exit") == 0 && ft_strlen(cmd) == 4)
+	if (ft_strcmp(cmd, "exit") == 0)
 		return (1);
-	else if (ft_strcmp(cmd, "echo") == 0 && ft_strlen(cmd) == 4)
+	else if (ft_strcmp(cmd, "echo") == 0)
 		return (1);
-	else if (ft_strcmp(cmd, "cd") == 0 && ft_strlen(cmd) == 2)
+	else if (ft_strcmp(cmd, "cd") == 0)
 		return (1);
-	else if (ft_strcmp(cmd, "pwd") == 0 && ft_strlen(cmd) == 3)
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "env") == 0)
 		return (1);
 	return (0);
 }

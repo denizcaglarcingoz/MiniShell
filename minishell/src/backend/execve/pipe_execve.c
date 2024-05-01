@@ -1,18 +1,6 @@
 
 #include "minishell.h"
 
-void	pipe_free_d_str(char **str)
-{
-	int	i;
-
-	i = 0;
-	while(str[i] != NULL)
-	{
-		free(str[i]);
-		i++;	
-	}
-	free(str);
-}
 
 char	**pipe_append_path(char **str, char *path_add)
 {
@@ -36,7 +24,6 @@ char	**pipe_append_path(char **str, char *path_add)
 	}
 	new[i] = NULL;
 	free(path_add);
-	pipe_free_d_str(str);
 	return (new);
 }
 
@@ -51,22 +38,21 @@ char	*pipe_path_run(char **all_paths, char **argv, char **environ, int is_out)
 	{
 		if (access(all_paths[i], X_OK) == 0)
 		{	
-
 			if (execve(all_paths[i], argv, environ) == -1)
-			pipe_free_d_str(all_paths);
+			free_d_str(all_paths);
 			printf("execve failed\n");
 			exit(0);
 		}
 		i++;
 	}
-
+	free_d_str(all_paths);
 	return (NULL);
 }
-
-char	*pipe_exter_cmd_run(char *path, char **argv, int is_out)
+char	*ft_pipe_execve(char *path, char **argv, int is_out)
 {
 	char	**environ;
 	char	**all_paths;
+	char	**paths;
 
 	environ = get_full_env(0);
 	if (argv[0] == NULL)
@@ -80,30 +66,11 @@ char	*pipe_exter_cmd_run(char *path, char **argv, int is_out)
 		}
 		exit(0);
 	}
-	all_paths = pipe_append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));
+	paths = ft_split(get_env("PATH"), ':');
+	all_paths = pipe_append_path(paths, ft_strjoin("/", path));
+	free_d_str(paths);
 	if (all_paths == NULL)
 		return (NULL);
 	return (pipe_path_run(all_paths, argv, environ, is_out));
 }
-
-// TEST
-
-// int main(int argc, char **argv)
-// {
-// 	if (argc < 3)
-// 	{
-// 		printf("Not enough arg\n");
-// 		return (1);
-// 	}
-// 	int x = 0;
-// 	while (argv[x] != NULL)
-// 	{
-// 		write(1, argv[x], ft_strlen(argv[x]));
-// 		write(1, "\n", 1);
-// 		x++;
-// 	}
-// 	exter_cmd_run(argv[1], argv);
-// 	return (0);
-// }
-
 

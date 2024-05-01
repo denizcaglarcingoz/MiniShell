@@ -59,8 +59,6 @@ void t_content_alloc(t_tokens *tokens, t_table *table)
 	table->out = malloc(sizeof(char *) * (table_content_len.out + 1));
 	table->append = malloc(sizeof(char *) * (table_content_len.append + 1));
 	table->heredoc = malloc(sizeof(char *) * (table_content_len.heredoc + 1));
-	table->my_stdin = malloc(sizeof(char *) * 1);
-	table->my_stdin[0] = NULL;
 	if (table->args == NULL || table->in == NULL || table->out == NULL ||
 			table->append == NULL || table->heredoc == NULL)
 	{

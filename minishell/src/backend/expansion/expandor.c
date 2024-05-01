@@ -4,16 +4,17 @@ char	*expand(char *exp)
 {
 	char	*new_exp;
 	int		i;
-	extern char **environ;
+	char	**env;
 
+	env = get_full_env(0);
 	i = 0;
 	exp = ft_strjoin_char(exp, '=');
 	new_exp = ft_strdup("");
-	while (environ[i])
+	while (env[i])
 	{
-		if (ft_strncmp(exp, environ[i], ft_strlen(exp)) == 0)
+		if (ft_strncmp(exp, env[i], ft_strlen(exp)) == 0)
 		{
-			new_exp = ft_strjoin(new_exp, environ[i] + ft_strlen(exp));
+			new_exp = ft_strjoin(new_exp, env[i] + ft_strlen(exp));
 		}
 		i++;
 	}
