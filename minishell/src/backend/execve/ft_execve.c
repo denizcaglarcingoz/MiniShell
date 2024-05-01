@@ -9,11 +9,11 @@
 void	pipe_init_exec(int pipefd[2])
 {
 	if (pipe(pipefd) == -1)
-		{
-    		perror("Pipe creation failed");
-			//free_table(exp_table);
-    		exit(EXIT_FAILURE);
-		}
+	{
+    	perror("Pipe creation failed");
+		//free_table(exp_table);
+    	exit(EXIT_FAILURE);
+	}
 }
 
 char	**append_path(char **str, char *path_add)
@@ -94,7 +94,8 @@ char	*ft_execve(char *path, char **argv)
 		if (pid == 0)	
 		{
 			execve(path, argv, environ);
-			return (perror("execve failed\n"), "fork failed\n");
+			perror("execve failed\n");
+			exit(127);
 		}
 		else
 			return (wait(NULL), NULL);
