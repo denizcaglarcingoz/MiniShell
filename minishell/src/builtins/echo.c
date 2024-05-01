@@ -1,17 +1,4 @@
 #include "minishell.h"
-//test print
-/* char **print_cmd(char **cmd)
-{
-	char **temp = cmd;
-	while (temp)
-	{
-		ft_putstr_fd(*temp, 1);
-		ft_putchar_fd('\n', 1);
-		temp++;
-	}
-	return cmd;
-} */
-	//full_cmd = print_cmd(full_cmd);
 
 int	ft_echo(char **full_cmd)
 {

@@ -1,6 +1,23 @@
 #include "minishell.h"
 
-void	free_list(t_tokens **tokens)
+void	free_list(t_tokens *tokens)
+{
+	t_tokens	*curr;
+	t_tokens	*temp;
+
+	if (tokens == NULL)
+		return ;
+	curr = tokens;
+	while (curr)
+	{
+		temp = curr->next;
+		free(curr->content);
+		free(curr);
+		curr = temp;
+	}
+	tokens = NULL;
+}
+/* void	free_list(t_tokens **tokens)
 {
 	t_tokens	*curr;
 	t_tokens	*temp;
@@ -17,7 +34,7 @@ void	free_list(t_tokens **tokens)
 		curr = temp;
 	}
 	*tokens = NULL;
-}
+} */
 
 int	ft_matrix_len(char **matrix)//move to lib?
 {

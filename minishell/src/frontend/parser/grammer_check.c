@@ -1,35 +1,34 @@
 #include "minishell.h"
 
-t_tokens	*error_print(t_tokens *tokens)
+t_tokens *error_print(t_tokens *tokens)
 {
 	if (tokens == NULL)
 	{
-		printf(RED"syntax error near unexpected token 'newline'\n"RESET);
+		printf("syntax error near unexpected token 'newline'\n");
 	}
 	else
-		printf(RED"syntax error near unexpected \
-	token '%s'\n"RESET, tokens->content);
+		printf("syntax error near unexpected token '%s'\n", tokens->content);
 	return (NULL);
 }
 
-t_tokens	*grammer_check(t_tokens *tokens)
+t_tokens *grammer_check(t_tokens *tokens)
 {
-	t_tokens	*first_token;
+	t_tokens *first_token;
 
 	first_token = tokens;
 	if (tokens == NULL || tokens->content == NULL)
 		return (tokens);
 	if (tokens->type == PIPE)
 		return (error_print(tokens));
-	while (tokens)
+	while(tokens)
 	{
 		if (tokens->type == PIPE)
 		{
 			if (tokens->next == NULL || tokens->next->type == PIPE)
 				return (error_print(tokens));
 		}
-		else if (tokens->type == GREATER || tokens->type == D_GREATER
-			|| tokens->type == LESS || tokens->type == D_LESS)
+		else if (tokens->type == GREATER || tokens->type == D_GREATER ||
+				tokens->type == LESS || tokens->type == D_LESS)
 		{
 			tokens = tokens->next;
 			if (tokens == NULL || tokens->type != STRING)

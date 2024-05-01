@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/03/25 21:45:40 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/04/10 18:55:46 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len)
 	join[s1_len + s2_len + 1] = '\0';
 	if (s1 != NULL)
 		free(s1);
-	free(s2);
 	return (join);
 }
 char	*hdoc_inp(char *h_name)
@@ -70,6 +69,7 @@ char	*hdoc_inp(char *h_name)
 			if ((whole_inp = hdoc_strjoin(whole_inp, input, ft_strlen(input))) == NULL)
 				return (free(input), NULL);
 		}
+		free(input);
 	}
 	return(free(input), whole_inp);
 }

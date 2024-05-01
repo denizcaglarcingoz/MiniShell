@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/03/25 21:45:24 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/04/25 20:46:45 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*app_strjoin(char *s1, char const *s2, size_t len)
 	join = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (!join)
 	{
+		printf("app_strjoin error\n");
 		perror("Malloc Error\n");
 		return (NULL);
 	}
@@ -40,23 +41,18 @@ char	*app_strjoin(char *s1, char const *s2, size_t len)
 int read_loop(int fd, char **full_file, int *len)
 {
 	char	buffer[BUFFER_SIZE];
-	int		bytes_read;
+	int		count_read;
 	
-	while (1 && *len != -1)
+	*len = 1;
+	while ((count_read = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == 0)
-			break;
-		if(bytes_read == -1)
-		{
-			perror("read");
-			close(fd);
-			return (1);
-		}
-		*full_file = app_strjoin(*full_file, buffer, bytes_read);
-		if (*full_file == NULL)
-			return (1);
-	}
+		printf("inside count_read: %d\n", count_read);
+        *full_file = app_strjoin(*full_file, buffer, count_read);
+        if (*full_file == NULL) {
+            return 1; // Error occurred while appending to full_file
+        }
+    }
+	printf("outside count_read: %d\n", count_read);
 	return (0);
 }
 
@@ -67,11 +63,16 @@ int	append_file(char *file_name, char *app_file)
 	int		bytes_read;
 	char	*full_file;
 
-	full_file = NULL;
+	printf("file_name: a%sa\n", file_name);
+	full_file = ft_strdup("");
 	if (access(file_name, F_OK) == 0)
+	{
+		printf("file exists\n");
 		fd = open(file_name, O_RDONLY);
+	}
 	else
 	{
+		printf("file does not exist\n");
 		fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		len = -1;
 	}
@@ -87,21 +88,7 @@ int	append_file(char *file_name, char *app_file)
 	}
 	if (read_loop(fd, &full_file, &len) == 1)
 		return (1);
-	// while (1 && len != -1)
-	// {
-	// 	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	// 	if (bytes_read == 0)
-	// 		break;
-	// 	if(bytes_read == -1)
-	// 	{
-	// 		perror("read");
-	// 		close(fd);
-	// 		return (1);
-	// 	}
-	// 	full_file = app_strjoin(full_file, buffer, bytes_read);
-	// 	if (full_file == NULL)
-	// 		return (1);
-	// }
+	printf("full_file: %s\n", full_file);
 	close(fd);
 	full_file = app_strjoin(full_file, app_file, ft_strlen(app_file) + 1);
 	if (full_file == NULL)

@@ -1,26 +1,41 @@
 #include "minishell.h"
 
+
 // void command_init(t_tokens *tokens, t_table *table) -- echo deniz
 // voic expand_check(t_tokens *tokens, t_table *table) -- $NO echo deniz
-t_table	*parser(t_tokens *tokens, t_shell *shell)
-{
-//	t_tokens	*first_token; unused
-	t_table		*table;
 
+t_table *parser(t_tokens *tokens)
+{
+	t_tokens	*first_token;
+	t_table		*table;
+	
 	table = NULL;
-//	first_token = tokens;
+	first_token = tokens;
 	if (tokens == NULL)
 		return (NULL);
-	table = table_alloc(tokens, shell);
-/* 	if (table == NULL)
-		ft_exit(first_token, shell, table); */
+	table = table_alloc(tokens);
+	//if (table == NULL)
+		// free and exit;
 	table = table_init(tokens, table);
-/* 	if (table == NULL)
-		ft_exit(first_token, shell, table); */
+	int i = 0;
+	while (table[i].args != NULL)
+	{
+		table[i].tokens = tokens;
+		i++;
+	}
 	return (table);
 }
 
-//TESTING----------------------------------------------------------
+size_t	ft_strlen_double(char **s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
 int print_tables(t_table *table)
 {
 	int i;
@@ -36,6 +51,7 @@ int print_tables(t_table *table)
 		while (table[i].args[j] != NULL)
 		{
 			printf("table[%d].args[%d] = %s\n", i, j, table[i].args[j]);
+			// printf("table[%d].args_len = %zu\n", i, ft_strlen_double(table[i].args));
 			j++;
 		}
 		j = 0;
@@ -48,6 +64,7 @@ int print_tables(t_table *table)
 		while (table[i].out[j] != NULL)
 		{
 			printf("table[%d].out[%d] = %s\n", i, j, table[i].out[j]);
+			// printf("table[%d].out_len = %zu\n", i, ft_strlen_double(table[i].out));
 			j++;
 		}
 		j = 0;

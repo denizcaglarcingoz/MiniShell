@@ -38,7 +38,7 @@ long int	set_code(char **full_cmd)
 void	final_free(t_table *table, t_shell *shell)
 {
 	clear_history();
-	free(shell->input);
+	//free(shell->input);// get rid of in main
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
 	if (table)

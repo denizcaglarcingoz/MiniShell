@@ -1,6 +1,6 @@
 
 #include "minishell.h"
-
+/* 
 int	check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell)
 { 
 	(void)table;
@@ -21,9 +21,9 @@ int	check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell)
 		return (1);
 	}
 	return (0);
-}
+} */
 
-int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell)
+/* int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell)
 {
 	
 //	if (**full_cmd == '$')//handle with dollar sign. receives expanded already.
@@ -46,16 +46,17 @@ int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell)
 		return (2);
 	return (0);
 	//else check against other commands if non exist then print not a commandif command not found updated shell->exit_status	
-}
+} */
 
-void	reset_and_run(t_tokens **tokens, t_shell *shell, t_table *table)
+void	reset(t_table *table)
 {
-	free_t_content_alloc_and_table(table, shell->table_len);
-	free(shell->input);	
-	if (*tokens != NULL)
-		free_list(tokens);
-	shell->table_len = 0;
-	shell_loop(shell);
+	//free_t_content_alloc_and_table(table, shell->table_len);
+	//free(shell->input);	
+	if (table->tokens != NULL)
+		free_list(table->tokens);
+	free_table(table);
+	//shell->table_len = 0;
+	//shell_loop(shell);
 }
 
 void	shell_loop(t_shell *shell)//at completion of execution reset all data and recall this.
@@ -65,40 +66,35 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 	t_table 	*table;
 
 	table = NULL;
-	init_in = readline("\033[1;94mminishell\033[1;92m$\033[0m ");
-	if (errno != 0 )
-		early_error_exit(init_in, shell);
-	shell->input = ft_strtrim(init_in, " ");
-	if (shell->input == NULL)
-		early_error_exit(init_in, shell);
-	if (ft_strcmp(shell->input, "") != 0)
-		add_history(init_in);
-	free(init_in);
-	tokens = build_token_list(shell->input);//mem safe with frees and exit if null.
-	//if (tokens == NULL)
-	//	ft_exit(table, );		
-	tokens = grammer_check(tokens);
-	if (tokens == NULL)
-		reset_and_run(&tokens, shell, table);
-	table = parser(tokens, shell);//redo mem safe. exit has changed clear on null return
-	free_list(&tokens); //free here
-
-	///PARSE AND TABLES TESTING-----------------
-	/* printf("\n--------\n");//test
-	print_tables(table);
-	printf("\n--------\n");//test */
-	//-------------------------------------
-	
-	executor(table, shell);// testing the executor here.. not totally fin.
-	
-	//EXPANDER TESTING-----------------------------------------------------------------------
-		//char *exp = expander(tokens->content, shell); //basic version is working, must remove exraneous quotes when needed
-	//printf("%s\n", exp);
-	//free(exp);
-	//printf("|");
-	//-----------------------------------------------------------------------------
-	reset_and_run(&tokens, shell, table);
+	errno = 0;
+	while (1)
+	{
+		init_in = readline("minishell$ ");
+		//init_in = readline("\033[1;94mminishell\033[1;92m$\033[0m "); issue with col?
+		if (errno != 0 )
+			readline_error_exit(init_in, shell);//rename
+		if (init_in == NULL)
+			break ;
+		shell->input = ft_strtrim(init_in, " ");
+		if (shell->input == NULL)
+			trim_error_exit(init_in, shell);
+		if (ft_strcmp(shell->input, "") != 0)
+			add_history(init_in);
+		free(init_in);
+		tokens = build_token_list(shell->input);//mem safe with frees and exit if null.
+		free(shell->input);
+		tokens = grammer_check(tokens);
+		table = parser(tokens);//redo mem safe. 
+		table = execution(table, shell);//shell added
+		//if (tokens == NULL)
+		//	ft_exit(table, );		
+		//free_list(&tokens); //free here?
+		if (tokens != NULL)
+			reset(table);
+	}
+	control_d_exit(shell);
 }
+	//reset_and_run(&tokens, shell, table);
 
 int	main(int ac, char **av)
 {
@@ -128,6 +124,20 @@ int	main(int ac, char **av)
 	return (0);
 }
 
+	///PARSE AND TABLES TESTING-----------------
+	/* printf("\n--------\n");//test
+	print_tables(table);
+	printf("\n--------\n");//test */
+	//-------------------------------------
+	
+	//executor(table, shell);// testing the executor here.. not totally fin.
+	
+	//EXPANDER TESTING-----------------------------------------------------------------------
+		//char *exp = expander(tokens->content, shell); //basic version is working, must remove exraneous quotes when needed
+	//printf("%s\n", exp);
+	//free(exp);
+	//printf("|");
+	//-----------------------------------------------------------------------------
 /* 	 shell.env = add_env(shell.env, "here=here");
 	// shell.env = add_env(shell.env, "here2=here2");
 	shell.env = del_env(shell.env, "he");  */
