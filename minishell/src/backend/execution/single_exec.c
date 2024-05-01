@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/29 23:15:42 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/05/01 21:21:40 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,30 +81,30 @@ int	output_check(t_table table, int table_id)
 	return (0);
 }
 
-t_table	single_exec(t_table table)
+int	single_exec(t_table *table)
 {
 	char **hdoc;
 	char *in;
 	int out_fd;
 	int	is_out;
-
+	
 	out_fd = dup(STDOUT_FILENO);
-	table = expandor(table);
-	if (table.args[0] == NULL)
-		return (table);
-	hdoc = check_hdoc(table);
-	in = check_in(table);
-	is_out = output_check(table, 0);
-	if (is_builtin(table.args[0]) == 1)
-		run_builtin(table);
-	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
-		ft_execve(table.args[0], table.args);
+	table[0] = expandor(*table);
+	if (table->args[0] == NULL)
+		return (free_all(table), 0);
+	hdoc = check_hdoc(table[0]);
+	in = check_in(table[0]);
+	is_out = output_check(table[0], 0);
+	if (is_builtin(table->args[0]) == 1)
+		run_builtin(table[0]);
+	else if (table->args[1] != NULL || (table->in[0] == NULL && table->heredoc[0] == NULL))
+		ft_execve(table->args[0], table->args);
 	else
-		inp_cmd_run(table, in, hdoc);
+		inp_cmd_run(table[0], in, hdoc);
 	if (is_out != 0)
 		dup2(out_fd, STDOUT_FILENO);
 	close(out_fd);
-	return (table);
+	return (free_all(table), 0);
 }
 // in the situation where expanded element is not good to run table is going to return args[0] as NULL
 // It is not faill

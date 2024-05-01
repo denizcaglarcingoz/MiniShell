@@ -16,3 +16,9 @@ void free_table(t_table *table)
 	}
 	free(table);
 }
+
+void free_all(t_table *table)
+{
+	free_table(table);
+	free_list(table->tokens);
+}

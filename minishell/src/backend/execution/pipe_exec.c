@@ -17,7 +17,7 @@ void	fork_fail(t_table *exp_table)
 	exit(EXIT_FAILURE);
 }
 
-t_table	*pipe_execution(t_table *tables)
+int	pipe_execution(t_table *tables)
 {
 	int		pipefd[2];
 	int 	in_fd;
@@ -55,15 +55,13 @@ t_table	*pipe_execution(t_table *tables)
 			else
 				close(pipefd[1]);
 			if ((tables[i]).args[0] == NULL)
-				exit(0);
+				return (free_all(tables), 1);
 			else
 				pipe_exec_run(tables[i], i, hdoc);
 			write(2, tables[i].args[0], ft_strlen(tables[i].args[0]));
 			write (2, ": command not found\n", 21);
-			free_list(tables[i].tokens);
-			free_table(tables);
 			free_env();
-			exit(127);
+			return (free_all(tables), 1);
 		}
 		else
 		{
@@ -76,12 +74,11 @@ t_table	*pipe_execution(t_table *tables)
 	}
 	close(in_fd);
 	close(pipefd[0]);
-	// free_table(tables);
 	i = 0;
 	while ( i < tables->table_len)
 	{
 		wait(NULL);
 		i++;
 	}
-	return (tables);
+	return (free_all(tables), 0);
 }

@@ -44,11 +44,10 @@ void	shell()//at completion of execution reset all data and recall this.
 		tokens = build_token_list(input);
 		tokens = grammer_check(tokens);
 		table = parser(tokens);
-		table = execution(table);
-		if (tokens != NULL)
-			reset(table, input);
+		if (execution(table) != 0)
+			break;
+		free(input);
 	}
-	printf("ctrl d exit\n");
 	clear_history();
 	free_env();
 	exit(EXIT_SUCCESS);

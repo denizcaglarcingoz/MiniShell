@@ -82,9 +82,9 @@ void			free_env();
 char			**ft_d_strdup(char **env);
 
 //	EXECUTION
-t_table			*execution(t_table *table);
-t_table			single_exec(t_table table);
-t_table			*pipe_execution(t_table *tables);
+int				execution(t_table *table);
+int				single_exec(t_table *table);
+int				pipe_execution(t_table *tables);
 void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc);
 void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
 void			fork_fail(t_table *exp_table);
@@ -110,6 +110,7 @@ int				is_builtin(char *cmd);
 t_token_type	out_o_app(t_table exp_table, int table_id);
 t_token_type	in_o_hdoc(t_table exp_table, int table_id);
 char			*last_str(char **strs);
+void			free_all(t_table *table);
 
 /**testing**/
 void			print_tokens(t_tokens *tokens);

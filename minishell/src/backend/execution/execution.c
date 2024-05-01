@@ -38,16 +38,18 @@ char *check_in(t_table table)
 	return (table.in[i - 1]);
 }
 
-t_table	*execution(t_table *table)
+int	execution(t_table *table)
 {
+	int error_check;
 
+	error_check = 0;
 	if (table == NULL)
-		return (NULL);
+		return (0);
 	if (table->table_len < 2)
-		table[0] = single_exec(table[0]);
+		error_check = single_exec(table);
 	else
-		table = pipe_execution(table);
+		error_check = pipe_execution(table);
 	
-	return (table);
+	return (error_check);
 	// print_tables(table);
 }
