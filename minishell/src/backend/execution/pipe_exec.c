@@ -20,13 +20,11 @@ void	fork_fail(t_table *exp_table)
 int	pipe_execution(t_table *tables)
 {
 	int		pipefd[2];
-	int 	in_fd;
 	int		prev_read_fd;
 	int		pid;
 	int		i;
 
 	i = 0;
-	in_fd = dup(STDIN_FILENO);
 	prev_read_fd = -1;
 	while (i < tables->table_len)
 	{
@@ -35,7 +33,6 @@ int	pipe_execution(t_table *tables)
 				fork_fail(tables);
 		if (pid == 0)	
 		{
-			close(in_fd);
 			close(pipefd[0]);
 			if (prev_read_fd != -1)
 			{
@@ -72,7 +69,6 @@ int	pipe_execution(t_table *tables)
 		}
 		i++;
 	}
-	close(in_fd);
 	close(pipefd[0]);
 	i = 0;
 	while ( i < tables->table_len)
