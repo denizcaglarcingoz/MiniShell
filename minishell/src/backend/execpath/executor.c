@@ -63,7 +63,7 @@ char	**return_expanded(char **args, t_shell *shell)//join args to put through ex
 	return (args);
 }
 
-static void	exec_cmd(char **full_cmd, char **envp)
+static int	exec_cmd(char **full_cmd, char **envp)
 {
 	char	*path;
 	
@@ -73,15 +73,17 @@ static void	exec_cmd(char **full_cmd, char **envp)
 		
 		ft_putstr_color_fd(2, full_cmd[0], RED);
 		ft_putstr_color_fd(2, ": command not found\n", RED);
+		return(127);
 		//free_stuff or use ft_exit when its ready
 		exit(EXIT_FAILURE);
 	}
 	if (execve(path, full_cmd, envp) == -1)
 	{
 		perror("execve error");
-		//free_stuff
+		return(126);//??
 		exit(EXIT_FAILURE);
 	}
+	return (0);
 }
 
 
@@ -146,7 +148,7 @@ void	executor(t_table *table, t_shell *shell)
 				perror("dup2");//handle
 			close(p_fd[1]);
 			if (!check_and_run_builtins_2(table, table[i].args, shell))
-				exec_cmd(table[i].args, shell->env);
+				shell->exit_status = exec_cmd(table[i].args, shell->env);
 		exit(EXIT_SUCCESS);
 		}
 		else

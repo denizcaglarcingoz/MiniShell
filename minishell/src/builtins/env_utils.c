@@ -19,6 +19,7 @@ void	free_all_env(char **env)
 {
 	int	j;
 	int	env_len;
+
 	if (env == NULL)
 	{
 		printf("Empty Environmental Variable List\n");

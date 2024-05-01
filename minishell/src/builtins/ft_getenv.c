@@ -45,7 +45,6 @@ static char	**fill_path_names_env(char **path_names, char **env)
 		}
 		path_names[i][j] = '\0';
 	}
-
 	path_names[i] = NULL;
 	return (path_names);
 }
@@ -74,7 +73,7 @@ char	*ft_getenv(char *path, char **env)
 		i++;
 	path_len = ft_strlen(path);
 	free_all_env(path_names);
-	if (!env[i]) //non exitstence
+	if (!env[i]) //non exitstence returns null so cant protect this way.
 		return (NULL);
 	return (env[i] + path_len + 1);
 }

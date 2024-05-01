@@ -90,15 +90,21 @@ void	sigint_handler_quit(int signum);
 /***BUILT-INS****/
 char	**parse_dollar(t_table *table, char **full_cmd, t_shell *shell);
 
-int		check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell);
-int		check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell);
-
 int		ft_echo(char **full_cmd);
 int		ft_cd(char **full_cmd, t_shell *shell);
 int		ft_pwd(void);
 int		ft_exit(t_table *table, char **full_cmd, t_shell *shell);
 int		ft_export(char **full_cmd, t_shell *shell);
 int		ft_unset(t_table *table, char **full_cmd, t_shell *shell);
+
+//utils
+int		check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell);
+int		check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell);
+void	ft_quicksort_params(char **tab, int start, int end);
+int		has_equal(char *str);
+void	cd_not_found(char **full_cmd);
+int		invalid_id(char *id);
+int		compare_names_add(char *name, char *var);
 
 
 /***ENV_UTILS***/

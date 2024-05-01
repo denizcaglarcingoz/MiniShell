@@ -35,7 +35,7 @@ static char	**del_env_helper(char **env, char **new_env, \
 				free_envs(new_env, j);
 				return (NULL);
 			}
-		j++;
+			j++;
 		}
 	}
 	new_env[j] = NULL;

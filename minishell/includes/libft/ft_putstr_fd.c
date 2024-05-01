@@ -14,7 +14,7 @@
 
 int	ft_putstr_fd(char *s, int fd)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (*s)
@@ -24,10 +24,3 @@ int	ft_putstr_fd(char *s, int fd)
 	}
 	return (len);
 }
-/*int main()
-{
-	char *s1 = "stuff for the thing";
-	ft_putstr_fd(s1, 1);
-	write(1, "\n", 1);
-	return 0;
-}*/

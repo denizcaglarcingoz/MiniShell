@@ -1,12 +1,12 @@
 #include "minishell.h"
-
-//double free occurs sometimes, why
+//remove quotes in special way, check cases
+//double free occurs sometimes, why, perhaps in expander switch to indexes
 int	has_equal(char *str)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(str[++i])
+	while (str[++i])
 	{
 		if (str[i] == '=')
 			return (1);
@@ -17,7 +17,8 @@ int	has_equal(char *str)
 int	check_valid_id(char *s)
 {
 	int	i;
-	i = 0;	
+
+	i = 0;
 	if (ft_isdigit(s[i]) || !(s[i] == '_' || ft_isalpha(s[i])))
 		return (1);
 	while (s[++i] && s[i] != '=')
@@ -43,22 +44,43 @@ void	print_export(char **env)
 	{
 		j = -1;
 		ft_putstr_fd("declare -x ", 1);
-		while (env[i][++j] != '=')
+		while (env[i][++j] != '=' && env[i][j])
 			ft_putchar_fd(env[i][j], 1);
-		ft_putchar_fd(env[i][j], 1);
-		ft_putstr_fd("\"", 1);
-		while (env[i][++j])
+		if (env[i][j] != '\0')
+		{
 			ft_putchar_fd(env[i][j], 1);
-		ft_putstr_fd("\"\n", 1);
+			ft_putchar_fd('\"', 1);
+			while (env[i][++j])
+				ft_putchar_fd(env[i][j], 1);
+			ft_putchar_fd('\"', 1);
+		}
+		ft_putstr_fd("\n", 1);
 	}
 }
 
-int	invalid_id(char *id)
+int	export_loop(char *cmd, t_shell *shell)
 {
-	ft_putstr_color_fd(2, "minishell: export: '", RED);
-	ft_putstr_color_fd(2, id, RED);
-	ft_putstr_color_fd(2, "': not a valid identifier\n", RED);
-	return (1);
+	int	ret;	
+
+	ret = 0;
+	if (check_valid_id(cmd))
+		ret = invalid_id(cmd);
+	else if (!has_equal(cmd))
+	{
+		shell->exported = add_env(shell->exported, cmd);
+		ft_quicksort_params(shell->exported, 0, \
+		ft_matrix_len(shell->exported) - 1);
+	}
+	else
+	{
+		shell->env = add_env(shell->env, cmd);
+		shell->exported = add_env(shell->exported, cmd);
+		ft_quicksort_params(shell->exported, 0, \
+		ft_matrix_len(shell->exported) - 1);
+	}
+	if (shell->env == NULL || shell->exported == NULL)
+		ret = 2;
+	return (ret);
 }
 
 int	ft_export(char **full_cmd, t_shell *shell)
@@ -74,18 +96,10 @@ int	ft_export(char **full_cmd, t_shell *shell)
 		i = 0;
 		while (full_cmd[++i])
 		{
-			if (check_valid_id(full_cmd[i]))
-				status = invalid_id(full_cmd[i]);
-			else if (!has_equal(full_cmd[i]))
-				continue ;
-			else
-			{	
-				shell->env = add_env(shell->env, full_cmd[i]);	
-				shell->exported = add_env(shell->exported, full_cmd[i]);
-				//if (shell->env == NULL || shell->exported == NULL) protect final_free
-			}
+			status = export_loop(full_cmd[i], shell);
+			if (status == 2)
+				break ;
 		}
 	}
-	return (status);
+	return (status);//status 2 is malloc fail
 }
-	

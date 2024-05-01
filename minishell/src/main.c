@@ -4,6 +4,7 @@
 int	check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell)
 { 
 	(void)table;
+	shell->exit_status = 0;
 	if (ft_strcmp(full_cmd[0], "pwd") == 0)//prints cannot fail.
 	{
 		ft_pwd();
@@ -28,12 +29,12 @@ int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell)
 //	if (**full_cmd == '$')//handle with dollar sign. receives expanded already.
 //		parse_dollar(table, shell);
 	if (ft_strcmp(full_cmd[0], "exit") == 0) 
-		ft_exit(table, full_cmd, shell);//maybe set equal to stat and determine exit status
+		shell->exit_status = ft_exit(table, full_cmd, shell);//maybe set equal to stat and determine exit status
 	else if (ft_strcmp(full_cmd[0], "cd") == 0) 
-		ft_cd(full_cmd, shell);//malloc fail returns 2, fail to find 1, 0 good;
+		shell->exit_status = ft_cd(full_cmd, shell);//malloc fail returns 2, fail to find 1, 0 good;
 	else if (ft_strcmp(full_cmd[0], "export") == 0)
 	{
-		ft_export(full_cmd, shell);
+		shell->exit_status = ft_export(full_cmd, shell);
 		return (2);
 	}
 	else if (ft_strcmp(full_cmd[0], "unset") == 0)
@@ -83,9 +84,9 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 	free_list(&tokens); //free here
 
 	///PARSE AND TABLES TESTING-----------------
-	printf("\n--------\n");//test
+	/* printf("\n--------\n");//test
 	print_tables(table);
-	printf("\n--------\n");//test
+	printf("\n--------\n");//test */
 	//-------------------------------------
 	
 	executor(table, shell);// testing the executor here.. not totally fin.
@@ -115,13 +116,13 @@ int	main(int ac, char **av)
 	shell.env = get_env();
 	if (!shell.env)
 		exit(EXIT_FAILURE);
-	shell.exported = (char **)malloc(sizeof(char*));//
+	shell.exported = get_env();//(char **)malloc(sizeof(char*));//
 	if (!shell.exported)
 	{
 		free_all_env(shell.env);
 		exit(EXIT_FAILURE);
 	}
-
+	ft_quicksort_params(shell.exported, 0, ft_matrix_len(shell.exported) - 1);
 	//print_intro();
 	shell_loop(&shell);
 	return (0);

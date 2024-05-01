@@ -3,7 +3,7 @@
 int	is_all_digit(char *s)
 {
 	int	i;
-	
+
 	i = -1;
 	if (s[0] == '-')
 		i++;
@@ -15,14 +15,24 @@ int	is_all_digit(char *s)
 	return (1);
 }
 
-int	check_args(char **full_cmd)
+long int	set_code(char **full_cmd)
 {
-	if (ft_matrix_len(full_cmd) > 2)
+	long int	code;
+
+	if (!is_all_digit(full_cmd[1]))
 	{
-		ft_putstr_color_fd(2, "minishell: exit: too many arguments\n", RED);
-		return (1);
+		ft_putstr_color_fd(2, "minishell: exit: ", RED);
+		ft_putstr_color_fd(2, full_cmd[1], RED);
+		ft_putstr_color_fd(2, ": numeric argument required\n", RED);
+		code = 2;
 	}
-	return (0);
+	else
+	{
+		code = (ft_atol(full_cmd[1]) % 256);
+		if (code < 0)
+			code += 256;
+	}
+	return (code);
 }
 
 void	final_free(t_table *table, t_shell *shell)
@@ -37,31 +47,20 @@ void	final_free(t_table *table, t_shell *shell)
 
 int	ft_exit(t_table *table, char **full_cmd, t_shell *shell)
 {
-	long int code;
+	long int	code;
 
 	ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
-	if (check_args(full_cmd))
-		code = 1;
-	else if (full_cmd[1])
+	if (ft_matrix_len(full_cmd) > 2)
 	{
-		if (!is_all_digit(full_cmd[1]))
-		{
-				ft_putstr_color_fd(2, "minishell: exit: ", RED);
-				ft_putstr_color_fd(2,  full_cmd[1], RED);
-				ft_putstr_color_fd(2, ": numeric argument required\n", RED);
-				code = 2;
-		}
-		else
-		{
-			code = (ft_atol(full_cmd[1]) % 256);
-			if (code < 0)
-				code += 256; 
-		}
+		ft_putstr_color_fd(2, "minishell: exit: too many arguments\n", RED);
+		return (1);
 	}
+	if (full_cmd[1])
+		code = set_code(full_cmd);
 	else
 		code = 0;
 	final_free(table, shell);
-	printf("exit code: %d\n", code);//-------------
+	printf("exit code: %ld\n", code);//-------------
 	exit(code);
 	return (code);
 }
