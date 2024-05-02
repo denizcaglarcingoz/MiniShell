@@ -17,8 +17,8 @@
 # include <sys/ioctl.h> 
 # include <termios.h>
 # include <dirent.h>//not in Deniz version
-# include "lexer.h"
 # include "parser.h"
+# include "lexer.h"
 # include <sys/wait.h>
 
 #define BUFFER_SIZE 4084

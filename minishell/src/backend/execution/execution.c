@@ -46,7 +46,7 @@ t_table	*execution(t_table *table, t_shell *shell)//added shell here
 	if (table->table_len < 2)
 		table[0] = single_exec(table[0], shell);//shell
 	else
-		table = pipe_execution(table);
+		table = pipe_execution(table, shell);//shell
 	
 	return (table);
 	// print_tables(table);

@@ -4,7 +4,7 @@
 # include "minishell.h"
 # include "parser.h"
 
-/* typedef enum e_token_type
+typedef enum e_token_type
 {
 	INITIAL, //THE FIRST PART UNTIL THE SPACE --COMMAND OR PATH ETC
 	WHITESPACE,
@@ -20,13 +20,13 @@
 	D_QUOTE,
 	NO_TYPE
 
-}	t_token_type; */
+}	t_token_type;
 
-/* typedef struct s_tokens
+typedef struct s_tokens
 {
 	t_token_type	type;
 	char			*content;
 	struct s_tokens	*next;
-}	t_tokens; */
+}	t_tokens;
 
 #endif
