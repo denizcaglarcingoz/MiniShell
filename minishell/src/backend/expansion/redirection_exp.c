@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-bool	redir_expand(char **content)
+bool	redir_expand(char **content, t_shell *shell)//shell
 {
 	int		i;
 	char	*temp;
@@ -14,7 +14,7 @@ bool	redir_expand(char **content)
 			return (false);
 		}
 		temp = ft_strdup(content[i]);
-		content[i] = expansion_check(content[i]);
+		content[i] = expansion_check(content[i], shell);
 		if (ft_strlen(content[i]) == 0)
 		{
 			printf("bash: %s: ambiguous redirect\n", temp);

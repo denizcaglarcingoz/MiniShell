@@ -41,7 +41,7 @@ void	final_free(t_table *table, t_shell *shell)
 	//free(shell->input);// get rid of in main
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	if (table)
+	if (table)		//must fix this freeing
 		free_t_content_alloc_and_table(table, shell->table_len);
 }
 

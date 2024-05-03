@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out)
+void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out, t_shell *shell)//has 5 now!!
 {
 	int				fd;
 	int				in_fd;
 	char			*inp;
-	char			*return_out;
+	//char			*return_out;
 	t_token_type	t_type;
 
 	t_type = in_o_hdoc(exp_table, 0);
@@ -33,14 +33,14 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out)
 	}
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
-	return_out = ft_pipe_execve(exp_table.args[0], exp_table.args, is_out);
+	ft_pipe_execve(exp_table.args[0], exp_table.args, is_out, shell);//return_out = 
 	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);
 	close(fd);
 }
 
-void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
+void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)//shell
 {
 	char *in;
 	int	is_out;
@@ -54,7 +54,7 @@ void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
 		exit(0);// with correct code
 	}
 	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
-		ft_pipe_execve(table.args[0], table.args, is_out);
+		ft_pipe_execve(table.args[0], table.args, is_out, shell);
 	else
-		pipe_inp_cmd_run(table, in, hdoc, is_out);
+		pipe_inp_cmd_run(table, in, hdoc, is_out, shell);//five!!
 }

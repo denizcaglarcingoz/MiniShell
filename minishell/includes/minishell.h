@@ -70,7 +70,7 @@ void	print_tokens(t_tokens *tokens);
 t_tokens	*grammer_check(t_tokens *tokens);
 t_table		*parser(t_tokens *tokens);
 t_table		*table_init(t_tokens *tokens, t_table *table);
-int			t_content_alloc(t_tokens *tokens, t_table *table);
+void		t_content_alloc(t_tokens *tokens, t_table *table);
 
 // table allocs
 t_table		*table_alloc(t_tokens *tokens);
@@ -81,30 +81,30 @@ void			free_table(t_table *table);
 int			print_tables(t_table *table);
 
 /****EXPANSION****/
-t_table			expandor(t_table table);
+t_table			expandor(t_table table, t_shell *shell);//shell
 char 			*ft_strjoin_char(char *s1, char c);
 bool			is_alfa_num(char c);
-bool			arg_expand(char ***ref_content);
+bool			arg_expand(char ***ref_content, t_shell *shell);//shell
 bool			content_check(char *content);
-char			*expansion_check(char *content);
-bool			redir_expand(char **content);
+char			*expansion_check(char *content, t_shell *shell);//shell
+bool			redir_expand(char **content, t_shell *shell);//shell
 
 /****EXECUTION****/
 t_table			*execution(t_table *table, t_shell *shell);// added shell
 t_table			single_exec(t_table table, t_shell *shell);// added shell
 t_table			*pipe_execution(t_table *tables, t_shell *shell);// added shell
-void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc);
+void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc, t_shell *shell);//shell
 void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
 void			fork_fail(t_table *exp_table);
 char			*check_in(t_table exp_table);
 char			**check_hdoc(t_table exp_table);
 int				output_check(t_table exp_table, int table_id);
-void			inp_cmd_run(t_table exp_table, char *in, char **hdoc);
+void			inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell);
 char 			*temp_hdoc(char *hdoc);
 
 //execution execve
-char			*ft_execve(char *path, char **argv);
-char			*ft_pipe_execve(char *path, char **argv, int is_out);
+char			*ft_execve(char *path, char **argv, t_shell *shell);//shell
+char			*ft_pipe_execve(char *path, char **argv, int is_out, t_shell *shell);//shell
 	
 // execution redirections
 char			*hdoc_inp(char *h_name);
@@ -122,10 +122,9 @@ char			*last_str(char **strs);
 
 /****SIGNALS****/
 void	sigint_handler_int(int signum);
-void	sigint_handler_quit(int signum);
+//void	sigint_handler_quit(int signum);
 
 /***BUILT-INS****/
-//char	**parse_dollar(t_table *table, char **full_cmd, t_shell *shell);
 
 int		ft_echo(char **full_cmd);
 int		ft_cd(char **full_cmd, t_shell *shell);

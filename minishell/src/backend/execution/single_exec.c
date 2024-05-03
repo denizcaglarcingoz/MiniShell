@@ -24,12 +24,12 @@ char *temp_hdoc(char *hdoc)
 	return ("temp_hdoc");
 }
 
-void	inp_cmd_run(t_table exp_table, char *in, char **hdoc)
+void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)//shell
 {
 	int				fd;
 	int				in_fd;
 	char			*inp;
-	char			*return_out;
+	//char			*return_out;
 	t_token_type	t_type;
 
 	t_type = in_o_hdoc(exp_table, 0);
@@ -46,7 +46,7 @@ void	inp_cmd_run(t_table exp_table, char *in, char **hdoc)
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	return_out = ft_execve(exp_table.args[0], exp_table.args);
+	ft_execve(exp_table.args[0], exp_table.args, shell);//return_out = 
 	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);
@@ -89,7 +89,7 @@ t_table	single_exec(t_table table, t_shell *shell)// shell
 	int	is_out;
 
 	out_fd = dup(STDOUT_FILENO);
-	table = expandor(table);
+	table = expandor(table, shell);
 	if (table.args[0] == NULL)
 		return (table);
 	hdoc = check_hdoc(table);
@@ -98,9 +98,9 @@ t_table	single_exec(t_table table, t_shell *shell)// shell
 	if (is_builtin(table.args[0]) == 1)
 		run_builtin(table, shell);
 	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
-		ft_execve(table.args[0], table.args);
+		ft_execve(table.args[0], table.args, shell);
 	else
-		inp_cmd_run(table, in, hdoc);
+		inp_cmd_run(table, in, hdoc, shell);
 	if (is_out != 0)
 		dup2(out_fd, STDOUT_FILENO);
 	close(out_fd);

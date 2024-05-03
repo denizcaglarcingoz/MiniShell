@@ -43,7 +43,7 @@ t_table	*pipe_execution(t_table *tables, t_shell *shell)//shell
 				close(prev_read_fd);
 			}
 			char **hdoc = check_hdoc(tables[i]);
-			tables[i] = expandor(tables[i]);
+			tables[i] = expandor(tables[i], shell);
 			if (i + 1 < tables->table_len)
 			{	
 				if (tables[i].args[0] != NULL && output_check(tables[i], i) == 0)
@@ -57,7 +57,7 @@ t_table	*pipe_execution(t_table *tables, t_shell *shell)//shell
 			if ((tables[i]).args[0] == NULL)
 				exit(0);
 			else
-				pipe_exec_run(tables[i], i, hdoc);
+				pipe_exec_run(tables[i], i, hdoc, shell);//shell
 			write(2, tables[i].args[0], ft_strlen(tables[i].args[0]));
 			write (2, ": command not found\n", 21);
 			free_list(tables[i].tokens);

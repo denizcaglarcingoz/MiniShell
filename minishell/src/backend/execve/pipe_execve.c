@@ -48,29 +48,29 @@ char	*pipe_path_run(char **all_paths, char **argv, char **environ, int is_out)
 	free_d_str(all_paths);
 	return (NULL);
 }
-char	*ft_pipe_execve(char *path, char **argv, int is_out)
+char	*ft_pipe_execve(char *path, char **argv, int is_out, t_shell *shell)//shell
 {
-	char	**environ;
+	//char	**environ;
 	char	**all_paths;
 	char	**paths;
 
-	environ = get_full_env(0);
+	//environ = get_full_env(0);
 	if (argv[0] == NULL)
 		return (NULL);
 	if (access(path, X_OK) == 0)
 	{
-		if (execve(path, argv, environ) == -1)
+		if (execve(path, argv, shell->env) == -1)
 		{
 			perror("execve");
 			return (NULL);
 		}
 		exit(0);
 	}
-	paths = ft_split(get_env("PATH"), ':');
+	paths = ft_split(getenv("PATH"), ':');// changed to getenv
 	all_paths = pipe_append_path(paths, ft_strjoin("/", path));
 	free_d_str(paths);
 	if (all_paths == NULL)
 		return (NULL);
-	return (pipe_path_run(all_paths, argv, environ, is_out));
+	return (pipe_path_run(all_paths, argv, shell->env, is_out));
 }
 

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-bool arg_expand(char ***ref_content)
+bool arg_expand(char ***ref_content, t_shell *shell)
 {
 	int		i;
 	char	**content;
@@ -13,7 +13,7 @@ bool arg_expand(char ***ref_content)
 			printf("minishell: syntax error\n");
 			return (false);
 		}
-		content[i] = expansion_check(content[i]);
+		content[i] = expansion_check(content[i], shell);
 		i++;
 	}
 	i = 0;

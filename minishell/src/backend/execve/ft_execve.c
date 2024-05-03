@@ -78,13 +78,13 @@ char	*path_run(char **all_paths, char **argv, char **environ)
 	return (NULL);
 }
 
-char	*ft_execve(char *path, char **argv)
+char	*ft_execve(char *path, char **argv, t_shell *shell)//shell
 {
-	char	**environ;
+	//char	**environ;
 	char		**all_paths;
 	pid_t	pid;
 
-	environ = get_full_env(0);
+	//environ = get_full_env(0);
 	if (argv[0] == NULL)
 		return (NULL);
 	if (access(path, X_OK) == 0)
@@ -93,14 +93,14 @@ char	*ft_execve(char *path, char **argv)
 			return (perror("execve failed\n"), "fork failed\n");
 		if (pid == 0)	
 		{
-			execve(path, argv, environ);
+			execve(path, argv, shell->env);
 			return (perror("execve failed\n"), "fork failed\n");
 		}
 		else
 			return (wait(NULL), NULL);
 	}
-	all_paths = append_path(ft_split(get_env("PATH"), ':'), ft_strjoin("/", path));
+	all_paths = append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));//changed get_env to getenv
 	if (all_paths == NULL)
 		return ("malloc failed\n");
-	return (path_run(all_paths, argv, environ));
+	return (path_run(all_paths, argv, shell->env));
 }

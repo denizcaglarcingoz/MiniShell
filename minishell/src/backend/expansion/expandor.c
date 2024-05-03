@@ -1,20 +1,20 @@
 #include "minishell.h"
 
-char	*expand(char *exp)
+char	*expand(char *exp, t_shell *shell)//shell
 {
 	char	*new_exp;
 	int		i;
-	char	**env;
+	//char	**env;
 
-	env = get_full_env(0);
+	//env = get_full_env(0);
 	i = 0;
 	exp = ft_strjoin_char(exp, '=');
 	new_exp = ft_strdup("");
-	while (env[i])
+	while (shell->env[i])
 	{
-		if (ft_strncmp(exp, env[i], ft_strlen(exp)) == 0)
+		if (ft_strncmp(exp, shell->env[i], ft_strlen(exp)) == 0)
 		{
-			new_exp = ft_strjoin(new_exp, env[i] + ft_strlen(exp));
+			new_exp = ft_strjoin(new_exp, shell->env[i] + ft_strlen(exp));
 		}
 		i++;
 	}
@@ -22,7 +22,7 @@ char	*expand(char *exp)
 	return (new_exp);
 }
 
-char	*expansion_dollar(char *content, int *i, char *new_content)
+char	*expansion_dollar(char *content, int *i, char *new_content, t_shell *shell)//shell
 {
 	char	*exp;
 
@@ -33,19 +33,19 @@ char	*expansion_dollar(char *content, int *i, char *new_content)
 		exp = ft_strjoin_char(exp, content[*i]);
 		(*i)++;
 	}
-	exp = expand(exp);
+	exp = expand(exp, shell);
 	new_content = ft_strjoin(new_content, exp);
 	free(exp);
 	return (new_content);
 }
 
-char *expansion_d_quo(char *content, int *i, char *new_content)
+char *expansion_d_quo(char *content, int *i, char *new_content, t_shell *shell)//shell
 {
 	(*i)++;
 	while (content[*i] && content[*i] != '"')
 	{
 		if (content[*i] == '$')
-			new_content = expansion_dollar(content, i, new_content);
+			new_content = expansion_dollar(content, i, new_content, shell);
 		if (!content[*i] || content[*i] == '"')
 			break ;
 		if (content[*i] != '$')
@@ -68,7 +68,7 @@ char *expansion_s_quo(char *content, int *i, char *new_content)
 	return (new_content);
 }
 
-char	*expansion_check(char *content)
+char	*expansion_check(char *content, t_shell *shell)
 {
 	char	*new_content;
 	int		i;
@@ -81,9 +81,9 @@ char	*expansion_check(char *content)
 	while(content[i])
 	{
 		if (content[i] == '$')
-			new_content = expansion_dollar(content, &i, new_content);
+			new_content = expansion_dollar(content, &i, new_content, shell);
 		else if (content[i] == '"')
-			new_content = expansion_d_quo(content, &i, new_content);
+			new_content = expansion_d_quo(content, &i, new_content, shell);
 		else if (content[i] == '\'')
 			new_content = expansion_s_quo(content, &i, new_content);
 		if (content[i] != '$' && content[i] != '"' && content[i] != '\'')
@@ -151,24 +151,24 @@ bool check_in_expandor(t_table exp_table)
 	return (true);
 }
 
-t_table	expandor(t_table table)
+t_table	expandor(t_table table, t_shell *shell)//shell
 {
-	if (arg_expand(&(table.args)) == false)
+	if (arg_expand(&(table.args), shell) == false)
 	{
 		table.args[0] = NULL;
 		return (table);
 	}
-	if (redir_expand(table.in) == false)
+	if (redir_expand(table.in, shell) == false)
 	{	
 		table.args[0] = NULL;
 		return (table);
 	}
-	if (redir_expand(table.out) == false)
+	if (redir_expand(table.out, shell) == false)
 	{
 		table.args[0] = NULL;
 		return (table);
 	}
-	if (redir_expand(table.append) == false)
+	if (redir_expand(table.append, shell) == false)
 	{	
 		table.args[0] = NULL;
 		return (table);

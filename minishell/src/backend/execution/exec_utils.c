@@ -53,6 +53,10 @@ int	is_builtin(char *cmd)
 		return (1);
 	else if (ft_strcmp(cmd, "env") == 0)
 		return (1);
+	else if (ft_strcmp(cmd, "export") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		return (1);
 	return (0);
 }
 
