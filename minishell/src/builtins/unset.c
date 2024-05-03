@@ -12,7 +12,7 @@ int	ft_unset(t_table *table, char **full_cmd, t_shell *shell)
 	while (full_cmd[++i])
 	{
 		if (ft_getenv(full_cmd[i], shell->env) == NULL)
-			continue ;
+			shell->exported = del_env(shell->exported, full_cmd[i]);
 		else
 		{
 			shell->env = del_env(shell->env, full_cmd[i]);
