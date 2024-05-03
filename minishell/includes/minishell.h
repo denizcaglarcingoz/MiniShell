@@ -83,7 +83,7 @@ char			**ft_d_strdup(char **env);
 
 //	EXECUTION
 int				execution(t_table *table);
-int				single_exec(t_table *table);
+void			single_exec(t_table *table);
 int				pipe_execution(t_table *tables);
 void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc);
 void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
@@ -91,11 +91,11 @@ void			fork_fail(t_table *exp_table);
 char			*check_in(t_table exp_table);
 char			**check_hdoc(t_table exp_table);
 int				output_check(t_table exp_table, int table_id);
-void			inp_cmd_run(t_table exp_table, char *in, char **hdoc);
+void			inp_cmd_run(t_table *table, char *in, char **hdoc);
 char 			*temp_hdoc(char *hdoc);
 
 	//EXECUTION EXECVE
-char			*ft_execve(char *path, char **argv);
+void			ft_execve(t_table *table);
 char			*ft_pipe_execve(char *path, char **argv, int is_out);
 	
 	// EXECUTION REDIRECTIONS
@@ -110,7 +110,7 @@ int				is_builtin(char *cmd);
 t_token_type	out_o_app(t_table exp_table, int table_id);
 t_token_type	in_o_hdoc(t_table exp_table, int table_id);
 char			*last_str(char **strs);
-void			free_all(t_table *table);
+void			free_all(t_table *table, int all, char *error);
 
 /**testing**/
 void			print_tokens(t_tokens *tokens);

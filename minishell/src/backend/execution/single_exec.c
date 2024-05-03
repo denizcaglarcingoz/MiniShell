@@ -24,15 +24,14 @@ char *temp_hdoc(char *hdoc)
 	return ("temp_hdoc");
 }
 
-void	inp_cmd_run(t_table exp_table, char *in, char **hdoc)
+void	inp_cmd_run(t_table *table, char *in, char **hdoc)
 {
 	int				fd;
 	int				in_fd;
 	char			*inp;
-	char			*return_out;
 	t_token_type	t_type;
 
-	t_type = in_o_hdoc(exp_table, 0);
+	t_type = in_o_hdoc(table[0], 0);
 	if (t_type == D_LESS)
 		inp = temp_hdoc(hdoc[0]);
 	if (t_type == LESS)
@@ -46,7 +45,7 @@ void	inp_cmd_run(t_table exp_table, char *in, char **hdoc)
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	return_out = ft_execve(exp_table.args[0], exp_table.args);
+	ft_execve(table);
 	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);
@@ -81,7 +80,7 @@ int	output_check(t_table table, int table_id)
 	return (0);
 }
 
-int	single_exec(t_table *table)
+void	single_exec(t_table *table)
 {
 	char **hdoc;
 	char *in;
@@ -91,20 +90,20 @@ int	single_exec(t_table *table)
 	out_fd = dup(STDOUT_FILENO);
 	table[0] = expandor(*table);
 	if (table->args[0] == NULL)
-		return (free_all(table), 0);
+		return (free_all(table, 0, NULL));
 	hdoc = check_hdoc(table[0]);
 	in = check_in(table[0]);
 	is_out = output_check(table[0], 0);
 	if (is_builtin(table->args[0]) == 1)
 		run_builtin(table[0]);
 	else if (table->args[1] != NULL || (table->in[0] == NULL && table->heredoc[0] == NULL))
-		ft_execve(table->args[0], table->args);
+		ft_execve(table);
 	else
-		inp_cmd_run(table[0], in, hdoc);
+		inp_cmd_run(table, in, hdoc);
 	if (is_out != 0)
 		dup2(out_fd, STDOUT_FILENO);
 	close(out_fd);
-	return (free_all(table), 0);
+	return (free_all(table, 0, NULL));
 }
 // in the situation where expanded element is not good to run table is going to return args[0] as NULL
 // It is not faill

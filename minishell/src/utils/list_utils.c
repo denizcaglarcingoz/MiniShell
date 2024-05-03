@@ -1,4 +1,4 @@
-#include "/home/dcingoz/CC/minishell/minishell/includes/minishell.h"
+#include "minishell.h"
 
 void	free_list(t_tokens *tokens)
 {

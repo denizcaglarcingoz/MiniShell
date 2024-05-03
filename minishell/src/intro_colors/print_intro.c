@@ -1,4 +1,4 @@
-#include "/home/dcingoz/CC/minishell/minishell/includes/minishell.h"
+#include "minishell.h"
 
 void	print_intro_2(char *color)
 {

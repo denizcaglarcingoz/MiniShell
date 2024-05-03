@@ -6,11 +6,9 @@
 
 t_table *parser(t_tokens *tokens)
 {
-	t_tokens	*first_token;
 	t_table		*table;
 	
 	table = NULL;
-	first_token = tokens;
 	if (tokens == NULL)
 		return (NULL);
 	table = table_alloc(tokens);

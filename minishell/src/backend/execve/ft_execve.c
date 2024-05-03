@@ -6,23 +6,13 @@
 #include "minishell.h"
 
 
-void	pipe_init_exec(int pipefd[2])
-{
-	if (pipe(pipefd) == -1)
-	{
-    	perror("Pipe creation failed");
-		//free_table(exp_table);
-    	exit(EXIT_FAILURE);
-	}
-}
-
 char	**append_path(char **str, char *path_add)
 {
 	char	**new;
 	int		i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
 	new = (char **)malloc((i + 1) * sizeof(char*));	
 	if (new == NULL)
@@ -31,7 +21,7 @@ char	**append_path(char **str, char *path_add)
 		return (NULL);
 	}
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		new[i] = ft_strjoin(str[i], path_add);
 		i++;
@@ -42,66 +32,65 @@ char	**append_path(char **str, char *path_add)
 	return (new);
 }
 
-char	*path_run(char **all_paths, char **argv, char **environ)
+void	path_run(char **all_paths, char **argv, char **environ, t_table *table)
 {
 	int		i;
 	pid_t	pid;
+
 	i = 0;
-	
 	while (all_paths[i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0)
 		{
 			if ((pid = fork()) == -1)
-				return ("fork failed\n");
+				return (free_all(table, 1, "fork fail"));
 			if (pid == 0)	
 			{
 				execve(all_paths[i], argv, environ);
 				free_d_str(all_paths);
-				// free tables
-				perror("execve failed\n");
-				exit(127);
+				free_all(table, 1, "execve failed\n");
 			}
 			else
 			{
 				wait(NULL);
 				free_d_str(all_paths);
-				return (NULL) ;
+				return ;
 			}
 		}
 		i++;
 	}
 	write(2, argv[0], ft_strlen(argv[0]));
 	if (ft_strlen(argv[0]) > 0)
-		write(2, "command not found\n", 18);
+		write(2, ": command not found\n", 20);
 	free_d_str(all_paths);
-	return (NULL);
 }
 
-char	*ft_execve(char *path, char **argv)
+void	ft_execve(t_table *table)
 {
 	char	**environ;
-	char		**all_paths;
+	char	**all_paths;
 	pid_t	pid;
 
 	environ = get_full_env(0);
-	if (argv[0] == NULL)
-		return (NULL);
-	if (access(path, X_OK) == 0)
+	if (table->args[0] == NULL)
+		return ;
+	if (access(table->args[0], X_OK) == 0)
 	{
 		if ((pid = fork()) == -1)
-			return (perror("execve failed\n"), "fork failed\n");
+			return (free_all(table, 1, "fork fail"));
 		if (pid == 0)	
 		{
-			execve(path, argv, environ);
-			perror("execve failed\n");
-			exit(127);
+			execve(table->args[0], table->args, environ);
+			free_all(table, 1,("execve failed\n"));
 		}
 		else
-			return (wait(NULL), NULL);
+		{	
+			wait(NULL);
+			return ;
+		}
 	}
-	all_paths = append_path(ft_split(get_env("PATH"), ':'), ft_strjoin("/", path));
+	all_paths = append_path(ft_split(get_env("PATH"), ':'), ft_strjoin("/", table->args[0]));
 	if (all_paths == NULL)
-		return ("malloc failed\n");
-	return (path_run(all_paths, argv, environ));
+		free_all(table, 1, "Malloc Error\n");
+	path_run(all_paths, table->args, environ, table);
 }

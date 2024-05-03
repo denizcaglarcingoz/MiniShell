@@ -17,7 +17,6 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out)
 	int				fd;
 	int				in_fd;
 	char			*inp;
-	char			*return_out;
 	t_token_type	t_type;
 
 	t_type = in_o_hdoc(exp_table, 0);
@@ -33,7 +32,7 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, int is_out)
 	}
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
-	return_out = ft_pipe_execve(exp_table.args[0], exp_table.args, is_out);
+	ft_pipe_execve(exp_table.args[0], exp_table.args, is_out);
 	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);

@@ -1,20 +1,14 @@
 #include "minishell.h"
 
-void	pipe_init(t_table *exp_table, int pipefd[2])
+int	pipe_fork(t_table *tables, int pipefd[2])
 {
-	if (pipe(pipefd) == -1)
-		{
-    		perror("Pipe creation failed");
-			free_table(exp_table);
-    		exit(EXIT_FAILURE);
-		}
-}
+	int	pid;
 
-void	fork_fail(t_table *exp_table)
-{
-	perror("Fork failed");
-	free_table(exp_table);
-	exit(EXIT_FAILURE);
+	if (pipe(pipefd) == -1)
+		free_all(tables, 1, "Pipe creation failed\n");
+	if ((pid = fork()) == -1)
+		free_all(tables, 1, "Fork creation failed\n");
+	return (pid);
 }
 
 int	pipe_execution(t_table *tables)
@@ -28,9 +22,7 @@ int	pipe_execution(t_table *tables)
 	prev_read_fd = -1;
 	while (i < tables->table_len)
 	{
-		pipe_init(tables, pipefd);
-		if ((pid = fork()) == -1)
-				fork_fail(tables);
+		pid = pipe_fork(tables, pipefd);
 		if (pid == 0)	
 		{
 			close(pipefd[0]);
@@ -52,13 +44,12 @@ int	pipe_execution(t_table *tables)
 			else
 				close(pipefd[1]);
 			if ((tables[i]).args[0] == NULL)
-				return (free_all(tables), 1);
+				return (free_all(tables, 0, NULL), 1);
 			else
 				pipe_exec_run(tables[i], i, hdoc);
 			write(2, tables[i].args[0], ft_strlen(tables[i].args[0]));
 			write (2, ": command not found\n", 21);
-			free_env();
-			return (free_all(tables), 1);
+			return (free_all(tables, 0, NULL), 1);
 		}
 		else
 		{
@@ -76,5 +67,5 @@ int	pipe_execution(t_table *tables)
 		wait(NULL);
 		i++;
 	}
-	return (free_all(tables), 0);
+	return (free_all(tables, 0, NULL), 0);
 }

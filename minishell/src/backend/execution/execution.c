@@ -46,7 +46,7 @@ int	execution(t_table *table)
 	if (table == NULL)
 		return (0);
 	if (table->table_len < 2)
-		error_check = single_exec(table);
+		single_exec(table);
 	else
 		error_check = pipe_execution(table);
 	

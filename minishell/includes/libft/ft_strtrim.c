@@ -31,7 +31,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char	*result;
 
 	if (!s1 || *s1 == '\0')
-		return ("");
+		return (ft_strdup(""));
 	if (!set)
 		return (ft_strdup(s1));
 	s12 = (char *)s1;

@@ -1,4 +1,4 @@
-#include "/home/dcingoz/CC/minishell/minishell/includes/minishell.h"
+#include "minishell.h"
 
 bool is_white_space(char is)
 {
