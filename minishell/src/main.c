@@ -1,52 +1,5 @@
 
 #include "minishell.h"
-/* 
-int	check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell)
-{ 
-	(void)table;
-	shell->exit_status = 0;
-	if (ft_strcmp(full_cmd[0], "pwd") == 0)//prints cannot fail.
-	{
-		ft_pwd();
-		return (1);
-	}
-	else if (ft_strcmp(full_cmd[0], "env") == 0)//env only prints, cannot fail
-	{
-		print_env(shell->env);
-		return (1);
-	}
-	else if (ft_strcmp(full_cmd[0], "echo") == 0)//env only prints, cannot fail
-	{
-		ft_echo(full_cmd);
-		return (1);
-	}
-	return (0);
-} */
-
-/* int	check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell)
-{
-	
-//	if (**full_cmd == '$')//handle with dollar sign. receives expanded already.
-//		parse_dollar(table, shell);
-	if (ft_strcmp(full_cmd[0], "exit") == 0) 
-		shell->exit_status = ft_exit(table, full_cmd, shell);//maybe set equal to stat and determine exit status
-	else if (ft_strcmp(full_cmd[0], "cd") == 0) 
-		shell->exit_status = ft_cd(full_cmd, shell);//malloc fail returns 2, fail to find 1, 0 good;
-	else if (ft_strcmp(full_cmd[0], "export") == 0)
-	{
-		shell->exit_status = ft_export(full_cmd, shell);
-		return (2);
-	}
-	else if (ft_strcmp(full_cmd[0], "unset") == 0)
-	{
-		ft_unset(table, full_cmd, shell);
-		return (2);
-	}
-	if ((ft_strcmp(full_cmd[0], "cd") == 0) || (ft_strcmp(full_cmd[0], "exit") == 0))//export and unset, exit, cd.
-		return (2);
-	return (0);
-	//else check against other commands if non exist then print not a commandif command not found updated shell->exit_status	
-} */
 
 void	reset(t_table *table)
 {

@@ -3,7 +3,7 @@
 void run_builtin(t_table table, t_shell *shell)//shell
 {
 	if (ft_strcmp(table.args[0], "exit") == 0) 
-		shell->exit_status = ft_exit(&table, table.args, shell);//maybe set equal to stat and determine exit status
+		shell->exit_status = ft_exit(&table, table.args, shell);
 	else if (ft_strcmp(table.args[0], "echo") == 0)
 		shell->exit_status = ft_echo(table.args);
 	else if (ft_strcmp(table.args[0], "pwd") == 0)//prints cannot fail.
@@ -11,18 +11,11 @@ void run_builtin(t_table table, t_shell *shell)//shell
 	else if (ft_strcmp(table.args[0], "env") == 0)
 		print_env(shell->env);
 	else if (ft_strcmp(table.args[0], "cd") == 0) 
-		shell->exit_status = ft_cd(table.args, shell);//malloc fail returns 2, fail to find 1, 0 good;
+		shell->exit_status = ft_cd(table.args, shell);//malloc fail returns 2, fail to find 1, 0 good;//change value for malloc fail
 	else if (ft_strcmp(table.args[0], "export") == 0)
 		shell->exit_status = ft_export(table.args, shell);
 	else if (ft_strcmp(table.args[0], "unset") == 0)
-		ft_unset(&table, table.args, shell);
-	// else if (ft_strcmp(table.args[0], "cd") == 0)
-	// 	ft_cd(table);
-	// else if (ft_strcmp(table.args[0], "pwd") == 0)
-	// 	ft_pwd();
-	// else if (ft_strcmp(table.args[0], "export") == 0)
-	// 	ft_export(table);
-	// else if (ft_strcmp(table.args[0], "unset") == 0)
-	// 	ft_unset(table);
+		shell->exit_status = ft_unset(&table, table.args, shell);
 
+	//if (shell->exit_status == 2) use malloc fail status check to free and exit if needed.
 }

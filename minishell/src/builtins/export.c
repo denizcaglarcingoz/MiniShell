@@ -1,6 +1,5 @@
 #include "minishell.h"
-//remove quotes in special way, check cases
-//double free occurs sometimes, why, perhaps in expander switch to indexes
+
 int	has_equal(char *str)
 {
 	int	i;
@@ -35,11 +34,6 @@ void	print_export(char **env)
 	int	j;
 
 	i = -1;
-	if (env == NULL || !env[0])
-	{
-		ft_putstr_color_fd(1, "Empty Exported Variable List\n", BOLD_BLUE);
-		return ;
-	}
 	while (env[++i] != NULL)
 	{
 		j = -1;
@@ -51,7 +45,11 @@ void	print_export(char **env)
 			ft_putchar_fd(env[i][j], 1);
 			ft_putchar_fd('\"', 1);
 			while (env[i][++j])
+			{
+				if (env[i][j] == '\"')
+					ft_putchar_fd('\\', 1);
 				ft_putchar_fd(env[i][j], 1);
+			}
 			ft_putchar_fd('\"', 1);
 		}
 		ft_putstr_fd("\n", 1);

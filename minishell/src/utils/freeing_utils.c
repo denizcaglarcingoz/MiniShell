@@ -36,7 +36,7 @@ void	free_list(t_tokens *tokens)
 	*tokens = NULL;
 } */
 
-int	ft_matrix_len(char **matrix)//move to lib?
+int	ft_matrix_len(char **matrix)
 {
 	int	i;
 
@@ -46,7 +46,7 @@ int	ft_matrix_len(char **matrix)//move to lib?
 	return (i);
 }
 
-void	free_matrix(char **matrix, int i)//lib?
+void	free_matrix(char **matrix, int i)
 {
 	while (--i >= 0)
 	{
