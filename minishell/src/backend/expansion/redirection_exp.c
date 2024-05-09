@@ -91,6 +91,13 @@ char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)//sh
 
 	to_exp = ft_strdup("");
 	(*i)++;
+	if (content[*i] == '?')
+	{
+		(*i)++;
+		d_exp = dollar_question(shell);
+		new_content = add_new_content(new_content, d_exp, shell);
+		return (new_content);
+	}
 	while (content[*i] && is_alfa_num(content[*i]) == true)
 	{
 		to_exp = ft_strjoin_char(to_exp, content[*i]);
@@ -119,9 +126,7 @@ char	**exp_check(char *content, t_shell *shell)
 	while(content[i])
 	{
 		if (content[i] == '$')
-		{
 			new_content = exp_dollar(content, &i, new_content, shell);
-		}
 		else if (content[i] == '"')
 		{
 			j = 0;

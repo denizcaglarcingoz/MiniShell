@@ -24,8 +24,16 @@ char	*quo_exp_dollar(char *content, int *i, char *new_content, t_shell *shell)//
 {
 	char	*exp;
 
-	exp = ft_strdup("");
 	(*i)++;
+	if (content[*i] == '?')
+	{
+		(*i)++;
+		exp = quo_dollar_question(shell);
+		new_content = ft_strjoin(new_content, exp);
+		free(exp);
+		return (new_content);
+	}
+	exp = ft_strdup("");
 	while (content[*i] && is_alfa_num(content[*i]) == true)
 	{
 		exp = ft_strjoin_char(exp, content[*i]);

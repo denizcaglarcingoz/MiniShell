@@ -74,7 +74,8 @@ bool			redir_expand(char **content, t_shell *shell);//shell
 char			**exp_check(char *content, t_shell *shell);
 char			*exp_s_quo(char *content, int *i, char *new_content);
 char			*exp_d_quo(char *content, int *i, char *new_content, t_shell *shell);
-
+char			**dollar_question(t_shell *shell);
+char			*quo_dollar_question(t_shell *shell);
 /****EXECUTION****/
 void			execution(t_shell *shell);// added shell
 void			single_exec(t_shell *shell);// added shell
