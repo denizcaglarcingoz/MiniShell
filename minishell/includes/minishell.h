@@ -25,60 +25,41 @@
 
 typedef struct s_shell
 {
-	char	*input;
-	char	**env;
-	char	**exported;
-	int		exit_status;
-	int		table_len;//
+	char		*input;
+	char		**env;
+	char		**exported;
+	int			exit_status;
+	int			table_len;//
+	t_table		*tables;
+	t_tokens	*tokens;
 }	t_shell;
 
-/* typedef enum e_token_type
-{
-	INITIAL, //THE FIRST PART UNTIL THE SPACE --COMMAND OR PATH ETC
-	PIPE,
-	STRING,
-	LESS,
-	GREATER,
-	D_LESS,
-	D_GREATER,
-	QUOTE,
-	D_QUOTE
-
-}	t_token_type;
-
-typedef struct s_tokens
-{
-	t_token_type	type;
-	char			*content;
-	struct s_tokens	*next;
-}	t_tokens; */
-
 /****SHELL****/
-void		shell_loop(t_shell *shell);
+void			shell_loop(t_shell *shell);
 
 /***LEXER UTILS***/
-t_tokens	*build_token_list(char *input);
-t_tokens	*token_init_string(t_tokens *c_token,char **content, t_token_type type);
-int			init_loop(char **content, int d_quo_qty, int quo_qty, int i);
-t_tokens	*token_init(t_tokens *c_token, char *content, t_token_type type);
-t_tokens	*meta_content(t_tokens *c_token, char **input);
-bool		is_meta_char(char is);
+t_tokens		*build_token_list(char *input);
+t_tokens		*token_init_string(t_tokens *c_token,char **content, t_token_type type);
+int				init_loop(char **content, int d_quo_qty, int quo_qty, int i);
+t_tokens		*token_init(t_tokens *c_token, char *content, t_token_type type);
+t_tokens		*meta_content(t_tokens *c_token, char **input);
+bool			is_meta_char(char is);
 //test print
-void	print_tokens(t_tokens *tokens);
+void			print_tokens(t_tokens *tokens);
 
 /****PARSER****/
-t_tokens	*grammer_check(t_tokens *tokens);
-t_table		*parser(t_tokens *tokens);
-t_table		*table_init(t_tokens *tokens, t_table *table);
-void		t_content_alloc(t_tokens *tokens, t_table *table);
+t_tokens		*grammer_check(t_tokens *tokens);
+t_table			*parser(t_tokens *tokens);
+t_table			*table_init(t_tokens *tokens, t_table *table);
+void			t_content_alloc(t_tokens *tokens, t_table *table);
 
 // table allocs
-t_table		*table_alloc(t_tokens *tokens);
-t_table		struct_null(t_table table);
+t_table			*table_alloc(t_tokens *tokens);
+t_table			struct_null(t_table table);
 
 void			free_table(t_table *table);
 // test print
-int			print_tables(t_table *table);
+int				print_tables(t_table *table);
 
 /****EXPANSION****/
 t_table			expandor(t_table table, t_shell *shell);//shell
@@ -89,22 +70,26 @@ bool			content_check(char *content);
 char			*expansion_check(char *content, t_shell *shell);//shell
 bool			redir_expand(char **content, t_shell *shell);//shell
 
+char			*expansion_dollar(char *content, int *i, char *new_content, t_shell *shell);
+char			*expansion_d_quo(char *content, int *i, char *new_content, t_shell *shell);
+char			*expansion_s_quo(char *content, int *i, char *new_content);
+
 /****EXECUTION****/
-t_table			*execution(t_table *table, t_shell *shell);// added shell
-t_table			single_exec(t_table table, t_shell *shell);// added shell
-t_table			*pipe_execution(t_table *tables, t_shell *shell);// added shell
+void			execution(t_shell *shell);// added shell
+void			single_exec(t_shell *shell);// added shell
+void			pipe_execution(t_shell *shell);// added shell
 void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc, t_shell *shell);//shell
 void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
 void			fork_fail(t_table *exp_table);
 char			*check_in(t_table exp_table);
 char			**check_hdoc(t_table exp_table);
-int				output_check(t_table exp_table, int table_id);
+int				output_check(t_table exp_table, int table_id, t_tokens *tokens);
 void			inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell);
 char 			*temp_hdoc(char *hdoc);
 
-//execution execve
+//execution execveclear
 char			*ft_execve(char *path, char **argv, t_shell *shell);//shell
-char			*ft_pipe_execve(char *path, char **argv, int is_out, t_shell *shell);//shell
+void			ft_pipe_execve(char *path, char **argv, t_shell *shell);//shell
 	
 // execution redirections
 char			*hdoc_inp(char *h_name);
@@ -115,66 +100,65 @@ int				output_file(char *file_name, char *out_file);
 t_tokens		*start_of_pipe(t_tokens *tokens, int table_id);
 char 			*read_file(int fd);
 int				is_builtin(char *cmd);
-t_token_type	out_o_app(t_table exp_table, int table_id);
-t_token_type	in_o_hdoc(t_table exp_table, int table_id);
+t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens);
+t_token_type	in_o_hdoc(t_tokens *tokens, int table_id);
 char			*last_str(char **strs);
 
 
 /****SIGNALS****/
-void	sigint_handler_int(int signum);
-//void	sigint_handler_quit(int signum);
+void			sigint_handler_int(int signum);
 
 /***BUILT-INS****/
 
-int		ft_echo(char **full_cmd);
-int		ft_cd(char **full_cmd, t_shell *shell);
-int		ft_pwd(void);
-int		ft_exit(t_table *table, char **full_cmd, t_shell *shell);
-int		ft_export(char **full_cmd, t_shell *shell);
-int		ft_unset(t_table *table, char **full_cmd, t_shell *shell);
+int				ft_echo(char **full_cmd);
+int				ft_cd(char **full_cmd, t_shell *shell);
+int				ft_pwd(void);
+int				ft_exit(t_table *table, char **full_cmd, t_shell *shell);
+int				ft_export(char **full_cmd, t_shell *shell);
+int				ft_unset(t_table *table, char **full_cmd, t_shell *shell);
 
 //utils
 //int		check_and_run_builtins_2(t_table *table, char **full_cmd, t_shell *shell);
 //int		check_and_run_builtins(t_table *table, char **full_cmd, t_shell *shell);
 
-void	run_builtin(t_table table, t_shell *shell);//shell
-
-void	ft_quicksort_params(char **tab, int start, int end);
-int		has_equal(char *str);
-void	cd_not_found(char **full_cmd);
-int		invalid_id(char *id);
-int		compare_names_add(char *name, char *var);
+void			run_builtin(t_table table, t_shell *shell);//shell
+void			ft_quicksort_params(char **tab, int start, int end);
+int				has_equal(char *str);
+void			cd_not_found(char **full_cmd);
+int				invalid_id(char *id);
+int				compare_names_add(char *name, char *var);
 
 
 /***ENV_UTILS***/
-char	**get_env(void);
-void	print_env(char **env);
-char	**add_env(char **env, char *variable);
-char	**del_env(char **env, char *variable);
-char 	*ft_getenv(char *path, char **env);
+char			**get_env(void);
+void			print_env(char **env);
+char			**add_env(char **env, char *variable);
+char			**del_env(char **env, char *variable);
+char 			*ft_getenv(char *path, char **env);
 
-int		check_valid_id(char *s);
-int		invalid_id(char *id);
+int				check_valid_id(char *s);
+int				invalid_id(char *id);
 
 
 /***OTHER***/
-void		print_intro(void);
+void			print_intro(void);
 
 /***CLEAN UP***/
-void	readline_error_exit(char *init_in, t_shell *shell);
-void	trim_error_exit(char *init_in, t_shell *shell);
-void	control_d_exit(t_shell *shell);
+void			readline_error_exit(char *init_in, t_shell *shell);
+void			trim_error_exit(char *init_in, t_shell *shell);
+void			control_d_exit(t_shell *shell);
 
-void	free_envs(char **env, int i);
-void	free_all_env(char **env);
-void	free_list(t_tokens *tokens);
+void			free_envs(char **env, int i);
+void			free_all_env(char **env);
+void			free_list(t_tokens *tokens);
 
-void	free_t_content_alloc_and_table(t_table *table, int i);
-int		ft_matrix_len(char **matrix);
-void	free_content_first_allocs_only(t_table table);
-void	free_matrix(char **matrix, int i);
+void			free_t_content_alloc_and_table(t_table *table, int i);
+int				ft_matrix_len(char **matrix);
+void			free_content_first_allocs_only(t_table table);
+void			free_matrix(char **matrix, int i);
 
-void	free_d_str(char **str);
+void			free_d_str(char **str);
+void			free_all(t_shell *shell, char *print, int exit_type);
 
 
 /* 

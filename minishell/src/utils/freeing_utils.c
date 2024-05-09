@@ -2,18 +2,16 @@
 
 void	free_list(t_tokens *tokens)
 {
-	t_tokens	*curr;
 	t_tokens	*temp;
 
 	if (tokens == NULL)
 		return ;
-	curr = tokens;
-	while (curr)
+	while (tokens)
 	{
-		temp = curr->next;
-		free(curr->content);
-		free(curr);
-		curr = temp;
+		temp = tokens->next;
+		free(tokens->content);
+		free(tokens);
+		tokens = temp;
 	}
 	tokens = NULL;
 }

@@ -38,16 +38,13 @@ char *check_in(t_table table)
 	return (table.in[i - 1]);
 }
 
-t_table	*execution(t_table *table, t_shell *shell)//added shell here
+void	execution(t_shell *shell)//added shell here
 {
 
-	if (table == NULL)
-		return (NULL);
-	if (table->table_len < 2)
-		table[0] = single_exec(table[0], shell);//shell
+	if (shell->tables == NULL)
+		return ;
+	if (shell->tables->table_len < 2)
+		single_exec(shell);//shell
 	else
-		table = pipe_execution(table, shell);//shell
-	
-	return (table);
-	// print_tables(table);
+		pipe_execution(shell);//shell
 }

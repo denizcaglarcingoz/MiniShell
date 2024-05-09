@@ -5,6 +5,9 @@ void free_table(t_table *table)
 	int i;
 
 	i = 0;
+	if (table == NULL)
+		return ;
+
 	while (table[i].args != NULL)
 	{
 		free_d_str(table[i].args);
@@ -15,4 +18,5 @@ void free_table(t_table *table)
 		i++;
 	}
 	free(table);
+	table = NULL;
 }

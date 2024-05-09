@@ -6,7 +6,6 @@ char	*expand(char *exp, t_shell *shell)//shell
 	int		i;
 	//char	**env;
 
-	//env = get_full_env(0);
 	i = 0;
 	exp = ft_strjoin_char(exp, '=');
 	new_exp = ft_strdup("");
@@ -39,7 +38,7 @@ char	*expansion_dollar(char *content, int *i, char *new_content, t_shell *shell)
 	return (new_content);
 }
 
-char *expansion_d_quo(char *content, int *i, char *new_content, t_shell *shell)//shell
+char	*expansion_d_quo(char *content, int *i, char *new_content, t_shell *shell)//shell
 {
 	(*i)++;
 	while (content[*i] && content[*i] != '"')
@@ -57,7 +56,7 @@ char *expansion_d_quo(char *content, int *i, char *new_content, t_shell *shell)/
 	return (new_content);
 }
 
-char *expansion_s_quo(char *content, int *i, char *new_content)
+char	*expansion_s_quo(char *content, int *i, char *new_content)
 {
 	(*i)++;
 	while (content[*i] && content[*i] != '\'')
@@ -75,7 +74,8 @@ char	*expansion_check(char *content, t_shell *shell)
 
 	i = 0;
 	new_content = ft_strdup("\0");
-		// protect this
+		// protect this  
+
 	if (content == NULL)
 		return NULL;
 	while(content[i])

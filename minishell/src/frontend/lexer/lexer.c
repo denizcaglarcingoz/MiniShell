@@ -7,6 +7,8 @@ t_tokens	*build_token_list(char *input)
 	t_tokens		*first_token;
 	int				first_entry;
 
+	if (input[0] == '\0')
+		return (NULL);
 	first_entry = 1;
 	c_token = NULL;
 	first_token = NULL;

@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-t_token_type in_o_hdoc(t_table exp_table, int table_id)
+t_token_type in_o_hdoc(t_tokens *tokens, int table_id)
 {
 	t_tokens *first;
 	int i;
 
-	first = start_of_pipe(exp_table.tokens, table_id);
+	first = start_of_pipe(tokens, table_id);
 	if (first == NULL)
 		return (NO_TYPE);
 	i = 0;
@@ -42,13 +42,13 @@ void create_files(t_table exp_table)
 	}
 }
 
-t_token_type out_o_app(t_table exp_table, int table_id)
+t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens)
 {
 	t_tokens *first;
 	int i;
 
 	create_files(exp_table);
-	first = start_of_pipe(exp_table.tokens, table_id);
+	first = start_of_pipe(tokens, table_id);
 	if (first == NULL)
 		return (NO_TYPE);
 	if (first->type== PIPE)

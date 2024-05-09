@@ -1,4 +1,4 @@
-NAME := minishell
+EXECUTABLE := minishell
 SRC_DIR = ./src
 OBJ_DIR = ./obj
 INC_DIR = ./includes
@@ -6,9 +6,8 @@ BT_DIR = ./builtins
 
 INCLUDES = $(wildcard $(INC_DIR)/*)
 SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*/*.c)  $(wildcard $(SRC_DIR)/*/*/*.c)
-OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
-#-fPIE in compile need for at home?
-CFLAGS := -Wall -Wextra -Werror -fPIE
+OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+CFLAGS := -Wall -Wextra -Werror -fPIE -g -Iincludes
 
 RM := rm -f
 
@@ -19,7 +18,6 @@ LIBFT_ARCH = $(LIBFT_PATH)/libft.a
 CC := cc
 
 OBS := $(SRCS:.c=.o)
-
 
 COLOR_RESET = \033[0m
 COLOR_GREEN = \033[1;92m
@@ -33,27 +31,25 @@ endef
 
 .SILENT:
 
-all: $(LIBFT_ARCH) $(NAME)
+all: $(LIBFT_ARCH) $(EXECUTABLE)
 
-# Compilation rule with -fPIE flag
-
-$(OBS): %.o : %.c
-	$(CC) $(CFLAGS) -Iincludes -c $< -o $@
-
-$(NAME): $(OBS)
-	$(CC) $^ -L$(LIBFT_PATH)  -lft -lreadline -lhistory -o $@ 
-	$(call print_colored, "[SUCCESS]", "./$(NAME)", "Ready")
+$(EXECUTABLE): $(OBJ)
+	$(CC) $^ -L$(LIBFT_PATH) -lft -lreadline -lhistory -o $@ 
+	$(call print_colored, "[SUCCESS]", "./$(EXECUTABLE)", "Ready")
 
 $(LIBFT_ARCH):
 	$(MAKE) -C $(LIBFT_PATH)
 
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS)  -c $< -o $@
+
 clean:
 	$(MAKE) -C $(LIBFT_PATH) clean
-	$(RM) $(OBS)
+	$(RM) $(OBJ)
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_PATH) fclean
-	$(RM) $(NAME)
+	$(RM) $(EXECUTABLE)
 
 re: fclean all
 

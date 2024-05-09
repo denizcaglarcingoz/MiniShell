@@ -17,12 +17,6 @@ t_table *parser(t_tokens *tokens)
 	//if (table == NULL)
 		// free and exit;
 	table = table_init(tokens, table);
-	int i = 0;
-	while (table[i].args != NULL)
-	{
-		table[i].tokens = tokens;
-		i++;
-	}
 	return (table);
 }
 

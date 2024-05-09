@@ -30,6 +30,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char	*s12;
 	char	*result;
 
+	if (s1[0] == '\0')
+		return (ft_strdup(""));
 	if (!s1)
 		return (NULL);
 	if (!set)

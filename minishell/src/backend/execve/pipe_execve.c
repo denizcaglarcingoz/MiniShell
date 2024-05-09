@@ -27,50 +27,46 @@ char	**pipe_append_path(char **str, char *path_add)
 	return (new);
 }
 
-char	*pipe_path_run(char **all_paths, char **argv, char **environ, int is_out)
+void	pipe_path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 {
 	int		i;
+
 	i = 0;
-	
-	if (is_out == 2)
-	{return (NULL);}
 	while (all_paths[i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0)
 		{	
 			if (execve(all_paths[i], argv, environ) == -1)
-			free_d_str(all_paths);
-			printf("execve failed\n");
-			exit(0);
+			{
+				free_d_str(all_paths);
+				free_all(shell, "Pipe Execve Error\n", 127);
+			}
 		}
 		i++;
 	}
+	write(2, argv[0], ft_strlen(argv[0]));
+	if (ft_strlen(argv[0]) > 0)
+		write(2, "command not found\n", 18);
 	free_d_str(all_paths);
-	return (NULL);
+	free_all(shell, NULL, 127);
 }
-char	*ft_pipe_execve(char *path, char **argv, int is_out, t_shell *shell)//shell
+
+void	ft_pipe_execve(char *path, char **argv, t_shell *shell)//shell
 {
-	//char	**environ;
 	char	**all_paths;
 	char	**paths;
 
-	//environ = get_full_env(0);
 	if (argv[0] == NULL)
-		return (NULL);
+		return ;
 	if (access(path, X_OK) == 0)
 	{
 		if (execve(path, argv, shell->env) == -1)
-		{
-			perror("execve");
-			return (NULL);
-		}
-		exit(0);
+			free_all(shell, "Pipe Execve Error\n", 127);
 	}
-	paths = ft_split(getenv("PATH"), ':');// changed to getenv
+	paths = ft_split(ft_getenv("PATH", shell->env), ':');
 	all_paths = pipe_append_path(paths, ft_strjoin("/", path));
 	free_d_str(paths);
 	if (all_paths == NULL)
-		return (NULL);
-	return (pipe_path_run(all_paths, argv, shell->env, is_out));
+		free_all(shell, "All Paths Malloc Error\n", 127);
+	pipe_path_run(all_paths, argv, shell->env, shell);
 }
-
