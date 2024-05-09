@@ -23,6 +23,21 @@ char *ft_strjoin_char(char *s1, char c)
 	return (str);
 }
 
+bool str_is_alfa_num(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!is_alfa_num(str[i]) && str[i] != '.')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+// special for expansion with . with alfanum
+
 bool is_alfa_num(char c)
 {
 	if (c >= '0' && c <= '9')

@@ -6,6 +6,7 @@
 		"typeinfo": "c",
 		"stdio.h": "c",
 		"unistd.h": "c",
-		"term.h": "c"
+		"term.h": "c",
+		"minishell.h": "c"
 	}
 }

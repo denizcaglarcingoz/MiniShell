@@ -22,7 +22,8 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 		close(prev_read_fd);
 	}
 	hdoc = check_hdoc(shell->tables[i]);
-	shell->tables[i] = expandor(shell->tables[i], shell);
+	if (expandor(shell, i) == false)
+		free_all(shell, "", 127);
 	if (i + 1 < shell->tables->table_len)
 	{	
 		if (shell->tables[i].args[0] != NULL && output_check(shell->tables[i], i, shell->tokens) == 0)

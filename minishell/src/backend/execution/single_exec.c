@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/29 23:15:42 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/05/09 23:36:15 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,11 @@ char *temp_hdoc(char *hdoc)
 	return ("temp_hdoc");
 }
 
-void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)//shell
+void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)
 {
 	int				fd;
 	int				in_fd;
 	char			*inp;
-	//char			*return_out;
 	t_token_type	t_type;
 
 	t_type = in_o_hdoc(shell->tokens, 0);
@@ -46,7 +45,7 @@ void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)//shel
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	ft_execve(exp_table.args[0], exp_table.args, shell);//return_out = 
+	ft_execve(exp_table.args[0], exp_table.args, shell); 
 	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);
@@ -89,8 +88,7 @@ void	single_exec(t_shell *shell)// shell
 	int	is_out;
 
 	out_fd = dup(STDOUT_FILENO);
-	shell->tables[0] = expandor(shell->tables[0], shell);
-	if (shell->tables[0].args[0] == NULL)
+	if (expandor(shell, 0) == false)
 		return ;
 	hdoc = check_hdoc(shell->tables[0]);
 	in = check_in(shell->tables[0]);

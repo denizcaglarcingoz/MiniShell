@@ -62,17 +62,18 @@ void			free_table(t_table *table);
 int				print_tables(t_table *table);
 
 /****EXPANSION****/
-t_table			expandor(t_table table, t_shell *shell);//shell
+bool			expandor(t_shell *shell, int table_num);//shell
 char 			*ft_strjoin_char(char *s1, char c);
 bool			is_alfa_num(char c);
+bool			str_is_alfa_num(char *str);
 bool			arg_expand(char ***ref_content, t_shell *shell);//shell
 bool			content_check(char *content);
 char			*expansion_check(char *content, t_shell *shell);//shell
 bool			redir_expand(char **content, t_shell *shell);//shell
 
-char			*expansion_dollar(char *content, int *i, char *new_content, t_shell *shell);
-char			*expansion_d_quo(char *content, int *i, char *new_content, t_shell *shell);
-char			*expansion_s_quo(char *content, int *i, char *new_content);
+char			**exp_check(char *content, t_shell *shell);
+char			*exp_s_quo(char *content, int *i, char *new_content);
+char			*exp_d_quo(char *content, int *i, char *new_content, t_shell *shell);
 
 /****EXECUTION****/
 void			execution(t_shell *shell);// added shell
