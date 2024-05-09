@@ -7,6 +7,8 @@ int	compare_names_add(char *name, char *var)
 		name++;
 		var++;
 	}
+	if (*name == '=' && *var == '\0')	
+		return (-256);
 	if (*name == '=' && (*var == '=' || (*var == '\0' && !(has_equal(var)))))
 		return (0);
 	if (*var == '=' && (*name == '=' || (*name == '\0' && !(has_equal(name)))))
@@ -71,6 +73,8 @@ char	**add_env(char **env, char *variable)
 	{
 		if (compare_names_add(env[i], variable) == 0)
 			flag = 1;
+		if (compare_names_add(env[i], variable) == -256)
+			return (env);
 	}
 	new_env = add_env_helper(env, variable, i - flag, flag);
 	if (!new_env)

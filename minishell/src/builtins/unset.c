@@ -1,5 +1,4 @@
 #include "minishell.h"
-//	ft_putstr_color_fd(1, "null\n", BOLD_BLUE);//test
 
 int	ft_unset(t_table *table, char **full_cmd, t_shell *shell)
 {

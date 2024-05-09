@@ -65,7 +65,7 @@ int	main(int ac, char **av)
 	shell.env = get_env();
 	if (!shell.env)
 		exit(EXIT_FAILURE);
-	shell.exported = get_env();//(char **)malloc(sizeof(char*));//
+	shell.exported = get_env();
 	if (!shell.exported)
 	{
 		free_all_env(shell.env);
@@ -82,3 +82,6 @@ int	main(int ac, char **av)
 	print_tables(table);
 	printf("\n--------\n");//test */
 	//-------------------------------------
+
+/* char *s = ft_getenv("HOME=", shell.env);//test.
+	printf("RES: %s\n", s);//test. */

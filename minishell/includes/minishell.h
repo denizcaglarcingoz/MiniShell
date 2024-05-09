@@ -144,6 +144,7 @@ int		has_equal(char *str);
 void	cd_not_found(char **full_cmd);
 int		invalid_id(char *id);
 int		compare_names_add(char *name, char *var);
+int		compare_names(char *name, char *var);
 
 
 /***ENV_UTILS***/

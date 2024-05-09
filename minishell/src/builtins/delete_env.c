@@ -1,15 +1,14 @@
 #include "minishell.h"
-//works now, possible double free somewhere.. here or add?
 
-static int	compare_names(char *name, char *var)
+int	compare_names(char *name, char *var)
 {
-	while (*name != '=' && *var && (*name == *var))
+	while (*name && *name != '=' && (*name == *var))
 	{
 		name++;
 		var++;
 	}
-	if (*name == '=' && *var == '\0')
-		return (0);
+	if (*name == '=')
+		return ('\0' - *var);
 	else
 		return (*name - *var);
 }
