@@ -1,31 +1,26 @@
 
 #include "minishell.h"
 
-void	reset(t_table *table)
+static void	loop_items(t_shell *shell)
 {
-	//free_t_content_alloc_and_table(table, shell->table_len);
-	//free(shell->input);	
-	if (table->tokens != NULL)
-		free_list(table->tokens);
-	free_table(table);
-	//shell->table_len = 0;
-	//shell_loop(shell);
-}
+	shell->tokens = build_token_list(shell->input, shell);
+	free(shell->input);
+	shell->tokens = grammer_check(shell->tokens);
+	shell->tables = parser(shell->tokens);
+	execution(shell);
+}	
 
-void	shell_loop(t_shell *shell)//at completion of execution reset all data and recall this.
+void	shell_loop(t_shell *shell)
 {
 	char		*init_in;
-	t_tokens	*tokens;
-	t_table 	*table;
 
-	table = NULL;
+	shell->tables = NULL;
 	errno = 0;
 	while (1)
 	{
 		init_in = readline("minishell$ ");
-		//init_in = readline("\033[1;94mminishell\033[1;92m$\033[0m "); issue with col?
 		if (errno != 0 )
-			readline_error_exit(init_in, shell);//rename
+			readline_error_exit(init_in, shell);
 		if (init_in == NULL)
 			break ;
 		shell->input = ft_strtrim(init_in, " ");
@@ -34,21 +29,11 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 		if (ft_strcmp(shell->input, "") != 0)
 			add_history(init_in);
 		free(init_in);
-		tokens = build_token_list(shell->input);//mem safe with frees and exit if null.
-		free(shell->input);
-		tokens = grammer_check(tokens);
-		table = parser(tokens);//redo mem safe. 
-		table = execution(table, shell);//shell added
-		//if (tokens == NULL)
-		//	ft_exit(table, );		
-		//free_list(&tokens); //free here?
-		if (tokens != NULL)
-			reset(table);
+		loop_items(shell);
 	}
 	control_d_exit(shell);
 }
-	//reset_and_run(&tokens, shell, table);
-
+	
 int	main(int ac, char **av)
 {
 	t_shell shell;
@@ -56,7 +41,7 @@ int	main(int ac, char **av)
 	(void)av;
 	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
-	shell.exit_status = 0;//testing must truly handle exit status
+	shell.exit_status = 0;
 	if (ac != 1)
 	{
 		ft_putstr_color_fd(2, "./minishell takes no arguments\n", "\033[1;91m");
@@ -76,12 +61,3 @@ int	main(int ac, char **av)
 	shell_loop(&shell);
 	return (0);
 }
-
-	///PARSE AND TABLES TESTING-----------------
-	/* printf("\n--------\n");//test
-	print_tables(table);
-	printf("\n--------\n");//test */
-	//-------------------------------------
-
-/* char *s = ft_getenv("HOME=", shell.env);//test.
-	printf("RES: %s\n", s);//test. */

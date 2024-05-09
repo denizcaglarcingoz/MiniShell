@@ -116,6 +116,6 @@ int	ft_cd(char **full_cmd, t_shell *shell)
 	if (status == 1)
 		return (1);
 	if (update_old(shell) || update_pwd(shell) || status == 2)
-		return (2);
+		free_all(shell, "unset malloc failed", 127);
 	return (EXIT_SUCCESS);
 }

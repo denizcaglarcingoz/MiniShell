@@ -34,6 +34,7 @@ char	**append_path(char **str, char *path_add)
 	while(str[i])
 	{
 		new[i] = ft_strjoin(str[i], path_add);
+		//clean;
 		i++;
 	}
 	new[i] = NULL;
@@ -42,7 +43,7 @@ char	**append_path(char **str, char *path_add)
 	return (new);
 }
 
-char	*path_run(char **all_paths, char **argv, char **environ)
+char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 {
 	int		i;
 	pid_t	pid;
@@ -53,19 +54,22 @@ char	*path_run(char **all_paths, char **argv, char **environ)
 		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0)
 		{
 			if ((pid = fork()) == -1)
-				return ("fork failed\n");
+			{
+				free_d_str(all_paths);
+				free_all(shell, "execve fail\n", 127);
+			}
 			if (pid == 0)	
 			{
 				execve(all_paths[i], argv, environ);
 				free_d_str(all_paths);
-				// free tables
-				perror("execve failed\n");
-				exit(127);
+				free_all(shell, "execve fail\n", 127);
 			}
 			else
 			{
 				wait(NULL);
 				free_d_str(all_paths);
+				free_table(shell->tables);
+				free_list(shell->tokens);
 				return (NULL) ;
 			}
 		}
@@ -75,32 +79,36 @@ char	*path_run(char **all_paths, char **argv, char **environ)
 	if (ft_strlen(argv[0]) > 0)
 		write(2, "command not found\n", 18);
 	free_d_str(all_paths);
+	free_table(shell->tables);
+	free_list(shell->tokens);
+	shell->exit_status = 127;
 	return (NULL);
 }
 
 char	*ft_execve(char *path, char **argv, t_shell *shell)//shell
 {
-	//char	**environ;
 	char		**all_paths;
 	pid_t	pid;
 
-	//environ = get_full_env(0);
 	if (argv[0] == NULL)
 		return (NULL);
 	if (access(path, X_OK) == 0)
 	{
 		if ((pid = fork()) == -1)
-			return (perror("execve failed\n"), "fork failed\n");
+			free_all(shell, "fork failed\n", 127);
 		if (pid == 0)	
 		{
 			execve(path, argv, shell->env);
-			return (perror("execve failed\n"), "fork failed\n");
+			free_all(shell, "execve failed\n", 127);
 		}
 		else
+		{
+			free_table(shell->tables);
 			return (wait(NULL), NULL);
+		}
 	}
-	all_paths = append_path(ft_split(getenv("PATH"), ':'), ft_strjoin("/", path));//changed get_env to getenv
+	all_paths = append_path(ft_split(ft_getenv("PATH", shell->env), ':'), ft_strjoin("/", path));
 	if (all_paths == NULL)
-		return ("malloc failed\n");
-	return (path_run(all_paths, argv, shell->env));
+		free_all(shell, "Malloc Fail\n", 127);
+	return (path_run(all_paths, argv, shell->env, shell));
 }

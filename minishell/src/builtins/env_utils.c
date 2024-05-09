@@ -11,8 +11,12 @@ void	free_envs(char **env, int i)
 	}
 	j = -1;
 	while (++j < i)
+	{
 		free(env[j]);
+		env[j] = NULL;
+	}
 	free(env);
+	env = NULL;
 }
 
 void	free_all_env(char **env)

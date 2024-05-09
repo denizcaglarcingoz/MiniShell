@@ -35,17 +35,16 @@ long int	set_code(char **full_cmd)
 	return (code);
 }
 
-void	final_free(t_table *table, t_shell *shell)
+void	final_free(t_shell *shell)
 {
 	clear_history();
-	//free(shell->input);// get rid of in main
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	if (table)		//must fix this freeing
-		free_t_content_alloc_and_table(table, shell->table_len);
+	free_list(shell->tokens);
+    free_table(shell->tables);
 }
 
-int	ft_exit(t_table *table, char **full_cmd, t_shell *shell)
+int	ft_exit(char **full_cmd, t_shell *shell)
 {
 	long int	code;
 
@@ -59,8 +58,7 @@ int	ft_exit(t_table *table, char **full_cmd, t_shell *shell)
 		code = set_code(full_cmd);
 	else
 		code = 0;
-	final_free(table, shell);
-	printf("exit code: %ld\n", code);//-------------
+	final_free(shell);
 	exit(code);
 	return (code);
 }

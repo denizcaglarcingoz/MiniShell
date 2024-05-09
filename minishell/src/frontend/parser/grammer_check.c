@@ -15,9 +15,9 @@ t_tokens *grammer_check(t_tokens *tokens)
 {
 	t_tokens *first_token;
 
+	if (tokens == NULL)
+		return (NULL);
 	first_token = tokens;
-	if (tokens == NULL || tokens->content == NULL)
-		return (tokens);
 	if (tokens->type == PIPE)
 		return (error_print(tokens));
 	while(tokens)
