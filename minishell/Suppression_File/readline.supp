@@ -2,6 +2,6 @@
     Readline still reachable
     Memcheck:Leak
     ...
-    fun:readline
+    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
     ...
 }

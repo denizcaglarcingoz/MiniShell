@@ -7,7 +7,7 @@ char	*quo_exp(char *exp, t_shell *shell)//shell
 
 	i = 0;
 	exp = ft_strjoin_char(exp, '=');
-	new_exp = ft_strdup("");
+	new_exp = NULL;
 	while (shell->env[i])
 	{
 		if (ft_strncmp(exp, shell->env[i], ft_strlen(exp)) == 0)
@@ -23,13 +23,16 @@ char	*quo_exp(char *exp, t_shell *shell)//shell
 char	*quo_exp_dollar(char *content, int *i, char *new_content, t_shell *shell)//shell
 {
 	char	*exp;
+	char	*temp;
 
+	temp = new_content;
 	(*i)++;
 	if (content[*i] == '?')
 	{
 		(*i)++;
 		exp = quo_dollar_question(shell);
 		new_content = ft_strjoin(new_content, exp);
+		free(temp);
 		free(exp);
 		return (new_content);
 	}
@@ -41,6 +44,7 @@ char	*quo_exp_dollar(char *content, int *i, char *new_content, t_shell *shell)//
 	}
 	exp = quo_exp(exp, shell);
 	new_content = ft_strjoin(new_content, exp);
+	free(temp);
 	free(exp);
 	return (new_content);
 }

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/29 19:57:31 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/05/13 23:49:44 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,22 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)/
 	}
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
-	ft_pipe_execve(exp_table.args[0], exp_table.args, shell);//return_out = 
-	dup2(in_fd, STDIN_FILENO);
-	if (t_type == D_LESS)
-		unlink(inp);
-	close(fd);
+	int pid;
+	if ((pid = fork()) == -1)
+		free_all(shell, "Fork Fail\n", 127);
+	if (pid == 0)
+	{
+		ft_pipe_execve(exp_table.args[0], exp_table.args, shell);//return_out = 
+	}
+	else 
+	{
+		wait(NULL);
+		dup2(in_fd, STDIN_FILENO);
+		if (t_type == D_LESS)
+			unlink(inp);
+		close(fd);
+		exit(0);
+	}
 }
 
 void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)//shell

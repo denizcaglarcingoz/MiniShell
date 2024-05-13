@@ -1,5 +1,5 @@
 #include "minishell.h"
-char **check_hdoc(t_table table)
+char **check_hdoc(t_table table, t_shell *shell)
 {
 	int i;
 	char *hdoc;
@@ -13,7 +13,7 @@ char **check_hdoc(t_table table)
 	{
 		if (hdoc != NULL)
 			free(hdoc);
-		hdoc = hdoc_inp((table.heredoc)[i]); // hdoc_inp is a function that is inside of redirections heredoc
+		hdoc = hdoc_inp((table.heredoc)[i], shell); // hdoc_inp is a function that is inside of redirections heredoc
 		i++;
 	}
 	hdocs = (char **)malloc(sizeof(char *) * 2);

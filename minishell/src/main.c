@@ -1,6 +1,8 @@
 
 #include "minishell.h"
 
+pid_t sig_int;
+
 void	shell_loop(t_shell *shell)//at completion of execution reset all data and recall this.
 {
 	char		*init_in;
@@ -9,6 +11,8 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 	errno = 0;
 	while (1)
 	{
+		signal(SIGINT, sigint_handler_int);
+		signal(SIGINT, sigint_handler_int);
 		init_in = readline("minishell$ ");
 		if (errno != 0 )
 			readline_error_exit(init_in, shell);//rename
@@ -33,9 +37,16 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 int	main(int ac, char **av)
 {
 	t_shell shell;
+	struct sigaction	sig;
+	int					i;
 
+	i = 0;
+	sig.sa_sigaction = signal_handler;
+	sig.sa_flags = SA_SIGINFO | SA_RESTART;
+	sigemptyset(&sig.sa_mask);
+	sigaction(SIGUSR1, &sig, 0);
+	sig_int = getpid();
 	(void)av;
-	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
 	shell.exit_status = 0;//testing must truly handle exit status
 	if (ac != 1)

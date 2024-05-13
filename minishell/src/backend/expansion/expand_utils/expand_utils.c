@@ -1,25 +1,34 @@
 #include "minishell.h"
 
+int	d_str_len(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		return (0);
+	while (str[i] != NULL)
+		i++;
+	return (i);
+}
+
 char *ft_strjoin_char(char *s1, char c)
 {
 	char	*str;
-	char	*temp;
 	int		i;
 
 	i = 0;
 	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 2));
 	if (!str)
 		return (NULL);
-	while (s1[i])
+	while (s1 != NULL && s1[i] != '\0')
 	{
 		str[i] = s1[i];
 		i++;
 	}
 	str[i] = c;
 	str[i + 1] = '\0';
-	temp = s1;
-	s1 = str;
-	free(temp);
+	free(s1);
 	return (str);
 }
 

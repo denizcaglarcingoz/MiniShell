@@ -6,12 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/04/10 18:55:46 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/05/13 22:37:34 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+extern pid_t sig_int;
 //basic implementation of heredoc
 // after returned the string
 // complexcases such as  cat << "EOF" or cat << 'EOF' or  
@@ -46,15 +47,24 @@ char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len)
 		free(s1);
 	return (join);
 }
-char	*hdoc_inp(char *h_name)
+char	*hdoc_inp(char *h_name, t_shell *shell)
 {
 	char	*input;
 	char	*whole_inp;
-
+	
+	signal(SIGINT, sigint_handler_hdoc);
 	errno = 0;
 	whole_inp = NULL;
+	 
 	while (1)
 	{
+		if (sig_int == 1)
+		{
+			if (whole_inp != NULL)
+				free(whole_inp);
+			free_all(shell, "no print", 0);
+			return (NULL);
+		}
 		if ((input = readline(">")) == NULL)
 		{
 			perror("readline malloc");

@@ -20,6 +20,7 @@
 # include "parser.h"
 # include "lexer.h"
 # include <sys/wait.h>
+# include <sys/stat.h>
 
 #define BUFFER_SIZE 4084
 
@@ -63,19 +64,24 @@ int				print_tables(t_table *table);
 
 /****EXPANSION****/
 bool			expandor(t_shell *shell, int table_num);//shell
-char 			*ft_strjoin_char(char *s1, char c);
-bool			is_alfa_num(char c);
-bool			str_is_alfa_num(char *str);
-bool			arg_expand(char ***ref_content, t_shell *shell);//shell
-bool			content_check(char *content);
 char			*expansion_check(char *content, t_shell *shell);//shell
+bool			arg_expand(char ***ref_content, t_shell *shell);//shell
+char			**split_join(char **content, char **exp, int add_split_from, t_shell *shell);
 bool			redir_expand(char **content, t_shell *shell);//shell
-
+char			**dollar_question(t_shell *shell);
 char			**exp_check(char *content, t_shell *shell);
 char			*exp_s_quo(char *content, int *i, char *new_content);
 char			*exp_d_quo(char *content, int *i, char *new_content, t_shell *shell);
-char			**dollar_question(t_shell *shell);
 char			*quo_dollar_question(t_shell *shell);
+
+
+	/****Expansion Utils****/
+bool			content_check(char *content);
+int				d_str_len(char **str);
+char 			*ft_strjoin_char(char *s1, char c);
+bool			str_is_alfa_num(char *str);
+bool			is_alfa_num(char c);
+
 /****EXECUTION****/
 void			execution(t_shell *shell);// added shell
 void			single_exec(t_shell *shell);// added shell
@@ -84,7 +90,7 @@ void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc, t_shell *shel
 void			run_command(t_table exp_table, int table_id, int pipefd1, int out_fd);
 void			fork_fail(t_table *exp_table);
 char			*check_in(t_table exp_table);
-char			**check_hdoc(t_table exp_table);
+char			**check_hdoc(t_table exp_table, t_shell *shell);
 int				output_check(t_table exp_table, int table_id, t_tokens *tokens);
 void			inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell);
 char 			*temp_hdoc(char *hdoc);
@@ -92,23 +98,22 @@ char 			*temp_hdoc(char *hdoc);
 //execution execveclear
 char			*ft_execve(char *path, char **argv, t_shell *shell);//shell
 void			ft_pipe_execve(char *path, char **argv, t_shell *shell);//shell
-	
 // execution redirections
-char			*hdoc_inp(char *h_name);
+char			*hdoc_inp(char *h_name, t_shell *shell);
 int				append_file(char *file_name, char *app_file);
 int				output_file(char *file_name, char *out_file);
 	
 // exectution utils
 t_tokens		*start_of_pipe(t_tokens *tokens, int table_id);
-char 			*read_file(int fd);
-int				is_builtin(char *cmd);
 t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens);
 t_token_type	in_o_hdoc(t_tokens *tokens, int table_id);
+char 			*read_file(int fd);
 char			*last_str(char **strs);
+int				is_builtin(char *cmd);
+int				is_directory(const char *path);
 
 
-/****SIGNALS****/
-void			sigint_handler_int(int signum);
+
 
 /***BUILT-INS****/
 
@@ -130,7 +135,6 @@ void			cd_not_found(char **full_cmd);
 int				invalid_id(char *id);
 int				compare_names_add(char *name, char *var);
 
-
 /***ENV_UTILS***/
 char			**get_env(void);
 void			print_env(char **env);
@@ -140,7 +144,6 @@ char 			*ft_getenv(char *path, char **env);
 
 int				check_valid_id(char *s);
 int				invalid_id(char *id);
-
 
 /***OTHER***/
 void			print_intro(void);
@@ -162,7 +165,11 @@ void			free_matrix(char **matrix, int i);
 void			free_d_str(char **str);
 void			free_all(t_shell *shell, char *print, int exit_type);
 
-
+/***SIGNALS***/
+void			sigint_handler_int(int signum);
+void			sigint_handler_hdoc(int signum);
+void			signal_handler(int signum, siginfo_t *info, void *context);
+void			sigint_handler_child(int signum);
 /* 
 void	executor(t_table *table, t_shell *shell);//go
 size_t		get_expanded_len(char *str, t_shell *shell);//go

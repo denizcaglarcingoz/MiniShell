@@ -6,11 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/05/09 23:36:15 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/05/13 22:38:35 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int sig_int;
 
 char *temp_hdoc(char *hdoc)
 {
@@ -90,7 +92,12 @@ void	single_exec(t_shell *shell)// shell
 	out_fd = dup(STDOUT_FILENO);
 	if (expandor(shell, 0) == false)
 		return ;
-	hdoc = check_hdoc(shell->tables[0]);
+	hdoc = check_hdoc(shell->tables[0], shell);
+	if (sig_int == 1)
+	{
+		sig_int = getpid();
+		return ;
+	}
 	in = check_in(shell->tables[0]);
 	is_out = output_check(shell->tables[0], 0, shell->tokens);
 	if (is_builtin(shell->tables[0].args[0]) == 1)

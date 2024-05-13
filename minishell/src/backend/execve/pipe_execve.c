@@ -46,7 +46,7 @@ void	pipe_path_run(char **all_paths, char **argv, char **environ, t_shell *shell
 	}
 	write(2, argv[0], ft_strlen(argv[0]));
 	if (ft_strlen(argv[0]) > 0)
-		write(2, "command not found\n", 18);
+		write(2, ": command not found\n", 20);
 	free_d_str(all_paths);
 	free_all(shell, NULL, 127);
 }
@@ -58,6 +58,12 @@ void	ft_pipe_execve(char *path, char **argv, t_shell *shell)//shell
 
 	if (argv[0] == NULL)
 		return ;
+	if (is_directory(path) == 1)
+	{
+		printf("bash: %s: Is a directory\n", argv[0]);
+		free_all(shell, "no print\n", 126);
+		return ;
+	}
 	if (access(path, X_OK) == 0)
 	{
 		if (execve(path, argv, shell->env) == -1)

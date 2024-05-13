@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern pid_t sig_int;
+
 int	pipe_fork(t_shell *shell, int pipefd[2])
 {
 	int pid;
@@ -16,14 +18,23 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 	char **hdoc;
 
 	close(pipefd[0]);
+	sig_int = 2;
+	hdoc = check_hdoc(shell->tables[i], shell);
+	if (sig_int == 1)
+	{
+		sig_int = getpid();
+		exit(0);
+	}
+	sig_int = getpid();
 	if (prev_read_fd != -1)
 	{
 		dup2(prev_read_fd, STDIN_FILENO);
 		close(prev_read_fd);
 	}
-	hdoc = check_hdoc(shell->tables[i]);
 	if (expandor(shell, i) == false)
-		free_all(shell, "", 127);
+	{	
+		free_all(shell, "no print", 127);
+	}
 	if (i + 1 < shell->tables->table_len)
 	{	
 		if (shell->tables[i].args[0] != NULL && output_check(shell->tables[i], i, shell->tokens) == 0)
