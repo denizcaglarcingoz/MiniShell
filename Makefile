@@ -15,7 +15,7 @@ LIBFT_PATH = includes/libft
 
 LIBFT_ARCH = $(LIBFT_PATH)/libft.a
 
-CC := cc
+CC := gcc
 
 OBS := $(SRCS:.c=.o)
 
