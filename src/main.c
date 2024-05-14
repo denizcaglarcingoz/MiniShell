@@ -14,9 +14,12 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 		signal(SIGINT, sigint_handler_int);
 		signal(SIGINT, sigint_handler_int);
 		if (isatty(fileno(stdin)))
+		{	
 			init_in = readline("minishell$ ");
+		}
 		else
 		{
+			errno = 0;
 			init_in = get_next_line(fileno(stdin));
 		}
 		if (errno != 0 )

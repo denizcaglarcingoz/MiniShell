@@ -28,6 +28,6 @@ void	control_d_exit(t_shell *shell)
 	clear_history();
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	ft_putstr_color_fd(1, "CTRL D Exit\n", BOLD_GREEN);
+	//ft_putstr_color_fd(1, "CTRL D Exit\n", BOLD_GREEN);
 	exit(EXIT_SUCCESS);
 }
