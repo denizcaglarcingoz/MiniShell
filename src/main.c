@@ -43,9 +43,7 @@ int	main(int ac, char **av)
 {
 	t_shell shell;
 	struct sigaction	sig;
-	int					i;
 
-	i = 0;
 	sig.sa_sigaction = signal_handler;
 	sig.sa_flags = SA_SIGINFO | SA_RESTART;
 	sigemptyset(&sig.sa_mask);
