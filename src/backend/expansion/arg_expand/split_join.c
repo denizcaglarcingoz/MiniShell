@@ -2,7 +2,7 @@
 
 char	**join_malloc(char **content, char **exp, t_shell *shell, int join_len)
 {
-	char **joined;
+	char	**joined;
 
 	joined = (char **)malloc(sizeof(char *) * (join_len + 1));
 	if (joined == NULL)
@@ -14,7 +14,7 @@ char	**join_malloc(char **content, char **exp, t_shell *shell, int join_len)
 	return (joined);
 }
 
-char **join_dup(char **joined, int *join, char **dup, int dup_int)
+char	**join_dup(char **joined, int *join, char **dup, int dup_int)
 {
 	while (dup[dup_int] != NULL)
 	{
@@ -25,7 +25,8 @@ char **join_dup(char **joined, int *join, char **dup, int dup_int)
 	return (joined);
 }
 
-char	**join_init(char **content, char **exp, int add_split_from, char **joined)
+char	**join_init(char **content, char **exp, int add_split_from, \
+char **joined)
 {
 	int		i;
 	int		k;
@@ -43,7 +44,8 @@ char	**join_init(char **content, char **exp, int add_split_from, char **joined)
 	return (joined);
 }
 
-char	**split_join(char **content, char **exp, int add_split_from, t_shell *shell)
+char	**split_join(char **content, char **exp, int add_split_from, \
+t_shell *shell)
 {
 	char	**joined;
 	int		content_len;

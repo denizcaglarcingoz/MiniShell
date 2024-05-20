@@ -1,9 +1,10 @@
 #include "minishell.h"
 
-bool arg_expand(char ***ref_content, t_shell *shell)
+bool	arg_expand(char ***ref_content, t_shell *shell)
 {
 	int		i;
 	int		j;
+	int		exp_len;
 	char	**content;
 	char	**exp;
 
@@ -23,7 +24,7 @@ bool arg_expand(char ***ref_content, t_shell *shell)
 		{
 			exp = exp_check(content[i], shell);
 			content = split_join(content, exp, i, shell);
-			int exp_len = 0;
+			exp_len = 0;
 			while (exp[exp_len] != NULL)
 			{
 				free(exp[exp_len]);

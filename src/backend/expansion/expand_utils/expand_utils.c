@@ -12,7 +12,7 @@ int	d_str_len(char **str)
 	return (i);
 }
 
-char *ft_strjoin_char(char *s1, char c)
+char	*ft_strjoin_char(char *s1, char c)
 {
 	char	*str;
 	int		i;
@@ -32,9 +32,9 @@ char *ft_strjoin_char(char *s1, char c)
 	return (str);
 }
 
-bool str_is_alfa_num(char *str)
+bool	str_is_alfa_num(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -47,7 +47,7 @@ bool str_is_alfa_num(char *str)
 }
 // special for expansion with . with alfanum
 
-bool is_alfa_num(char c)
+bool	is_alfa_num(char c)
 {
 	if (c >= '0' && c <= '9')
 		return (true);

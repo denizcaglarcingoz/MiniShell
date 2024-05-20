@@ -20,7 +20,8 @@ char	*quo_exp(char *exp, t_shell *shell)
 	return (new_exp);
 }
 
-char	*quo_exp_dollar(char *content, int *i, char *new_content, t_shell *shell)//shell
+char	*quo_exp_dollar(char *content, int *i, char *new_content, \
+t_shell *shell)
 {
 	char	*exp;
 	char	*temp;
@@ -49,7 +50,7 @@ char	*quo_exp_dollar(char *content, int *i, char *new_content, t_shell *shell)//
 	return (new_content);
 }
 
-char *exp_d_quo(char *content, int *i, char *new_content, t_shell *shell)//shell
+char	*exp_d_quo(char *content, int *i, char *new_content, t_shell *shell)
 {
 	(*i)++;
 	while (content[*i] && content[*i] != '"')
@@ -69,7 +70,7 @@ char *exp_d_quo(char *content, int *i, char *new_content, t_shell *shell)//shell
 	return (new_content);
 }
 
-char *exp_s_quo(char *content, int *i, char *new_content)
+char	*exp_s_quo(char *content, int *i, char *new_content)
 {
 	(*i)++;
 	while (content[*i] && content[*i] != '\'')
