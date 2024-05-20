@@ -1,25 +1,31 @@
 #include "minishell.h"
 
-pid_t g_sig_int;
+pid_t	g_sig_int;
 
 static void	loop_items(t_shell *shell, char *init_in)
-{	
-		shell->input = ft_strtrim(init_in, " ");
-		if (shell->input == NULL)
-			trim_error_exit(init_in, shell);
-		if (ft_strcmp(shell->input, "") != 0)
-			add_history(init_in);
-		free(init_in);
+{
+	shell->input = ft_strtrim(init_in, " ");
+	if (shell->input == NULL)
+		trim_error_exit(init_in, shell);
+	if (ft_strcmp(shell->input, "") != 0)
+		add_history(init_in);
+	free(init_in);
+	init_in = NULL;
 	shell->tokens = build_token_list(shell->input, shell);
 	free(shell->input);
+	shell->input = NULL;
 	shell->tokens = grammer_check(shell->tokens);
 	shell->tables = parser(shell->tokens);
-	//if (!ft_strcmp(shell->tables->args[0], "env"))
-	//	shell->env = add_env(shell->env, "_=/usr/bin/env");
+	if (shell->tables && shell->tables->args)
+	{
+		if (shell->tables->args[0] \
+		&& !ft_strcmp(shell->tables->args[0], "env"))
+			shell->env = add_env(shell->env, "_=/usr/bin/env");
+	}
 	execution(shell);
-	//if (shell->tables->args[0] && ft_strcmp(shell->tables->args[0], "exit"))
-	//	update_last_cmd(shell->tables->args, shell);//
-}	
+	if (shell->update_cmd)
+		update_last_cmd(shell->update_cmd, shell);
+}
 
 void	shell_loop(t_shell *shell)
 {
@@ -38,8 +44,8 @@ void	shell_loop(t_shell *shell)
 			errno = 0;
 			init_in = get_next_line(fileno(stdin));
 		}
-		if (errno != 0 )
-			readline_error_exit(init_in, shell);//rename
+		if (errno != 0)
+			readline_error_exit(init_in, shell);
 		if (init_in == NULL)
 			break ;
 		loop_items(shell, init_in);
@@ -49,7 +55,7 @@ void	shell_loop(t_shell *shell)
 
 int	main(int ac, char **av)
 {
-	t_shell shell;
+	t_shell				shell;
 	struct sigaction	sig;
 
 	sig.sa_sigaction = signal_handler;
@@ -71,7 +77,7 @@ int	main(int ac, char **av)
 }
 
 	///PARSE AND TABLES TESTING-----------------
-	/* printf("\n--------\n");//test
-	print_tables(table);
+/* 	printf("\n--------\n");//test
+	print_tables(shell->tables);
 	printf("\n--------\n");//test */
 	//-------------------------------------

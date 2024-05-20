@@ -59,7 +59,7 @@ void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
 		return ;
 	if (is_directory(path) == 1)
 	{
-		printf("bash: %s: Is a directory\n", argv[0]);
+		printf("minishell: %s: Is a directory\n", argv[0]);
 		free_all(shell, "no print\n", 126);
 		return ;
 	}

@@ -30,6 +30,7 @@ typedef struct s_shell
 	char		*input;
 	char		**env;
 	char		**exported;
+	char		*update_cmd;
 	int			exit_status;
 	int			table_len;//
 	t_table		*tables;
@@ -148,7 +149,8 @@ char			*ft_getenv(char *path, char **env);
 
 int				check_valid_id(char *s);
 int				invalid_id(char *id);
-int				update_last_cmd(char **full_cmd, t_shell *shell);
+int				update_last_cmd(char *update_cmd, t_shell *shell);
+char			*get_update_cmd(char **full_cmd, t_shell *shell);
 void			init_env(t_shell *shell);
 
 /***CLEAN UP***/
