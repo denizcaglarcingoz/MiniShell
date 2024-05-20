@@ -1,5 +1,5 @@
 #ifndef LEXER_H
-#define LEXER_H
+# define LEXER_H
 
 # include "minishell.h"
 # include "parser.h"
@@ -19,7 +19,6 @@ typedef enum e_token_type
 	QUOTE,
 	D_QUOTE,
 	NO_TYPE
-
 }	t_token_type;
 
 typedef struct s_tokens

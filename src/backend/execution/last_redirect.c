@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-t_token_type in_o_hdoc(t_tokens *tokens, int table_id)
+t_token_type	in_o_hdoc(t_tokens *tokens, int table_id)
 {
-	t_tokens *first;
-	int i;
+	t_tokens	*first;
+	int			i;
 
 	first = start_of_pipe(tokens, table_id);
 	if (first == NULL)
 		return (NO_TYPE);
 	i = 0;
-	while(first)
+	while (first)
 	{
-		if(first->type == LESS)
+		if (first->type == LESS)
 			i = 0;
 		else if (first->type == D_LESS)
 			i = 1;
@@ -23,9 +23,9 @@ t_token_type in_o_hdoc(t_tokens *tokens, int table_id)
 		return (D_LESS);
 }
 
-void create_files(t_table exp_table)
+void	create_files(t_table exp_table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (exp_table.out[i] != NULL)
@@ -44,25 +44,25 @@ void create_files(t_table exp_table)
 
 t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens)
 {
-	t_tokens *first;
-	int i;
+	t_tokens	*first;
+	int			i;
 
 	create_files(exp_table);
 	first = start_of_pipe(tokens, table_id);
 	if (first == NULL)
 		return (NO_TYPE);
-	if (first->type== PIPE)
+	if (first->type == PIPE)
 		first = first->next;
 	i = 2;
-	while(first)
+	while (first)
 	{
-		if(first->type == GREATER)
+		if (first->type == GREATER)
 			i = 0;
 		else if (first->type == D_GREATER)
 			i = 1;
 		first = first->next;
 		if (first == NULL || first->type == PIPE)
-			break;
+			break ;
 	}
 	if (i == 0)
 		return (GREATER);

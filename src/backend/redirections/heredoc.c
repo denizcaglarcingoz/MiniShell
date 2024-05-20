@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern pid_t sig_int;
+extern pid_t g_sig_int;
 //basic implementation of heredoc
 // after returned the string
 // complexcases such as  cat << "EOF" or cat << 'EOF' or  
@@ -58,7 +58,7 @@ char	*hdoc_inp(char *h_name, t_shell *shell)
 	 
 	while (1)
 	{
-		if (sig_int == 1)
+		if (g_sig_int == 1)
 		{
 			if (whole_inp != NULL)
 				free(whole_inp);

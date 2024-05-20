@@ -12,12 +12,13 @@
 
 #include "minishell.h"
 
-void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)//has 5 now!!
+void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, \
+t_shell *shell)
 {
 	int				fd;
 	int				in_fd;
+	int				pid;
 	char			*inp;
-	//char			*return_out;
 	t_token_type	t_type;
 
 	t_type = in_o_hdoc(shell->tokens, 0);
@@ -27,20 +28,18 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)/
 		inp = in;
 	fd = open(inp, 0);
 	if (fd == -1)
-	{	
+	{
 		perror("open");
 		return ;
 	}
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
-	int pid;
-	if ((pid = fork()) == -1)
+	pid = fork();
+	if (pid == -1)
 		free_all(shell, "Fork Fail\n", 127);
 	if (pid == 0)
-	{
-		ft_pipe_execve(exp_table.args[0], exp_table.args, shell);//return_out = 
-	}
-	else 
+		ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
+	else
 	{
 		wait(NULL);
 		dup2(in_fd, STDIN_FILENO);
@@ -51,20 +50,20 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)/
 	}
 }
 
-void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)//shell
+void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
 {
-	char *in;
+	char	*in;
 
 	in = check_in(table);
 	output_check(table, table_id, shell->tokens);
 	if (is_builtin(table.args[0]) == 1)
-	{	
-		run_builtin(table, shell);//shell
-		// clean up
-		exit(0);// with correct code
+	{
+		run_builtin(table, shell);
+		exit(shell->exit_status);
 	}
-	else if (table.args[1] != NULL || (table.in[0] == NULL && table.heredoc[0] == NULL))
+	else if (table.args[1] != NULL || (table.in[0] == NULL \
+	&& table.heredoc[0] == NULL))
 		ft_pipe_execve(table.args[0], table.args, shell);
 	else
-		pipe_inp_cmd_run(table, in, hdoc, shell);//five!!
+		pipe_inp_cmd_run(table, in, hdoc, shell);
 }

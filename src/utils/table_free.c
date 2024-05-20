@@ -1,13 +1,12 @@
 #include "minishell.h"
 
-void free_table(t_table *table)
+void	free_table(t_table *table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (table == NULL)
 		return ;
-
 	while (table[i].args != NULL)
 	{
 		free_d_str(table[i].args);

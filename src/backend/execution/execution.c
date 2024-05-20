@@ -1,9 +1,10 @@
 #include "minishell.h"
-char **check_hdoc(t_table table, t_shell *shell)
+
+char	**check_hdoc(t_table table, t_shell *shell)
 {
-	int i;
-	char *hdoc;
-	char **hdocs;
+	int		i;
+	char	*hdoc;
+	char	**hdocs;
 
 	if (table.heredoc[0] == NULL)
 		return (NULL);
@@ -13,7 +14,7 @@ char **check_hdoc(t_table table, t_shell *shell)
 	{
 		if (hdoc != NULL)
 			free(hdoc);
-		hdoc = hdoc_inp((table.heredoc)[i], shell); // hdoc_inp is a function that is inside of redirections heredoc
+		hdoc = hdoc_inp((table.heredoc)[i], shell);
 		i++;
 	}
 	hdocs = (char **)malloc(sizeof(char *) * 2);
@@ -22,10 +23,10 @@ char **check_hdoc(t_table table, t_shell *shell)
 	return (hdocs);
 }
 
-char *check_in(t_table table)
+char	*check_in(t_table table)
 {
-	int i;
-	
+	int	i;
+
 	if (table.in[0] == NULL)
 		return (NULL);
 	i = 0;
@@ -38,13 +39,12 @@ char *check_in(t_table table)
 	return (table.in[i - 1]);
 }
 
-void	execution(t_shell *shell)//added shell here
+void	execution(t_shell *shell)
 {
-
 	if (shell->tables == NULL)
 		return ;
 	if (shell->tables->table_len < 2)
-		single_exec(shell);//shell
+		single_exec(shell);
 	else
-		pipe_execution(shell);//shell
+		pipe_execution(shell);
 }

@@ -7,10 +7,10 @@ void	free_d_str(char **str)
 	i = 0;
 	if (!str)
 		return ;
-	while(str[i] != NULL)
+	while (str[i] != NULL)
 	{
 		free(str[i]);
-		i++;	
+		i++;
 	}
 	free(str);
 }

@@ -2,26 +2,23 @@
 
 int	update_old(t_shell *shell)
 {
-	int		i;
 	char	*temp;
 	char	*old;
+	char	*pwd;
 
-	old = ft_strdup(ft_getenv("PWD", shell->env));
+	pwd = ft_getenv("PWD", shell->env);
+	if (pwd == NULL)
+		return (0);
+	old = ft_strdup(pwd);
 	if (!old)
 		return (2);
-	i = -1;
-	while (shell->env[++i])
-	{
-		if (!ft_strncmp(shell->env[i], "OLDPWD=", 7))
-		{
-			temp = ft_strjoin("OLDPWD=", old);
-			free(old);
-			if (!temp)
-				return (2);
-			free(shell->env[i]);
-			shell->env[i] = temp;
-		}
-	}
+	temp = ft_strjoin("OLDPWD=", old);
+	free(old);
+	if (!temp)
+		return (2);
+	shell->env = add_env(shell->env, temp);
+	if (!shell->env)
+		return (2);
 	return (EXIT_SUCCESS);
 }
 
@@ -55,7 +52,14 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 		|| **(full_cmd + 1) == '\0')
 		path = ft_getenv("HOME", shell->env);
 	else if (**(full_cmd + 1) == '-')
+	{
 		path = ft_getenv("OLDPWD", shell->env);
+		if (!path)
+		{
+			ft_putstr_color_fd(2, "minishell: cd: OLDPWD not set\n", RED);
+			return (1);
+		}
+	}
 	else
 		path = full_cmd[1];
 	if (chdir(path) == -1)
@@ -108,14 +112,13 @@ int	ft_cd(char **full_cmd, t_shell *shell)
 		|| **(full_cmd + 1) == '/' || **(full_cmd + 1) == '\0' \
 			|| **(full_cmd + 1) == '-')
 	{
-		if (absolute_home(full_cmd, shell) != 0)
-			status = 1;
+		status = absolute_home(full_cmd, shell);
 	}
 	else
 		status = handle_relative(full_cmd);
 	if (status == 1)
 		return (1);
 	if (update_old(shell) || update_pwd(shell) || status == 2)
-		return (2);
+		free_all(shell, "unset malloc failed", 127);
 	return (EXIT_SUCCESS);
 }

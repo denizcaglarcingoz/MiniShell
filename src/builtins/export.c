@@ -96,8 +96,8 @@ int	ft_export(char **full_cmd, t_shell *shell)
 		{
 			status = export_loop(full_cmd[i], shell);
 			if (status == 2)
-				break ;
+				free_all(shell, "export malloc failed", 127);
 		}
 	}
-	return (status);//status 2 is malloc fail
+	return (status);
 }

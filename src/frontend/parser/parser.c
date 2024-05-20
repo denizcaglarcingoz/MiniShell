@@ -75,5 +75,5 @@ int print_tables(t_table *table)
 		}
 		i++;
 	}
-	return  0;
+	return  (0);
 }

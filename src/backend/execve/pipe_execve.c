@@ -1,6 +1,4 @@
-
 #include "minishell.h"
-
 
 char	**pipe_append_path(char **str, char *path_add)
 {
@@ -8,7 +6,7 @@ char	**pipe_append_path(char **str, char *path_add)
 	int		i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
 	new = (char **)malloc((i + 1) * sizeof(char*));	
 	if (new == NULL)
@@ -17,7 +15,7 @@ char	**pipe_append_path(char **str, char *path_add)
 		return (NULL);
 	}
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		new[i] = ft_strjoin(str[i], path_add);
 		i++;
@@ -27,7 +25,8 @@ char	**pipe_append_path(char **str, char *path_add)
 	return (new);
 }
 
-void	pipe_path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
+void	pipe_path_run(char **all_paths, char **argv, char **environ, \
+t_shell *shell)
 {
 	int		i;
 
@@ -51,7 +50,7 @@ void	pipe_path_run(char **all_paths, char **argv, char **environ, t_shell *shell
 	free_all(shell, NULL, 127);
 }
 
-void	ft_pipe_execve(char *path, char **argv, t_shell *shell)//shell
+void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
 {
 	char	**all_paths;
 	char	**paths;

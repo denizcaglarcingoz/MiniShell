@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*quo_exp(char *exp, t_shell *shell)//shell
+char	*quo_exp(char *exp, t_shell *shell)
 {
 	char	*new_exp;
 	int		i;

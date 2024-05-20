@@ -3,7 +3,7 @@
 
 # include "minishell.h"
 # include "lexer.h"
- 
+
 typedef struct s_table
 {
 	char		**args;
@@ -19,10 +19,9 @@ typedef struct s_table
 
 	// cat "$daria" out.txt
 	// arg[0] = cat arg[1]= "cat deniz.txt  out.txt" arg[2]= out.txt
-	
+
 	// cat $daria"asd"$deniz out.txt
 	// arg[0]= cat arg[1]= cat arg[2]= deniz.txt arg[3]= out.txt arg[4]=out.txt
-
 
 typedef struct s_table_content_len
 {

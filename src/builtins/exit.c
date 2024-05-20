@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+void	print_exit_err(char **full_cmd, long int *code)
+{
+	ft_putstr_color_fd(2, "minishell: exit: ", RED);
+	ft_putstr_color_fd(2, full_cmd[1], RED);
+	ft_putstr_color_fd(2, ": numeric argument required\n", RED);
+	*code = 2;
+}
+
 int	is_all_digit(char *s)
 {
 	int	i;
@@ -15,39 +23,37 @@ int	is_all_digit(char *s)
 	return (1);
 }
 
-long int	set_code(char **full_cmd)
+int	set_code(char **full_cmd)
 {
 	long int	code;
 
 	if (!is_all_digit(full_cmd[1]))
-	{
-		ft_putstr_color_fd(2, "minishell: exit: ", RED);
-		ft_putstr_color_fd(2, full_cmd[1], RED);
-		ft_putstr_color_fd(2, ": numeric argument required\n", RED);
-		code = 2;
-	}
+		print_exit_err(full_cmd, &code);
+	if ((full_cmd[1][0] == '-' && ft_num_strcmp(full_cmd[1], L_MIN_STR) < 0) ||
+		(full_cmd[1][0] != '-' && ft_num_strcmp(full_cmd[1], L_MAX_STR) > 0))
+		print_exit_err(full_cmd, &code);
 	else
 	{
-		code = (ft_atol(full_cmd[1]) % 256);
+		code = ft_atol(full_cmd[1]);
+		code %= 256;
 		if (code < 0)
 			code += 256;
 	}
 	return (code);
 }
 
-void	final_free(t_table *table, t_shell *shell)
+void	final_free(t_shell *shell)
 {
 	clear_history();
-	//free(shell->input);// get rid of in main
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	if (table)		//must fix this freeing
-		free_t_content_alloc_and_table(table, shell->table_len);
+	free_list(shell->tokens);
+	free_table(shell->tables);
 }
 
-int	ft_exit(t_table *table, char **full_cmd, t_shell *shell)
+int	ft_exit(char **full_cmd, t_shell *shell)
 {
-	long int	code;
+	int	code;
 
 	ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
 	if (ft_matrix_len(full_cmd) > 2)
@@ -59,8 +65,7 @@ int	ft_exit(t_table *table, char **full_cmd, t_shell *shell)
 		code = set_code(full_cmd);
 	else
 		code = 0;
-	final_free(table, shell);
-	printf("exit code: %ld\n", code);//-------------
+	final_free(shell);
 	exit(code);
 	return (code);
 }

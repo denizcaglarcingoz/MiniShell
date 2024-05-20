@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_table struct_null(t_table table)
+t_table	struct_null(t_table table)
 {
 	table.args = NULL;
 	table.in = NULL;
@@ -12,11 +12,11 @@ t_table struct_null(t_table table)
 
 void t_table_len_assign(t_table *table, int len)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < len)
-	{	
+	{
 		table[i].table_len = len;
 		i++;
 	}

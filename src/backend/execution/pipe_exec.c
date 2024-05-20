@@ -1,54 +1,53 @@
 #include "minishell.h"
 
-extern pid_t sig_int;
+extern	pid_t g_sig_int;
 
 int	pipe_fork(t_shell *shell, int pipefd[2])
 {
-	int pid;
+	int	pid;
 
 	if (pipe(pipefd) == -1)
 		free_all(shell, "Pipe Fail\n", 127);
-	if ((pid = fork()) == -1)
+	pid = fork();
+	if (pid == -1)
 		free_all(shell, "Fork Fail\n", 127);
 	return (pid);
 }
 
 void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 {
-	char **hdoc;
+	char	**hdoc;
 
 	close(pipefd[0]);
-	sig_int = 2;
+	g_sig_int = 2;
 	hdoc = check_hdoc(shell->tables[i], shell);
-	if (sig_int == 1)
+	if (g_sig_int == 1)
 	{
-		sig_int = getpid();
+		g_sig_int = getpid();
 		exit(0);
 	}
-	sig_int = getpid();
+	g_sig_int = getpid();
 	if (prev_read_fd != -1)
 	{
 		dup2(prev_read_fd, STDIN_FILENO);
 		close(prev_read_fd);
 	}
 	if (expandor(shell, i) == false)
-	{	
 		free_all(shell, "no print", 127);
-	}
 	if (i + 1 < shell->tables->table_len)
-	{	
+	{
 		if (shell->tables[i].args[0] != NULL && output_check(shell->tables[i], i, shell->tokens) == 0)
-			{
-				dup2(pipefd[1], STDOUT_FILENO);
-				close(pipefd[1]);
-			}
+		{
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+		}
 	}
 	else
 		close(pipefd[1]);
 	if ((shell->tables[i]).args[0] == NULL)
 		exit(0);
 	else
-		pipe_exec_run(shell->tables[i], i, hdoc, shell);//shell
+		pipe_exec_run(shell->tables[i], i, hdoc, shell);
 }
 
 void	ft_wait(t_shell *shell)
@@ -56,7 +55,7 @@ void	ft_wait(t_shell *shell)
 	int	i;
 
 	i = 0;
-	while ( i < shell->tables->table_len)
+	while (i < shell->tables->table_len)
 	{
 		wait(NULL);
 		i++;
@@ -64,7 +63,7 @@ void	ft_wait(t_shell *shell)
 	free_all(shell, "no exit", 0);
 }
 
-void	pipe_execution(t_shell *shell)//shell
+void	pipe_execution(t_shell *shell)
 {
 	int		pipefd[2];
 	int		prev_read_fd;
@@ -76,7 +75,7 @@ void	pipe_execution(t_shell *shell)//shell
 	while (i < shell->tables->table_len)
 	{
 		pid = pipe_fork(shell, pipefd);
-		if (pid == 0)	
+		if (pid == 0)
 			child_pro(shell, pipefd, prev_read_fd, i);
 		else
 		{
