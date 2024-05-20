@@ -38,19 +38,18 @@ char	*app_strjoin(char *s1, char const *s2, size_t len)
 	return (join);
 }
 
-int read_loop(int fd, char **full_file, int *len)
+int	read_loop(int fd, char **full_file, int *len)
 {
 	char	buffer[BUFFER_SIZE];
 	int		count_read;
-	
+
 	*len = 1;
 	while ((count_read = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		printf("inside count_read: %d\n", count_read);
         *full_file = app_strjoin(*full_file, buffer, count_read);
-        if (*full_file == NULL) {
-            return 1; // Error occurred while appending to full_file
-        }
+        if (*full_file == NULL)
+            return (1); // Error occurred while appending to full_file
     }
 	printf("outside count_read: %d\n", count_read);
 	return (0);
@@ -109,23 +108,3 @@ int	append_file(char *file_name, char *app_file)
 	}
 	return (0);
 }
-
-// TEST
-
-// int main (int argc, char **argv)
-// {
-// 	char *file_name = "file.txt";
-// 	char *inp_file = argv[1];
-// 	int i = argc;
-// 	i = 4;
-// 	if (append_file(file_name, inp_file) == -1)
-// 	{
-// 		//error;
-// 		return(1);
-// 	}
-	
-// 	//printf("%s\n", inp_file);
-// 	return (0);
-// }
-
-

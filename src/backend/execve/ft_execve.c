@@ -4,10 +4,10 @@ extern pid_t g_sig_int;
 
 void	pipe_init_exec(int pipefd[2], t_shell *shell)//not being used..?
 {
-	if	(pipe(pipefd) == -1)
+	if (pipe(pipefd) == -1)
 	{
 		free_all(shell, "Pipe creation failed", 127);
-    	exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -17,9 +17,9 @@ char	**append_path(char **str, char *path_add)
 	int		i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 		i++;
-	new = (char **)malloc((i + 1) * sizeof(char*));	
+	new = (char **)malloc((i + 1) * sizeof(char*));
 	if (new == NULL)
 	{
 		free(path_add);
@@ -27,7 +27,7 @@ char	**append_path(char **str, char *path_add)
 		return (NULL);
 	}
 	i = -1;
-	while(str[++i])
+	while (str[++i])
 	{
 		new[i] = ft_strjoin(str[i], path_add);
 		if (!new[i])
@@ -48,13 +48,14 @@ char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 {
 	int		i;
 	pid_t	pid;
+
 	i = 0;
-	
 	while (all_paths[i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0)
 		{
-			if ((pid = fork()) == -1)
+			pid = fork();
+			if (pid == -1)
 			{
 				free_d_str(all_paths);
 				free_all(shell, "execve fail\n", 127);
@@ -68,11 +69,10 @@ char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 			}
 			else
 			{
-				
 				wait(NULL);
 				free_d_str(all_paths);
 				free_all(shell, "no print\n", 0);
-				return (NULL) ;
+				return (NULL);
 			}
 		}
 		i++;
@@ -104,13 +104,14 @@ char	*ft_execve(char *path, char **argv, t_shell *shell)
 	if (access(path, X_OK) == 0)
 	{
 		pipe(pipefd);
-		if ((pid = fork()) == -1)
+		pid = fork();
+		if (pid == -1)
 			free_all(shell, "fork failed\n", 127);
 		if (pid == 0)	
 		{
 			close(pipefd[0]);
 			g_sig_int = getpid();
-			write(pipefd[1], ft_itoa(g_sig_int), ft_strlen(ft_itoa(g_sig_int)));
+			write(pipefd[1], ft_itoa(g_sig_int), ft_strlen(ft_itoa(g_sig_int)));//must protect itoa
 			// printf("here\n");
 			execve(path, argv, shell->env);
 			free_all(shell, "execve failed\n", 127);

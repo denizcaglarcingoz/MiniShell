@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern pid_t g_sig_int;
+extern pid_t	g_sig_int;
 //basic implementation of heredoc
 // after returned the string
 // complexcases such as  cat << "EOF" or cat << 'EOF' or  
@@ -47,15 +47,15 @@ char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len)
 		free(s1);
 	return (join);
 }
+
 char	*hdoc_inp(char *h_name, t_shell *shell)
 {
 	char	*input;
 	char	*whole_inp;
-	
+
 	signal(SIGINT, sigint_handler_hdoc);
 	errno = 0;
 	whole_inp = NULL;
-	 
 	while (1)
 	{
 		if (g_sig_int == 1)
@@ -65,33 +65,24 @@ char	*hdoc_inp(char *h_name, t_shell *shell)
 			free_all(shell, "no print", 0);
 			return (NULL);
 		}
-		if ((input = readline(">")) == NULL)
+		input = readline(">");
+		if (input == NULL)//correct protect here
 		{
 			perror("readline malloc");
 			if (input != 0)
 				free(input);
 			exit(EXIT_FAILURE);
 		}
-		if (ft_strncmp(input, h_name, ft_strlen(h_name)) == 0 && ft_strlen(h_name) == ft_strlen(input)) 
+		if (ft_strncmp(input, h_name, ft_strlen(h_name)) == 0 \
+		&& ft_strlen(h_name) == ft_strlen(input))
 			break ;
 		else
 		{
-			if ((whole_inp = hdoc_strjoin(whole_inp, input, ft_strlen(input))) == NULL)
+			whole_inp = hdoc_strjoin(whole_inp, input, ft_strlen(input));//check if protect needed.
+			if (whole_inp == NULL)
 				return (free(input), NULL);
 		}
 		free(input);
 	}
-	return(free(input), whole_inp);
+	return (free(input), whole_inp);
 }
-
-// TEST
-
-// int main (int argc, char **argv)
-// {
-// 	char *h_name = argv[1];
-// 	char *input;
-// 	input = hdoc_inp(h_name);
-// 	printf("\n\nHEREDOC:\n%s", input);
-// 	free(input);
-// 	return (0);
-// }

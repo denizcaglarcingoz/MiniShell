@@ -1,33 +1,45 @@
 #include "minishell.h"
 
-bool content_check(char *content)
+static void	check_squo(char *content, int *i)
 {
-	int i;
+	(*i)++;
+	while (content[*i] && content[*i] != '\'')
+	{
+		if (content[*i] == '\'')
+			return ;
+		(*i)++;
+	}
+	return ;
+}
+
+static void	check_dquo(char *content, int *i)
+{
+	(*i)++;
+	while (content[*i] && content[*i] != '"')
+	{
+		if (content[*i] == '"')
+			return ;
+		(*i)++;
+	}
+	return ;
+}
+
+bool	content_check(char *content)
+{
+	int	i;
 
 	i = 0;
 	while (content[i])
 	{
 		if (content[i] == '\'')
 		{
-			i++;
-			while (content[i] && content[i] != '\'')
-			{	
-				if (content[i] == '\'')
-					break;
-				i++;
-			}
+			check_squo(content, &i);
 			if (!content[i])
 				return (false);
 		}
 		else if (content[i] == '"')
 		{
-			i++;
-			while (content[i] && content[i] != '"')
-			{
-				if (content[i] == '"')
-					break;
-				i++;
-			}
+			check_dquo(content, &i);
 			if (!content[i])
 				return (false);
 		}
@@ -36,10 +48,10 @@ bool content_check(char *content)
 	return (true);
 }
 
-bool check_in_expandor(t_table exp_table)
+bool	check_in_expandor(t_table exp_table)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (exp_table.in[i] != NULL)
 	{
@@ -55,21 +67,14 @@ bool check_in_expandor(t_table exp_table)
 
 bool	expandor(t_shell *shell, int table_num)
 {
-	if (arg_expand(&(shell->tables[table_num].args), shell) == false ||
-		redir_expand(shell->tables[table_num].in, shell) == false ||
-		redir_expand(shell->tables[table_num].out, shell) == false ||
-		redir_expand(shell->tables[table_num].append, shell) == false ||
-		check_in_expandor(shell->tables[table_num]) == false)
+	if (arg_expand(&(shell->tables[table_num].args), shell) == false
+		|| redir_expand(shell->tables[table_num].in, shell) == false
+		|| redir_expand(shell->tables[table_num].out, shell) == false
+		|| redir_expand(shell->tables[table_num].append, shell) == false
+		|| check_in_expandor(shell->tables[table_num]) == false)
 	{
 		free_all(shell, "no print", 0);
 		return (false);
 	}
 	return (true);
 }
-
-// typedef struct s_tokens
-// {
-// 	t_token_type	type;
-// 	char			*content;
-// 	struct s_tokens	*next;
-// }	t_tokens;
