@@ -58,11 +58,17 @@ void	free_t_content_alloc_and_table(t_table *table, int i)
 	table = NULL;
 }
 
-void	free_content_first_allocs_only(t_table table)//do i need this?
+void	free_content_first_allocs_only(t_table *table)
 {
-	free(table.args);
-	free(table.in);
-	free(table.out);
-	free(table.append);
-	free(table.heredoc);
+	if (table->args)
+		free(table->args);
+	if (table->in)
+		free(table->in);
+	if (table->out)
+		free(table->out);
+	if (table->append)
+		free(table->append);
+	if (table->heredoc)
+		free(table->heredoc);
 }
+

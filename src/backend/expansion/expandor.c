@@ -78,7 +78,7 @@ bool	expandor(t_shell *shell, int table_num)
 		free_all(shell, "no print", 0);
 		return (false);
 	}
-	if (shell->tables->args[0] && ft_strcmp(shell->tables->args[0], "exit"))
-		shell->update_cmd = get_update_cmd(shell->tables->args, shell);
+	/* if (shell->tables->args[0] && ft_strcmp(shell->tables->args[0], "exit"))
+		shell->update_cmd = get_update_cmd(shell->tables->args, shell); */
 	return (true);
 }

@@ -15,16 +15,16 @@ static void	loop_items(t_shell *shell, char *init_in)
 	free(shell->input);
 	shell->input = NULL;
 	shell->tokens = grammer_check(shell->tokens);
-	shell->tables = parser(shell->tokens);
-	if (shell->tables && shell->tables->args)
+	shell->tables = parser(shell->tokens, shell);
+	/* if (shell->tables && shell->tables->args)
 	{
 		if (shell->tables->args[0] \
 		&& !ft_strcmp(shell->tables->args[0], "env"))
 			shell->env = add_env(shell->env, "_=/usr/bin/env");
-	}
+	} */
 	execution(shell);
-	if (shell->update_cmd)
-		update_last_cmd(shell->update_cmd, shell);
+	/* if (shell->update_cmd)
+		update_last_cmd(shell->update_cmd, shell); */
 }
 
 void	shell_loop(t_shell *shell)

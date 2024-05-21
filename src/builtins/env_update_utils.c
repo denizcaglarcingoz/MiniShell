@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char *get_update_cmd(char **full_cmd, t_shell *shell)
+char	*get_update_cmd(char **full_cmd, t_shell *shell)
 {
 	int		i;
 	char	*command;
@@ -42,7 +42,7 @@ int	update_last_cmd(char *update_cmd, t_shell *shell)
 void	init_env(t_shell *shell)
 {
 	shell->update_cmd = NULL;
-	//shell->exit_status = 0;
+	shell->exit_status = 0;
 	shell->env = get_env();
 	if (!shell->env)
 		exit(EXIT_FAILURE);

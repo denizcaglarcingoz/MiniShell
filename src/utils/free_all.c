@@ -1,6 +1,14 @@
 #include "minishell.h"
 
-static void	free_all_ops(t_shell *shell, int exit_type)
+static void	free_list_env(t_shell *shell)
+{
+	if (shell->env)	
+		free_all_env(shell->env);
+	if (shell->exported)
+		free_all_env(shell->exported);
+	free_list(shell->tokens);
+}
+static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 {
 	if (exit_type == 0)
 	{
@@ -20,6 +28,13 @@ static void	free_all_ops(t_shell *shell, int exit_type)
 		free_list(shell->tokens);
 		free_table(shell->tables);
 	}
+	else if(exit_type == 2)
+	{
+		clear_history();
+		free_list_env(shell);
+		perror(print);
+		exit (2);
+	}
 }
 
 void	free_all(t_shell *shell, char *print, int exit_type)
@@ -33,14 +48,11 @@ void	free_all(t_shell *shell, char *print, int exit_type)
 	{
 		if (ft_strcmp(print, "no print") != 0)
 			perror(print);
+		free_list_env(shell);
 		clear_history();
-		free_d_str(shell->env);
-		if (shell->exported)
-			free_d_str(shell->exported);
-		free_list(shell->tokens);
 		free_table(shell->tables);
 		exit(127);
 	}
 	else
-		free_all_ops(shell, exit_type);
+		free_all_ops(shell, print, exit_type);
 }

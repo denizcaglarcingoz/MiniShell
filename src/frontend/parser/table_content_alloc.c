@@ -13,7 +13,8 @@ static t_table_content_len	int_zero_init(void)
 	return (table_content_len);
 }
 
-static t_table_content_len	content_lens(t_tokens *tokens, t_table_content_len t_c_len)
+static	t_table_content_len	content_lens(t_tokens *tokens, \
+t_table_content_len t_c_len)
 {
 	while (tokens)
 	{
@@ -47,9 +48,9 @@ static void	set_to_null(t_table *table, t_table_content_len table_content_len)
 	table->heredoc[table_content_len.heredoc] = NULL;
 }
 
-void	t_content_alloc(t_tokens *tokens, t_table *table)
+int	t_content_alloc(t_tokens *tokens, t_table *table)
 {
-	t_table_content_len table_content_len;
+	t_table_content_len	table_content_len;
 
 	table_content_len = int_zero_init();
 	table_content_len = content_lens(tokens, table_content_len);
@@ -58,10 +59,13 @@ void	t_content_alloc(t_tokens *tokens, t_table *table)
 	table->out = malloc(sizeof(char *) * (table_content_len.out + 1));
 	table->append = malloc(sizeof(char *) * (table_content_len.append + 1));
 	table->heredoc = malloc(sizeof(char *) * (table_content_len.heredoc + 1));
-	if (table->args == NULL || table->in == NULL || table->out == NULL ||
-			table->append == NULL || table->heredoc == NULL)
+	if (table->args == NULL || table->in == NULL || table->out == NULL \
+	|| table->append == NULL || table->heredoc == NULL)
 	{
 		perror("t_content_init");
+		free_content_first_allocs_only(table);
+		return (-1);
 	}
 	set_to_null(table, table_content_len);
+	return (0);
 }

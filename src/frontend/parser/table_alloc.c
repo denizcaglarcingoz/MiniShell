@@ -10,7 +10,7 @@ t_table	struct_null(t_table table)
 	return (table);
 }
 
-void t_table_len_assign(t_table *table, int len)
+static void	t_table_len_assign(t_table *table, int len)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ void t_table_len_assign(t_table *table, int len)
 	}
 }
 
-t_table	*table_alloc(t_tokens *tokens)
+t_table	*table_alloc(t_tokens *tokens, t_shell *shell)
 {
 	int			len;
 	t_table		*table;
@@ -36,10 +36,7 @@ t_table	*table_alloc(t_tokens *tokens)
 	}
 	table = malloc(sizeof(t_table) * (len + 2));
 	if (table == NULL)
-	{
-		perror("table_alloc");
-		return (NULL);
-	}
+		free_all(shell, "table_alloc failure", 2);
 	table[len + 1] = struct_null(table[len + 1]);
 	t_table_len_assign(table, len + 1);
 	return (table);

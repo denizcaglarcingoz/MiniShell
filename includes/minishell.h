@@ -54,12 +54,14 @@ void			print_tokens(t_tokens *tokens);
 
 /****PARSER****/
 t_tokens		*grammer_check(t_tokens *tokens);
-t_table			*parser(t_tokens *tokens);
-t_table			*table_init(t_tokens *tokens, t_table *table);
-void			t_content_alloc(t_tokens *tokens, t_table *table);
+t_table			*parser(t_tokens *tokens, t_shell *shell);//shell
+//t_table			*table_init(t_tokens *tokens, t_table *table);
+t_table		*table_init(t_tokens *tokens, t_table *table, t_shell *shell);
+
+int				t_content_alloc(t_tokens *tokens, t_table *table);
 
 // table allocs
-t_table			*table_alloc(t_tokens *tokens);
+t_table			*table_alloc(t_tokens *tokens, t_shell *shell);
 t_table			struct_null(t_table table);
 
 void			free_table(t_table *table);
@@ -165,7 +167,7 @@ void			free_list(t_tokens *tokens);
 
 void			free_t_content_alloc_and_table(t_table *table, int i);
 int				ft_matrix_len(char **matrix);
-void			free_content_first_allocs_only(t_table table);
+void			free_content_first_allocs_only(t_table *table);
 void			free_matrix(char **matrix, int i);
 
 void			free_d_str(char **str);
