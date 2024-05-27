@@ -15,8 +15,8 @@ void sigint_handler_int(int signum)
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
 	(void)signum;
-	(void)*info;
-	(void)*context;
+	(void)info;
+	(void)context;
 }
 void	sigint_handler_hdoc(int signum)
 {

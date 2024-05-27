@@ -39,11 +39,11 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 
 void	free_all(t_shell *shell, char *print, int exit_type)
 {
-	if (shell->update_cmd)
+	/* if (shell->update_cmd)
 	{
 		free (shell->update_cmd);
-		shell->update_cmd = NULL;
-	}
+		shell->update_cmd = NULL;//
+	} */
 	if (exit_type == 127)
 	{
 		if (ft_strcmp(print, "no print") != 0)

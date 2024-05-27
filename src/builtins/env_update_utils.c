@@ -52,7 +52,7 @@ void	init_env(t_shell *shell)
 		free_all_env(shell->env);
 		exit(EXIT_FAILURE);
 	}
-	shell->exported = del_env(shell->exported, "_");
-	shell->env = add_env(shell->env, "_=paco");
+	//shell->exported = del_env(shell->exported, "_");
+	//shell->env = add_env(shell->env, "_=paco");
 	ft_quicksort_params(shell->exported, 0, ft_matrix_len(shell->exported) - 1);
 }

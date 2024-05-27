@@ -15,10 +15,10 @@ void	shell_loop(t_shell *shell)//at completion of execution reset all data and r
 		signal(SIGINT, sigint_handler_int);
 		if (isatty(fileno(stdin)))
 			init_in = readline("minishell$ ");
-		else
+		/* else
 		{
 			init_in = get_next_line(fileno(stdin));
-		}
+		} */
 		if (errno != 0 )
 			readline_error_exit(init_in, shell);//rename
 		if (init_in == NULL)
@@ -43,9 +43,9 @@ int	main(int ac, char **av)
 {
 	t_shell shell;
 	struct sigaction	sig;
-	int					i;
+	//int					i;
 
-	i = 0;
+	//i = 0;
 	sig.sa_sigaction = signal_handler;
 	sig.sa_flags = SA_SIGINFO | SA_RESTART;
 	sigemptyset(&sig.sa_mask);
