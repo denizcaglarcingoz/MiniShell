@@ -88,6 +88,15 @@ int				d_str_len(char **str);
 char			*ft_strjoin_char(char *s1, char c);
 bool			str_is_alfa_num(char *str);
 bool			is_alfa_num(char c);
+void			len_loop(char **content, int *k);
+void			len_loop_2(char **content, int *k);
+void			free_content(char **content);
+char			**exp_check(char *content, t_shell *shell);
+char			**exp_dollar(char *content, int *i, char **new_content, t_shell *shell);
+char			**add_new_content(char **new_content, char **d_exp, t_shell *shell);
+
+
+
 
 /****EXECUTION****/
 void			execution(t_shell *shell);

@@ -32,7 +32,7 @@ t_shell *shell)
 	{
 		(*i)++;
 		exp = quo_dollar_question(shell);
-		new_content = ft_strjoin(new_content, exp);
+		new_content = ft_strjoin(new_content, exp);//pro
 		free(temp);
 		free(exp);
 		return (new_content);
@@ -44,7 +44,7 @@ t_shell *shell)
 		(*i)++;
 	}
 	exp = quo_exp(exp, shell);
-	new_content = ft_strjoin(new_content, exp);
+	new_content = ft_strjoin(new_content, exp);//pro
 	free(temp);
 	free(exp);
 	return (new_content);
@@ -61,7 +61,7 @@ char	*exp_d_quo(char *content, int *i, char *new_content, t_shell *shell)
 			break ;
 		if (content[*i] != '$')
 		{
-			new_content = ft_strjoin_char(new_content, content[*i]);
+			new_content = ft_strjoin_char(new_content, content[*i]);//pro
 			(*i)++;
 		}
 	}
@@ -75,7 +75,7 @@ char	*exp_s_quo(char *content, int *i, char *new_content)
 	(*i)++;
 	while (content[*i] && content[*i] != '\'')
 	{
-		new_content = ft_strjoin_char(new_content, content[*i]);
+		new_content = ft_strjoin_char(new_content, content[*i]);//pro
 		(*i)++;
 	}
 	if (content[*i] && content[*i] == '\'')
