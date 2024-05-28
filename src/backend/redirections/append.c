@@ -44,14 +44,70 @@ int	read_loop(int fd, char **full_file, int *len)
 	int		count_read;
 
 	*len = 1;
-	while ((count_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	count_read = read(fd, buffer, BUFFER_SIZE);
+	while (count_read > 0)
 	{
 		printf("inside count_read: %d\n", count_read);
-        *full_file = app_strjoin(*full_file, buffer, count_read);
-        if (*full_file == NULL)
-            return (1); // Error occurred while appending to full_file
-    }
+		*full_file = app_strjoin(*full_file, buffer, count_read);
+		if (*full_file == NULL)
+			return (1); // Error occurred while appending to full_file
+		count_read = read(fd, buffer, BUFFER_SIZE);
+	}
+	if (count_read < 0)
+	{
+		perror("read error");
+		return (1);
+	}
 	printf("outside count_read: %d\n", count_read);
+	return (0);
+}
+
+int	bottom_half(char *file_name, char **full_file, char **app_file)
+{
+	int	fd;
+	int	len;
+	int	bytes_read;
+
+	*full_file = app_strjoin(*full_file, *app_file, ft_strlen(*app_file) + 1);
+	if (*full_file == NULL)
+		return (1);
+	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	len = ft_strlen(*full_file);
+	bytes_read = write(fd, *full_file, len);
+	if (bytes_read == -1)
+	{
+		perror("write");
+		close(fd);
+		return (1);
+	}
+	if (close(fd) == -1)
+	{
+		perror("close");
+		return (1);
+	}
+	return (0);
+}
+
+int	top_half(int *fd, int *len, char *file_name, char **full_file)
+{
+	printf("file_name: a%sa\n", file_name);
+	*full_file = ft_strdup("");//pro
+	if (access(file_name, F_OK) == 0)
+	{
+		printf("file exists\n");
+		*fd = open(file_name, O_RDONLY);
+	}
+	else
+	{
+		printf("file does not exist\n");
+		*fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		*len = -1;
+	}
+	if (*fd == -1)
+	{
+		perror("open");
+		return (1);
+	}
 	return (0);
 }
 
@@ -59,27 +115,10 @@ int	append_file(char *file_name, char *app_file)
 {
 	int		fd;
 	int		len;
-	int		bytes_read;
 	char	*full_file;
 
-	printf("file_name: a%sa\n", file_name);
-	full_file = ft_strdup("");
-	if (access(file_name, F_OK) == 0)
-	{
-		printf("file exists\n");
-		fd = open(file_name, O_RDONLY);
-	}
-	else
-	{
-		printf("file does not exist\n");
-		fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		len = -1;
-	}
-	if (fd == -1)
-	{
-		perror("open");
+	if (top_half(&fd, &len, file_name, &full_file))
 		return (1);
-	}
 	if (app_file == NULL)
 	{
 		close(fd);
@@ -89,22 +128,7 @@ int	append_file(char *file_name, char *app_file)
 		return (1);
 	printf("full_file: %s\n", full_file);
 	close(fd);
-	full_file = app_strjoin(full_file, app_file, ft_strlen(app_file) + 1);
-	if (full_file == NULL)
+	if (bottom_half(file_name, &full_file, &app_file))
 		return (1);
-	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	len = ft_strlen(full_file);
-	bytes_read = write(fd, full_file, len);
-	if (bytes_read == -1)
-	{
-		perror("write");
-		close(fd);
-		return(1);
-	}
-	if (close(fd) == -1)
-	{
-		perror("close");
-		return (1);
-	}
 	return (0);
 }

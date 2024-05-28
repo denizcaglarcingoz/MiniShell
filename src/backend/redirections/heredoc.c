@@ -48,6 +48,26 @@ char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len)
 	return (join);
 }
 
+int	hdoc_check(char **input, char *whole_inp, t_shell *shell)
+{
+	if (g_sig_int == 1)
+	{
+		if (whole_inp != NULL)
+			free(whole_inp);
+		free_all(shell, "no print", 0);
+		return (1);
+	}
+	*input = readline(">");
+	if (*input == NULL)//correct protect here
+	{
+		perror("readline malloc");
+		if (*input != 0)
+			free(input);
+		exit(EXIT_FAILURE);
+	}
+	return (0);
+}
+
 char	*hdoc_inp(char *h_name, t_shell *shell)
 {
 	char	*input;
@@ -58,21 +78,8 @@ char	*hdoc_inp(char *h_name, t_shell *shell)
 	whole_inp = NULL;
 	while (1)
 	{
-		if (g_sig_int == 1)
-		{
-			if (whole_inp != NULL)
-				free(whole_inp);
-			free_all(shell, "no print", 0);
+		if (hdoc_check(&input, whole_inp, shell))
 			return (NULL);
-		}
-		input = readline(">");
-		if (input == NULL)//correct protect here
-		{
-			perror("readline malloc");
-			if (input != 0)
-				free(input);
-			exit(EXIT_FAILURE);
-		}
 		if (ft_strncmp(input, h_name, ft_strlen(h_name)) == 0 \
 		&& ft_strlen(h_name) == ft_strlen(input))
 			break ;
