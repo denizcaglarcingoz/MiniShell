@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern	pid_t g_sig_int;
+extern pid_t	g_sig_int;
 
 int	pipe_fork(t_shell *shell, int pipefd[2])
 {
@@ -12,6 +12,28 @@ int	pipe_fork(t_shell *shell, int pipefd[2])
 	if (pid == -1)
 		free_all(shell, "Fork Fail\n", 127);
 	return (pid);
+}
+
+void	child_pro_helper(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
+{
+	if (prev_read_fd != -1)
+	{
+		dup2(prev_read_fd, STDIN_FILENO);
+		close(prev_read_fd);
+	}
+	if (expandor(shell, i) == false)
+		free_all(shell, "no print", 127);
+	if (i + 1 < shell->tables->table_len)
+	{
+		if (shell->tables[i].args[0] != NULL \
+		&& output_check(shell->tables[i], i, shell->tokens) == 0)
+		{
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+		}
+	}
+	else
+		close(pipefd[1]);
 }
 
 void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
@@ -27,23 +49,7 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 		exit(0);
 	}
 	g_sig_int = getpid();
-	if (prev_read_fd != -1)
-	{
-		dup2(prev_read_fd, STDIN_FILENO);
-		close(prev_read_fd);
-	}
-	if (expandor(shell, i) == false)
-		free_all(shell, "no print", 127);
-	if (i + 1 < shell->tables->table_len)
-	{
-		if (shell->tables[i].args[0] != NULL && output_check(shell->tables[i], i, shell->tokens) == 0)
-		{
-			dup2(pipefd[1], STDOUT_FILENO);
-			close(pipefd[1]);
-		}
-	}
-	else
-		close(pipefd[1]);
+	child_pro_helper(shell, pipefd, prev_read_fd, i);
 	if ((shell->tables[i]).args[0] == NULL)
 		exit(0);
 	else

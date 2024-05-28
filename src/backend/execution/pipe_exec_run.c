@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+int	init_fork_ft(t_token_type *t_type, char **inp, char *in, char **hdoc)
+{
+	int	fd;
+
+	if (*t_type == D_LESS)
+		*inp = temp_hdoc(hdoc[0]);
+	if (*t_type == LESS)
+		*inp = in;
+	fd = open(*inp, 0);
+	if (fd == -1)
+	{
+		perror("open");
+		return (-1);
+	}
+	return (fd);
+}
+
+void	wait_ft(t_token_type t_type, char *inp, int in_fd, int fd)
+{
+	wait(NULL);
+	dup2(in_fd, STDIN_FILENO);
+	if (t_type == D_LESS)
+		unlink(inp);
+	close(fd);
+	exit(0);
+}
+
 void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, \
 t_shell *shell)
 {
@@ -22,16 +49,9 @@ t_shell *shell)
 	t_token_type	t_type;
 
 	t_type = in_o_hdoc(shell->tokens, 0);
-	if (t_type == D_LESS)
-		inp = temp_hdoc(hdoc[0]);
-	if (t_type == LESS)
-		inp = in;
-	fd = open(inp, 0);
+	fd = init_fork_ft(&t_type, &inp, in, hdoc);
 	if (fd == -1)
-	{
-		perror("open");
 		return ;
-	}
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	pid = fork();
@@ -40,14 +60,7 @@ t_shell *shell)
 	if (pid == 0)
 		ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
 	else
-	{
-		wait(NULL);
-		dup2(in_fd, STDIN_FILENO);
-		if (t_type == D_LESS)
-			unlink(inp);
-		close(fd);
-		exit(0);
-	}
+		wait_ft(t_type, inp, in_fd, fd);
 }
 
 void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)

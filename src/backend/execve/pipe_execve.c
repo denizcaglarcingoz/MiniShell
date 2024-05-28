@@ -8,7 +8,7 @@ char	**pipe_append_path(char **str, char *path_add)
 	i = 0;
 	while (str[i])
 		i++;
-	new = (char **)malloc((i + 1) * sizeof(char*));	
+	new = (char **)malloc((i + 1) * sizeof(char *));
 	if (new == NULL)
 	{
 		perror("malloc");
@@ -34,7 +34,7 @@ t_shell *shell)
 	while (all_paths[i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0)
-		{	
+		{
 			if (execve(all_paths[i], argv, environ) == -1)
 			{
 				free_d_str(all_paths);

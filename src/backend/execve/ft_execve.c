@@ -1,31 +1,11 @@
 #include "minishell.h"
 
-extern pid_t g_sig_int;
+extern pid_t	g_sig_int;
 
-void	pipe_init_exec(int pipefd[2], t_shell *shell)//not being used..?
+char	**app_assign_new(char **new, char **str, char *path_add)
 {
-	if (pipe(pipefd) == -1)
-	{
-		free_all(shell, "Pipe creation failed", 127);
-		exit(EXIT_FAILURE);
-	}
-}
+	int	i;
 
-char	**append_path(char **str, char *path_add)
-{
-	char	**new;
-	int		i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	new = (char **)malloc((i + 1) * sizeof(char*));
-	if (new == NULL)
-	{
-		free(path_add);
-		free_d_str(str);
-		return (NULL);
-	}
 	i = -1;
 	while (str[++i])
 	{
@@ -39,49 +19,70 @@ char	**append_path(char **str, char *path_add)
 		}
 	}
 	new[i] = NULL;
+	return (new);
+}
+
+char	**append_path(char **str, char *path_add)
+{
+	char	**new;
+	int		i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	new = (char **)malloc((i + 1) * sizeof(char *));
+	if (new == NULL)
+	{
+		free(path_add);
+		free_d_str(str);
+		return (NULL);
+	}
+	new = app_assign_new(new, str, path_add);
+	if (!new)
+		return (NULL);
 	free(path_add);
 	free_d_str(str);
 	return (new);
 }
 
-char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
+int	path_run_access_check(char **all_paths, char **argv, \
+char **environ, t_shell *shell)
 {
 	int		i;
 	pid_t	pid;
 
-	i = 0;
-	while (all_paths[i] != NULL)
+	i = -1;
+	while (all_paths[++i] != NULL)
 	{
 		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0)
 		{
 			pid = fork();
 			if (pid == -1)
+				free_d_all(all_paths, "execve fail\n", shell, 127);
+			if (pid == 0)
 			{
-				free_d_str(all_paths);
-				free_all(shell, "execve fail\n", 127);
-			}
-			if (pid == 0)	
-			{
-				
 				execve(all_paths[i], argv, environ);
-				free_d_str(all_paths);
-				free_all(shell, "execve fail\n", 127);
+				free_d_all(all_paths, "execve fail\n", shell, 127);
 			}
 			else
 			{
 				wait(NULL);
-				free_d_str(all_paths);
-				free_all(shell, "no print\n", 0);
-				return (NULL);
+				free_d_all(all_paths, "no print\n", shell, 0);
+				return (1);
 			}
 		}
-		i++;
 	}
+	return (0);
+}
+
+char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
+{
+	if (path_run_access_check(all_paths, argv, environ, shell))
+		return (NULL);
 	write(2, argv[0], ft_strlen(argv[0]));
 	if (ft_strlen(argv[0]) > 0)
 		write(2, ": command not found\n", 20);
-	free_d_str(all_paths);
-	free_all(shell, "no print\n", 0);
+	free_d_all(all_paths, "no print\n", shell, 0);
 	shell->exit_status = 127;
 	return (NULL);
 }
@@ -89,9 +90,6 @@ char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 char	*ft_execve(char *path, char **argv, t_shell *shell)
 {
 	char	**all_paths;
-	pid_t	pid;
-	int		pipefd[2];
-	char	buffer[1024];
 
 	if (argv[0] == NULL)
 		return (NULL);
@@ -103,30 +101,11 @@ char	*ft_execve(char *path, char **argv, t_shell *shell)
 	}
 	if (access(path, X_OK) == 0)
 	{
-		pipe(pipefd);
-		pid = fork();
-		if (pid == -1)
-			free_all(shell, "fork failed\n", 127);
-		if (pid == 0)	
-		{
-			close(pipefd[0]);
-			g_sig_int = getpid();
-			write(pipefd[1], ft_itoa(g_sig_int), ft_strlen(ft_itoa(g_sig_int)));//must protect itoa
-			// printf("here\n");
-			execve(path, argv, shell->env);
-			free_all(shell, "execve failed\n", 127);
-		}
-		else
-		{
-			close(pipefd[1]);
-			read(pipefd[0], buffer, sizeof(buffer));
-			g_sig_int = ft_atoi(buffer);
-			// printf("pid: %d\n", g_sig_int);
-			free_all(shell, "no print\n", 0);
+		if (ft_access(path, argv, shell))
 			return (wait(NULL), NULL);
-		}
 	}
-	all_paths = append_path(ft_split(ft_getenv("PATH", shell->env), ':'), ft_strjoin("/", path));//must protect for cases split fail, or split success and join fail.
+	all_paths = append_path(ft_split(ft_getenv("PATH", shell->env), ':'), \
+	ft_strjoin("/", path));//must protect for cases split fail, or split success and join fail.
 	if (all_paths == NULL)
 		free_all(shell, "Malloc Fail\n", 127);
 	return (path_run(all_paths, argv, shell->env, shell));

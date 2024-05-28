@@ -29,11 +29,13 @@ char	*read_file(int fd)
 	char	*read_str;
 
 	read_str = ft_strdup("");//protect
-	while ((count_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	(count_read = read(fd, buffer, BUFFER_SIZE));
+	while (count_read > 0)
 	{
 		buffer[count_read] = '\0';
 		read_str = ft_strjoin(read_str, buffer);
 		// protect this
+		(count_read = read(fd, buffer, BUFFER_SIZE));
 	}
 	printf("inside read_file\n");
 	return (read_str);

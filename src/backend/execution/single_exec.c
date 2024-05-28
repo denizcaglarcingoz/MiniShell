@@ -82,6 +82,20 @@ int	output_check(t_table table, int table_id, t_tokens *tokens)
 	return (0);
 }
 
+int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
+{
+	*out_fd = dup(STDOUT_FILENO);
+	if (expandor(shell, 0) == false)
+		return (1);
+	*hdoc = check_hdoc(shell->tables[0], shell);
+	if (g_sig_int == 1)
+	{
+		g_sig_int = getpid();
+		return (1);
+	}
+	return (0);
+}
+
 void	single_exec(t_shell *shell)
 {
 	char	**hdoc;
@@ -89,15 +103,8 @@ void	single_exec(t_shell *shell)
 	int		out_fd;
 	int		is_out;
 
-	out_fd = dup(STDOUT_FILENO);
-	if (expandor(shell, 0) == false)
+	if (check_and_set(&out_fd, &hdoc, shell))
 		return ;
-	hdoc = check_hdoc(shell->tables[0], shell);
-	if (g_sig_int == 1)
-	{
-		g_sig_int = getpid();
-		return ;
-	}
 	in = check_in(shell->tables[0]);
 	is_out = output_check(shell->tables[0], 0, shell->tokens);
 	if (is_builtin(shell->tables[0].args[0]) == 1)

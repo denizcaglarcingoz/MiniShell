@@ -32,7 +32,7 @@ typedef struct s_shell
 	char		**exported;
 	char		*update_cmd;
 	int			exit_status;
-	int			table_len;//
+	int			table_len;
 	t_table		*tables;
 	t_tokens	*tokens;
 }	t_shell;
@@ -54,10 +54,8 @@ void			print_tokens(t_tokens *tokens);
 
 /****PARSER****/
 t_tokens		*grammer_check(t_tokens *tokens);
-t_table			*parser(t_tokens *tokens, t_shell *shell);//shell
-//t_table			*table_init(t_tokens *tokens, t_table *table);
-t_table		*table_init(t_tokens *tokens, t_table *table, t_shell *shell);
-
+t_table			*parser(t_tokens *tokens, t_shell *shell);
+t_table			*table_init(t_tokens *tokens, t_table *table, t_shell *shell);
 int				t_content_alloc(t_tokens *tokens, t_table *table);
 
 // table allocs
@@ -70,7 +68,6 @@ int				print_tables(t_table *table);
 
 /****EXPANSION****/
 bool			expandor(t_shell *shell, int table_num);
-char			*expansion_check(char *content, t_shell *shell);
 bool			arg_expand(char ***ref_content, t_shell *shell);
 char			**split_join(char **content, char **exp, int add_split_from, \
 t_shell *shell);
@@ -82,7 +79,7 @@ char			*exp_d_quo(char *content, int *i, char *new_content, \
 t_shell *shell);
 char			*quo_dollar_question(t_shell *shell);
 
-	/****Expansion Utils****/
+/****Expansion Utils****/
 bool			content_check(char *content);
 int				d_str_len(char **str);
 char			*ft_strjoin_char(char *s1, char c);
@@ -95,18 +92,12 @@ char			**exp_check(char *content, t_shell *shell);
 char			**exp_dollar(char *content, int *i, char **new_content, t_shell *shell);
 char			**add_new_content(char **new_content, char **d_exp, t_shell *shell);
 
-
-
-
 /****EXECUTION****/
 void			execution(t_shell *shell);
 void			single_exec(t_shell *shell);
 void			pipe_execution(t_shell *shell);
 void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc, \
 t_shell *shell);
-void			run_command(t_table exp_table, int table_id, int pipefd1, \
-int out_fd);
-void			fork_fail(t_table *exp_table);
 char			*check_in(t_table exp_table);
 char			**check_hdoc(t_table exp_table, t_shell *shell);
 int				output_check(t_table exp_table, int table_id, \
@@ -131,6 +122,8 @@ char			*read_file(int fd);
 char			*last_str(char **strs);
 int				is_builtin(char *cmd);
 int				is_directory(const char *path);
+int				ft_access(char *path, char **argv, t_shell *shell);
+void			free_d_all(char **all_paths, char *msg, t_shell *shell, int type);
 
 /***BUILT-INS****/
 
