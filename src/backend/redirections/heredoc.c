@@ -21,7 +21,7 @@ extern pid_t	g_sig_int;
 // >EOF
 // shold be handled
 
-char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len)
+char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len, t_shell *shell)
 {
 	size_t	s1_len;
 	char	*join;
@@ -37,7 +37,7 @@ char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len)
 	{
 		if (s1 != NULL)
 			free(s1);
-		return (perror("Malloc Error\n"), NULL);
+		free_all(shell, "Malloc Error\n", 127);
 	}
 	ft_strlcpy(join, s1, s1_len + 1);
 	ft_strlcpy((join + s1_len), s2, s2_len + 1);
@@ -58,12 +58,11 @@ int	hdoc_check(char **input, char *whole_inp, t_shell *shell)
 		return (1);
 	}
 	*input = readline(">");
-	if (*input == NULL)//correct protect here
+	if (*input == NULL)
 	{
-		perror("readline malloc");
+		free_all(shell, "readline malloc", 127);
 		if (*input != 0)
 			free(input);
-		exit(EXIT_FAILURE);
 	}
 	return (0);
 }
@@ -85,7 +84,8 @@ char	*hdoc_inp(char *h_name, t_shell *shell)
 			break ;
 		else
 		{
-			whole_inp = hdoc_strjoin(whole_inp, input, ft_strlen(input));//check if protect needed.
+			whole_inp = hdoc_strjoin(whole_inp, input, \
+			ft_strlen(input), shell);
 			if (whole_inp == NULL)
 				return (free(input), NULL);
 		}

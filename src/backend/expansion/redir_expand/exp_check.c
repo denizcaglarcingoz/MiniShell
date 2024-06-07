@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 void	new_content_dquo(char ***new_content, char **content, \
-int *i, t_shell *shell)
+int *i, t_shell *shell)//like what? new con has [0] and [1] only... why loop?
 {
 	int	j;
 
@@ -34,15 +34,28 @@ void	new_content_alt(char ***new_content, char **content, int *i)
 	(*i)++;
 }
 
+void	init_new_content(char ***new_content, t_shell *shell)
+{
+	*new_content = (char **)malloc(sizeof(char *) * 2);
+	if (!(*new_content))
+		free_all(shell, "new_content malloc", 127);
+	(*new_content)[0] = ft_strdup("");
+	if (!((*new_content)[0]))
+	{
+		free(*new_content);
+		free_all(shell, "new_content[0]", 127);
+	}
+	(*new_content)[1] = NULL;
+}
+
 char	**exp_check(char *content, t_shell *shell)
 {
 	char	**new_content;
 	int		i;
 
 	i = 0;
-	new_content = (char **)malloc(sizeof(char *) * 2);//protect
-	new_content[0] = ft_strdup("");//protect
-	new_content[1] = NULL;
+	new_content = NULL;
+	init_new_content(&new_content, shell);
 	if (content == NULL)
 		return (NULL);
 	while (content[i])

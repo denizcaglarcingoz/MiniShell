@@ -18,6 +18,11 @@ char	**check_hdoc(t_table table, t_shell *shell)
 		i++;
 	}
 	hdocs = (char **)malloc(sizeof(char *) * 2);
+	if (!hdocs)
+	{
+		free(hdoc);
+		free_all(shell, "hdocs malloc error", 127);
+	}
 	hdocs[0] = hdoc;
 	hdocs[1] = NULL;
 	return (hdocs);

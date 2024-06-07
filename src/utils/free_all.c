@@ -8,6 +8,7 @@ static void	free_list_env(t_shell *shell)
 		free_all_env(shell->exported);
 	free_list(shell->tokens);
 }
+
 static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 {
 	if (exit_type == 0)
@@ -28,7 +29,7 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 		free_list(shell->tokens);
 		free_table(shell->tables);
 	}
-	else if(exit_type == 2)
+	else if (exit_type == 2)
 	{
 		clear_history();
 		free_list_env(shell);
