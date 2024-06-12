@@ -144,7 +144,7 @@ void			get_exit_code(t_shell *shell, pid_t pid);
 
 /***BUILT-INS****/
 
-int				ft_echo(char **full_cmd);
+int				ft_echo(char **full_cmd, t_shell *shell);//-------------
 int				ft_cd(char **full_cmd, t_shell *shell);
 int				ft_pwd(void);
 int				ft_exit(char **full_cmd, t_shell *shell);
@@ -199,7 +199,7 @@ void			signal_handler(int signum, siginfo_t *info, void *context);
 void			sigint_handler_child(int signum);
 
 /***OTHER***/
-void			print_intro(void);
+//void			print_intro(void);
 void			print_d_str(char **str);
 
 

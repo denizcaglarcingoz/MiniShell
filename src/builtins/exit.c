@@ -67,7 +67,7 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 {
 	int	code;
 
-	ft_putstr_fd("Exiting MINISHELL!\n", 1);
+	//ft_putstr_fd("exit\n", 1);
 	if (ft_matrix_len(full_cmd) > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);

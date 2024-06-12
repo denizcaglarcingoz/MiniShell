@@ -107,7 +107,7 @@ void	pipe_execution(t_shell *shell)
 		i++;
 	}
 	get_exit_code(shell, pid);
-	// free_all(shell, "no exit", 0);
+	free_all(shell, "no exit", 3);
 	// ft_wait (shell);
 	close(pipefd[0]);
 }
