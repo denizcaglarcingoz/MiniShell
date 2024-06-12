@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 18:26:21 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:28:11 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	pipe_execution(t_shell *shell)
 		i++;
 	}
 	get_exit_code(shell, pid);
-	// free_all(shell, "no exit", 0);
+	free_all(shell, "no exit", 3);
 	// ft_wait (shell);
 	close(pipefd[0]);
 }

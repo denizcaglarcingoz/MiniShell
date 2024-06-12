@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:51 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 22:25:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 20:01:26 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	content_check(char *content)
 	int	i;
 
 	i = 0;
-	while (content[i])
+	while (content[i] != '\0')
 	{
 		if (content[i] == '\'')
 		{

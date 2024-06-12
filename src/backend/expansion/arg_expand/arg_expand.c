@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:27 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 22:26:18 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 19:58:58 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_expand_content(char ***content, int *i, t_shell *shell)
 		exp_len++;
 	}
 	free(exp);
-	i = i + exp_len - 1;
+	*i = *i + exp_len - 1;
 	return (0);
 }
 
