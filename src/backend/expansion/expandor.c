@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:51 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 20:01:26 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 22:37:56 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	content_check(char *content)
 	int	i;
 
 	i = 0;
-	while (content[i] != '\0')
+	while (content[i])
 	{
 		if (content[i] == '\'')
 		{
@@ -60,6 +60,13 @@ bool	content_check(char *content)
 	return (true);
 }
 
+void	no_such_file(char *in)
+{
+	ft_putstr_fd("minishell: line 1: ", 2);
+	ft_putstr_fd(in, 2);
+	ft_putstr_fd(" No such file or directory\n", 2);
+}
+
 bool	check_in_expandor(t_table exp_table)
 {
 	int	i;
@@ -69,7 +76,7 @@ bool	check_in_expandor(t_table exp_table)
 	{
 		if (access(exp_table.in[i], F_OK) == -1)
 		{
-			printf("bash: %s: syntax error: no such file\n", exp_table.in[i]);
+			no_such_file(exp_table.in[i]);
 			return (false);
 		}
 		i++;

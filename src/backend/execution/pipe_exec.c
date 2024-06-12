@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 18:28:11 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 20:11:05 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void	pipe_execution(t_shell *shell)
 	while (i < shell->tables->table_len)
 	{
 		pid = pipe_fork(shell, pipefd);
-		// printf("pid: %d\n", pid);
 		if (pid == 0)
 			child_pro(shell, pipefd, prev_read_fd, i);
 		else
@@ -108,6 +107,5 @@ void	pipe_execution(t_shell *shell)
 	}
 	get_exit_code(shell, pid);
 	free_all(shell, "no exit", 3);
-	// ft_wait (shell);
 	close(pipefd[0]);
 }

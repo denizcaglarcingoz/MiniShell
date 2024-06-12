@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 16:59:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 22:44:27 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 {
 	int	code;
 
-	ft_putstr_fd("Exiting MINISHELL!\n", 1);
 	if (ft_matrix_len(full_cmd) > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 17:47:18 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 21:37:04 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,25 +100,34 @@ char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 	return (NULL);
 }
 
-char	*ft_execve(char *path, char **argv, t_shell *shell)
+char	*ft_execve(char *first_arg, char **argv, t_shell *shell)
 {
 	char	**all_paths;
+	char	*path;
 
 	if (argv[0] == NULL)
 		return (NULL);
-	if (is_directory(path) == 1)
+	if (is_directory(first_arg) == 1)
 	{
 		printf("minishell: %s: Is a directory\n", argv[0]);
 		free_all(shell, "no print\n", 126);
 		return (NULL);
 	}
-	if (access(path, X_OK) == 0)
+	if (access(first_arg, X_OK) == 0)
 	{
-		if (ft_access(path, argv, shell))
+		if (ft_access(first_arg, argv, shell))
 			return (wait(NULL), NULL);
 	}
+	path = ft_getenv("PATH", shell->env);
+	if (path == NULL)
+	{
+		printf("minishell: %s: command not found\n", argv[0]);
+		shell->exit_status = 127;
+		free_all(shell, "no print\n", 0);
+		return (NULL);
+	}
 	all_paths = append_path(ft_split(ft_getenv("PATH", shell->env), ':'), \
-	ft_strjoin("/", path));//must protect for cases split fail, or split success and join fail.
+	ft_strjoin("/", first_arg));//must protect for cases split fail, or split success and join fail.
 	if (all_paths == NULL)
 		free_all(shell, "Malloc Fail\n", 127);
 	return (path_run(all_paths, argv, shell->env, shell));
