@@ -26,7 +26,7 @@ int	check_expand_content(char ***content, int *i, t_shell *shell)
 		exp_len++;
 	}
 	free(exp);
-	i = i + exp_len - 1;
+	*i = *i + exp_len - 1;
 	return (0);
 }
 

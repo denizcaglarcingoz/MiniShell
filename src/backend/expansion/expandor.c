@@ -69,7 +69,10 @@ bool	check_in_expandor(t_table exp_table)
 	{
 		if (access(exp_table.in[i], F_OK) == -1)
 		{
-			printf("bash: %s: syntax error: no such file\n", exp_table.in[i]);
+			ft_putstr_fd("minishell: ", 2);//----------------------------
+			ft_putstr_fd(exp_table.in[i], 2);
+			ft_putstr_fd("No such file or directory\n", 2);//--------------------
+			//printf("bash: %s: syntax error: no such file\n", exp_table.in[i]);
 			return (false);
 		}
 		i++;
