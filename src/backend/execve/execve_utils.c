@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:09 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 22:51:30 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:17:22 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,11 @@ int	ft_access(char *path, char **argv, t_shell *shell)
 	}
 	else
 	{
+		get_exit_code(shell, pid);
 		close(pipefd[1]);
 		read(pipefd[0], buffer, sizeof(buffer));
 		g_sig_int = ft_atoi(buffer);
-		free_all(shell, "no print\n", 0);
+		free_all(shell, "no print\n", 3);
 		return (1);
 	}
 	return (0);

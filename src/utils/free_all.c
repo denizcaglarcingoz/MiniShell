@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 20:11:42 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:10:53 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 		free_list_env(shell);
 		perror(print);
 		exit (2);
+	}
+	else if (exit_type == 3)
+	{
+		free_list(shell->tokens);
+		free_table(shell->tables);
 	}
 }
 

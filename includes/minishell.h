@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 21:28:04 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:18:08 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,8 @@ int				is_directory(const char *path);
 int				ft_access(char *path, char **argv, t_shell *shell);
 void			free_d_all(char **all_paths,
 					char *msg, t_shell *shell, int type);
+void			get_exit_code(t_shell *shell, pid_t pid);
+
 
 /***BUILT-INS****/
 

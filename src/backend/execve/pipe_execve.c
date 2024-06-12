@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:16 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:29:17 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:57:20 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
 	{
 		printf("minishell: %s: Is a directory\n", argv[0]);
 		free_all(shell, "no print\n", 126);
-		return ;
+		exit(126);
 	}
 	if (access(path, X_OK) == 0)
 	{

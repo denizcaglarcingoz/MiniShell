@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:29:05 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:26:21 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 extern pid_t	g_sig_int;
 
-int	pipe_fork(t_shell *shell, int pipefd[2])
+pid_t	pipe_fork(t_shell *shell, int pipefd[2])
 {
-	int	pid;
+	pid_t	pid;
 
 	if (pipe(pipefd) == -1)
 		free_all(shell, "Pipe Fail\n", 127);
@@ -76,6 +76,7 @@ void	ft_wait(t_shell *shell)
 	while (i < shell->tables->table_len)
 	{
 		wait(NULL);
+		
 		i++;
 	}
 	free_all(shell, "no exit", 0);
@@ -85,7 +86,7 @@ void	pipe_execution(t_shell *shell)
 {
 	int		pipefd[2];
 	int		prev_read_fd;
-	int		pid;
+	pid_t	pid;
 	int		i;
 
 	i = 0;
@@ -93,6 +94,7 @@ void	pipe_execution(t_shell *shell)
 	while (i < shell->tables->table_len)
 	{
 		pid = pipe_fork(shell, pipefd);
+		// printf("pid: %d\n", pid);
 		if (pid == 0)
 			child_pro(shell, pipefd, prev_read_fd, i);
 		else
@@ -104,6 +106,8 @@ void	pipe_execution(t_shell *shell)
 		}
 		i++;
 	}
+	get_exit_code(shell, pid);
+	// free_all(shell, "no exit", 0);
+	// ft_wait (shell);
 	close(pipefd[0]);
-	ft_wait (shell);
 }

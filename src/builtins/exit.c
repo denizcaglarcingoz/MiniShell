@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 15:43:32 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 16:59:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,3 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 	final_free(shell);
 	exit(code);
 }
-err

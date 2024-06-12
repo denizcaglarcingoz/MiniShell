@@ -6,13 +6,14 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 22:24:59 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 16:40:35 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 pid_t	g_sig_int;
+
 
 static void	loop_items(t_shell *shell, char *init_in)
 {
@@ -33,6 +34,7 @@ static void	loop_items(t_shell *shell, char *init_in)
 void	shell_loop(t_shell *shell)
 {
 	char		*init_in;
+	extern int	errno;
 
 	shell->tables = NULL;
 	while (1)

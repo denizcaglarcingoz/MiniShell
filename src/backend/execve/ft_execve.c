@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:29:13 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/12 17:47:18 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ char **environ, t_shell *shell)
 			}
 			else
 			{
-				wait(NULL);
+				// wait(NULL);
+				get_exit_code(shell, pid);
 				free_d_all(all_paths, "no print\n", shell, 0);
 				return (1);
 			}
