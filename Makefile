@@ -6,6 +6,8 @@ BT_DIR = ./builtins
 
 INCLUDES = $(wildcard $(INC_DIR)/*)
 SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*/*.c)  $(wildcard $(SRC_DIR)/*/*/*.c) $(wildcard $(SRC_DIR)/*/*/*/*.c)
+
+
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CFLAGS := -Wall -Wextra -Werror -fPIE -g -Iincludes
 
