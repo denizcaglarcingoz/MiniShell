@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   freeing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:25:04 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/10 19:33:17 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_list(t_tokens *tokens)
@@ -71,4 +83,3 @@ void	free_content_first_allocs_only(t_table *table)
 	if (table->heredoc)
 		free(table->heredoc);
 }
-

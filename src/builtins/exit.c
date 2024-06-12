@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/12 15:43:32 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	print_exit_err(char **full_cmd, long int *code)
 {
-	ft_putstr_color_fd(2, "minishell: exit: ", RED);
-	ft_putstr_color_fd(2, full_cmd[1], RED);
-	ft_putstr_color_fd(2, ": numeric argument required\n", RED);
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(full_cmd[1], 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
 	*code = 2;
 }
 
@@ -55,10 +67,10 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 {
 	int	code;
 
-	ft_putstr_color_fd(1, "Exiting MINISHELL!\n", BOLD_GREEN);
+	ft_putstr_fd("Exiting MINISHELL!\n", 1);
 	if (ft_matrix_len(full_cmd) > 2)
 	{
-		ft_putstr_color_fd(2, "minishell: exit: too many arguments\n", RED);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
 	if (full_cmd[1])
@@ -67,5 +79,5 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 		code = 0;
 	final_free(shell);
 	exit(code);
-	return (code);
 }
+err

@@ -7,6 +7,17 @@
 		"stdio.h": "c",
 		"unistd.h": "c",
 		"term.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"history.h": "c",
+		"ioctl.h": "c",
+		"termios.h": "c",
+		"parser.h": "c",
+		"ncurses.h": "c",
+		"limits.h": "c",
+		"signal.h": "c",
+		"errno.h": "c",
+		"fcntl.h": "c",
+		"libft.h": "c",
+		"readline.h": "c"
 	}
 }

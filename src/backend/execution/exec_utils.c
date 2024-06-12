@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:28:41 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/10 23:13:46 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_tokens	*start_of_pipe(t_tokens *tokens, int table_id)
@@ -22,24 +34,24 @@ t_tokens	*start_of_pipe(t_tokens *tokens, int table_id)
 	return (tmp);
 }
 
-char	*read_file(int fd)
-{
-	char	buffer[BUFFER_SIZE];
-	int		count_read;
-	char	*read_str;
+// char	*read_file(int fd)
+// {
+// 	char	buffer[BUFFER_SIZE];
+// 	int		count_read;
+// 	char	*read_str;
 
-	read_str = ft_strdup("");//protect
-	(count_read = read(fd, buffer, BUFFER_SIZE));
-	while (count_read > 0)
-	{
-		buffer[count_read] = '\0';
-		read_str = ft_strjoin(read_str, buffer);
-		// protect this
-		(count_read = read(fd, buffer, BUFFER_SIZE));
-	}
-	printf("inside read_file\n");
-	return (read_str);
-}
+// 	read_str = ft_strdup("");//protect
+// 	(count_read = read(fd, buffer, BUFFER_SIZE));
+// 	while (count_read > 0)
+// 	{
+// 		buffer[count_read] = '\0';
+// 		read_str = ft_strjoin(read_str, buffer);
+// 		// protect this
+// 		(count_read = read(fd, buffer, BUFFER_SIZE));
+// 	}
+// 	printf("inside read_file\n");
+// 	return (read_str);
+// }
 
 int	is_builtin(char *cmd)
 {

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_expand.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/10 22:22:02 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**word_split(char *new_exp, t_shell *shell)
@@ -13,16 +25,22 @@ char	**word_split(char *new_exp, t_shell *shell)
 void	exps_loop(char **to_exp, char ***new_d_exp, char **new_exp, \
 t_shell *shell)
 {
-	int	i;
+	char	*temp;
+	int		i;
 
 	i = 0;
 	while (shell->env[i] && ft_strlen(*to_exp) > 1)
 	{
 		if (ft_strncmp(*to_exp, shell->env[i], ft_strlen(*to_exp)) == 0)
 		{
-			*new_exp = ft_strjoin(*new_exp, shell->env[i] + ft_strlen(*to_exp));//pro
+			temp = *new_exp;
+			*new_exp = ft_strjoin(*new_exp, shell->env[i] + ft_strlen(*to_exp));
+			free(temp);
 			if (*new_exp == NULL)
+			{
+				free_d_str(*new_d_exp);
 				free_all(shell, "Malloc Error\n", 127);
+			}
 			*new_d_exp = word_split(*new_exp, shell);
 			break ;
 		}
@@ -38,7 +56,9 @@ char	**exps(char *to_exp, t_shell *shell)
 
 	if (to_exp == NULL || to_exp[0] == '\0')
 		return (NULL);
-	to_exp = ft_strjoin_char(to_exp, '=');//pro
+	to_exp = ft_strjoin_char(to_exp, '=');
+	if (to_exp == NULL)
+		free_all(shell, "Malloc Error\n", 127);
 	new_exp = NULL;
 	new_d_exp = NULL;
 	exps_loop(&to_exp, &new_d_exp, &new_exp, shell);
@@ -63,7 +83,9 @@ char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 	}
 	while (content[*i] && is_alfa_num(content[*i]) == true)
 	{
-		to_exp = ft_strjoin_char(to_exp, content[*i]);//pro
+		to_exp = ft_strjoin_char(to_exp, content[*i]);
+		if (to_exp == NULL)
+			to_exp_fail(new_content, content, shell);
 		(*i)++;
 	}
 	d_exp = exps(to_exp, shell);

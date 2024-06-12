@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_exit_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:25:15 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 13:47:51 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	token_list_error_exit(t_shell *shell)
@@ -7,7 +19,7 @@ void	token_list_error_exit(t_shell *shell)
 	free(shell->input);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	ft_putstr_color_fd(2, "Token List Malloc Error\n", BOLD_RED);
+	ft_putstr_fd("Token List Malloc Error\n", 2);
 	exit(EXIT_FAILURE);
 }
 
@@ -18,7 +30,7 @@ void	readline_error_exit(char *init_in, t_shell *shell)
 	free(init_in);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	ft_putstr_color_fd(2, "Readline Errno: ", BOLD_RED);
+	ft_putstr_fd("Readline Errno: ", 2);
 	ft_putnbr_fd(errno, 2);
 	ft_putchar_fd('\n', 2);
 	exit(EXIT_FAILURE);
@@ -31,7 +43,7 @@ void	trim_error_exit(char *init_in, t_shell *shell)
 	free(init_in);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	ft_putstr_color_fd(2, "Strtrim Malloc Error", BOLD_RED);
+	ft_putstr_fd("Strtrim Malloc Error", 2);
 	exit(EXIT_FAILURE);
 }
 
@@ -40,6 +52,6 @@ void	control_d_exit(t_shell *shell)
 	clear_history();
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	ft_putstr_color_fd(1, "CTRL D Exit\n", BOLD_GREEN);
+	// ft_putstr_fd("CTRL D Exit\n", 1);
 	exit(EXIT_SUCCESS);
 }

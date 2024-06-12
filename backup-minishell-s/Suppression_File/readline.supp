@@ -1,7 +1,0 @@
-{
-    Readline still reachable
-    Memcheck:Leak
-    ...
-    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
-    ...
-}

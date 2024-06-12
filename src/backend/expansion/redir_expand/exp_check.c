@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_check.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:29:43 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 13:11:11 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	new_content_dquo(char ***new_content, char **content, \
-int *i, t_shell *shell)//like what? new con has [0] and [1] only... why loop?
+int *i, t_shell *shell)
 {
 	int	j;
 
@@ -9,7 +21,7 @@ int *i, t_shell *shell)//like what? new con has [0] and [1] only... why loop?
 	while ((*new_content)[j] != NULL)
 		j++;
 	(*new_content)[j - 1] = exp_d_quo(*content, i, \
-	(*new_content)[j - 1], shell);//pro?
+	(*new_content)[j - 1], shell);//pro?l
 }
 
 void	new_content_squo(char ***new_content, char **content, int *i)

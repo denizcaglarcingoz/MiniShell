@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 21:28:04 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "libft/libft.h"
 # include <fcntl.h>
-# include "ansi_colors.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <readline/readline.h>
@@ -53,7 +64,7 @@ bool			is_meta_char(char is);
 void			print_tokens(t_tokens *tokens);
 
 /****PARSER****/
-t_tokens		*grammer_check(t_tokens *tokens);
+t_tokens		*grammer_check(t_tokens *tokens, int *exit_status);
 t_table			*parser(t_tokens *tokens, t_shell *shell);
 t_table			*table_init(t_tokens *tokens, t_table *table, t_shell *shell);
 int				t_content_alloc(t_tokens *tokens, t_table *table);
@@ -72,6 +83,7 @@ bool			arg_expand(char ***ref_content, t_shell *shell);
 char			**split_join(char **content, char **exp, int add_split_from, \
 t_shell *shell);
 bool			redir_expand(char **content, t_shell *shell);
+void			to_exp_fail(char **new_cntnt, char *cntnt, t_shell *shell);
 char			**dollar_question(t_shell *shell);
 char			**exp_check(char *content, t_shell *shell);
 char			*exp_s_quo(char *content, int *i, char *new_content);
@@ -89,8 +101,10 @@ void			len_loop(char **content, int *k);
 void			len_loop_2(char **content, int *k);
 void			free_content(char **content);
 char			**exp_check(char *content, t_shell *shell);
-char			**exp_dollar(char *content, int *i, char **new_content, t_shell *shell);
-char			**add_new_content(char **new_content, char **d_exp, t_shell *shell);
+char			**exp_dollar(char *content, int *i,
+					char **new_content, t_shell *shell);
+char			**add_new_content(char **new_content,
+					char **d_exp, t_shell *shell);
 
 /****EXECUTION****/
 void			execution(t_shell *shell);
@@ -123,7 +137,8 @@ char			*last_str(char **strs);
 int				is_builtin(char *cmd);
 int				is_directory(const char *path);
 int				ft_access(char *path, char **argv, t_shell *shell);
-void			free_d_all(char **all_paths, char *msg, t_shell *shell, int type);
+void			free_d_all(char **all_paths,
+					char *msg, t_shell *shell, int type);
 
 /***BUILT-INS****/
 
@@ -183,5 +198,7 @@ void			sigint_handler_child(int signum);
 
 /***OTHER***/
 void			print_intro(void);
+void			print_d_str(char **str);
+
 
 #endif

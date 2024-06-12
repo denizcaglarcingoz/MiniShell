@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execve_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:29:09 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/10 22:51:30 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern pid_t	g_sig_int;
@@ -31,7 +43,7 @@ int	ft_access(char *path, char **argv, t_shell *shell)
 	{
 		close(pipefd[0]);
 		g_sig_int = getpid();
-		write(pipefd[1], ft_itoa(g_sig_int), ft_strlen(ft_itoa(g_sig_int)));//must protect itoa
+		write(pipefd[1], ft_itoa(g_sig_int), ft_strlen(ft_itoa(g_sig_int)));
 		execve(path, argv, shell->env);
 		free_all(shell, "execve failed\n", 127);
 	}

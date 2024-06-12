@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/10 20:11:42 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	free_list_env(t_shell *shell)
 {
-	if (shell->env)	
+	if (shell->env)
 		free_all_env(shell->env);
 	if (shell->exported)
 		free_all_env(shell->exported);
@@ -40,11 +52,6 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 
 void	free_all(t_shell *shell, char *print, int exit_type)
 {
-	/* if (shell->update_cmd)
-	{
-		free (shell->update_cmd);
-		shell->update_cmd = NULL;//
-	} */
 	if (exit_type == 127)
 	{
 		if (ft_strcmp(print, "no print") != 0)

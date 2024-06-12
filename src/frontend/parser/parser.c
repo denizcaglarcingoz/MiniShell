@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:26:19 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 22:25:43 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_table	*parser(t_tokens *tokens, t_shell *shell)
@@ -22,7 +34,7 @@ size_t	ft_strlen_double(char **s)
 	return (i);
 }
 
-/* int print_tables(t_table *table)
+int print_tables(t_table *table)
 {
 	int i;
 	int j;
@@ -32,13 +44,12 @@ size_t	ft_strlen_double(char **s)
 		return (0);
 	while (i < table->table_len)
 	{
-		//printf("table[%d].cmd = %s\n", i, table[i].cmd);
 		j = 0;
 		while (table[i].args[j] != NULL)
 		{
 			printf("table[%d].args[%d] = %s\n", i, j, table[i].args[j]);
-			// printf("table[%d].args_len = %zu\n", i, \
-			ft_strlen_double(table[i].args));
+			// printf("table[%d].args_len = %zu\n", i, 
+			// ft_strlen_double(table[i].args));
 			j++;
 		}
 		j = 0;
@@ -51,8 +62,8 @@ size_t	ft_strlen_double(char **s)
 		while (table[i].out[j] != NULL)
 		{
 			printf("table[%d].out[%d] = %s\n", i, j, table[i].out[j]);
-			// printf("table[%d].out_len = %zu\n", i, \
-			//ft_strlen_double(table[i].out));
+			printf("table[%d].out_len = %zu\n", i, \
+			ft_strlen_double(table[i].out));
 			j++;
 		}
 		j = 0;
@@ -70,4 +81,4 @@ size_t	ft_strlen_double(char **s)
 		i++;
 	}
 	return  (0);
-} */
+} 

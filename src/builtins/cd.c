@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:27:50 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/10 19:27:51 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	update_old(t_shell *shell)
@@ -56,7 +68,7 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 		path = ft_getenv("OLDPWD", shell->env);
 		if (!path)
 		{
-			ft_putstr_color_fd(2, "minishell: cd: OLDPWD not set\n", RED);
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
 			return (1);
 		}
 	}
@@ -105,7 +117,7 @@ int	ft_cd(char **full_cmd, t_shell *shell)
 	status = 0;
 	if (ft_matrix_len(full_cmd) > 2)
 	{
-		ft_putstr_color_fd(2, "minishell: cd: too many arguments\n", RED);
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (1);
 	}
 	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~' \

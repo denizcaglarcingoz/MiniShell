@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arg_expand.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:29:27 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 22:26:18 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	check_expand_content(char ***content, int *i, t_shell *shell)
@@ -31,9 +43,8 @@ char	**content_checker(char ***ref_content, t_shell *shell)
 	{
 		if (content_check(content[i]) == false)
 		{
-			if (j > 0)
-				free_d_str(content);
 			printf("minishell: syntax error\n");
+			*ref_content = content;
 			return (NULL);
 		}
 		if (str_is_alfa_num(content[i]) == false)
@@ -59,7 +70,7 @@ char	**n_content_alloc_fill(char **content, int k)
 		perror("malloc");
 		return (NULL);
 	}
-	new_content[k] = NULL;//should this be k + 1? 
+	new_content[k] = NULL;
 	k = 0;
 	while (content[i])
 	{

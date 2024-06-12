@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 22:24:59 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 pid_t	g_sig_int;
@@ -10,21 +22,12 @@ static void	loop_items(t_shell *shell, char *init_in)
 	if (ft_strcmp(shell->input, "") != 0)
 		add_history(init_in);
 	free(init_in);
-	init_in = NULL;
 	shell->tokens = build_token_list(shell->input, shell);
 	free(shell->input);
 	shell->input = NULL;
-	shell->tokens = grammer_check(shell->tokens);
+	shell->tokens = grammer_check(shell->tokens, &shell->exit_status);
 	shell->tables = parser(shell->tokens, shell);
-	/* if (shell->tables && shell->tables->args)
-	{
-		if (shell->tables->args[0] \
-		&& !ft_strcmp(shell->tables->args[0], "env"))
-			shell->env = add_env(shell->env, "_=/usr/bin/env");
-	} */
 	execution(shell);
-	/* if (shell->update_cmd)
-		update_last_cmd(shell->update_cmd, shell); */
 }
 
 void	shell_loop(t_shell *shell)
@@ -32,18 +35,25 @@ void	shell_loop(t_shell *shell)
 	char		*init_in;
 
 	shell->tables = NULL;
-	errno = 0;
 	while (1)
 	{
 		signal(SIGINT, sigint_handler_int);
 		signal(SIGINT, sigint_handler_int);
+		errno = 0;
+		init_in = NULL;
 		if (isatty(fileno(stdin)))
 			init_in = readline("minishell$ ");
 		else
 		{
 			errno = 0;
-			init_in = get_next_line(fileno(stdin));
+			char *line;
+			line = get_next_line(fileno(stdin));
+			if (line != 0)
+				init_in = ft_strtrim(line, "\n");
+			free(line);
 		}
+		if (errno == 4)
+			errno = 0;
 		if (errno != 0)
 			readline_error_exit(init_in, shell);
 		if (init_in == NULL)
@@ -67,11 +77,10 @@ int	main(int ac, char **av)
 	signal(SIGQUIT, SIG_IGN);
 	if (ac != 1)
 	{
-		ft_putstr_color_fd(2, "./minishell takes no arguments\n", BOLD_RED);
+		ft_putstr_fd("./minishell takes no arguments\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	init_env(&shell);
-	//print_intro();
 	shell_loop(&shell);
 	return (0);
 }

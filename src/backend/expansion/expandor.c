@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expandor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/10 19:29:51 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/11 22:25:12 by dcingoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	check_squo(char *content, int *i)
@@ -78,7 +90,6 @@ bool	expandor(t_shell *shell, int table_num)
 		free_all(shell, "no print", 0);
 		return (false);
 	}
-	/* if (shell->tables->args[0] && ft_strcmp(shell->tables->args[0], "exit"))
-		shell->update_cmd = get_update_cmd(shell->tables->args, shell); */
+
 	return (true);
 }
