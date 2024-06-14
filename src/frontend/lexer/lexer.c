@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:27:25 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:27:26 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 12:39:34 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_tokens	*build_token_list(char *input, t_shell *shell)
 	{
 		if (*input == '|' || *input == '<' || *input == '>')
 			c_token = meta_content(c_token, &input);
-		else if (*input != ' ')
+		else if (*input != ' ' && *input != 8 && *input != 9 && *input != 10 && *input != 11 && *input != 12 && *input != 13)
 			c_token = token_init_string(c_token, &input, STRING);
 		if (first_entry == 1)
 		{

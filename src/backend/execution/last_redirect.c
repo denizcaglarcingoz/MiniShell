@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:29:00 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 02:12:07 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ t_token_type	in_o_hdoc(t_tokens *tokens, int table_id)
 	if (first == NULL)
 		return (NO_TYPE);
 	i = 0;
+	if (first->type == PIPE)
+			first = first->next;
 	while (first)
 	{
 		if (first->type == LESS)
 			i = 0;
 		else if (first->type == D_LESS)
 			i = 1;
+		if (first->type == PIPE)
+			break ;
 		first = first->next;
 	}
 	if (i == 0)
@@ -35,23 +39,27 @@ t_token_type	in_o_hdoc(t_tokens *tokens, int table_id)
 		return (D_LESS);
 }
 
-void	create_files(t_table exp_table)
+
+int	create_files(t_table exp_table)
 {
 	int	i;
 
 	i = 0;
 	while (exp_table.out[i] != NULL)
 	{
-		output_file(exp_table.out[i], NULL);
+		if (output_file(exp_table.out[i], NULL) == 1)
+			return (1);
 		i++;
 	}
 	i = 0;
 	while (exp_table.append[i] != NULL)
 	{
 		if (access(exp_table.append[i], F_OK) == -1)
-			output_file(exp_table.append[i], NULL);
+			if (output_file(exp_table.append[i], NULL) == 1)
+				return (1);
 		i++;
 	}
+	return (0);
 }
 
 t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens)
@@ -59,7 +67,8 @@ t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens)
 	t_tokens	*first;
 	int			i;
 
-	create_files(exp_table);
+	if (create_files(exp_table) == 1)
+		return (ERR_TYPE);
 	first = start_of_pipe(tokens, table_id);
 	if (first == NULL)
 		return (NO_TYPE);

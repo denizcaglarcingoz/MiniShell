@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 21:49:06 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 00:55:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	loop_items(t_shell *shell, char *init_in)
 		add_history(init_in);
 	free(init_in);
 	shell->tokens = build_token_list(shell->input, shell);
+	// print_tokens(shell->tokens);
 	free(shell->input);
 	shell->input = NULL;
 	shell->tokens = grammer_check(shell->tokens, &shell->exit_status);
@@ -44,7 +45,9 @@ void	shell_loop(t_shell *shell)
 		errno = 0;
 		init_in = NULL;
 		if (isatty(fileno(stdin)))
+		{	
 			init_in = readline("minishell$ ");
+		}
 		else
 		{
 			errno = 0;
@@ -60,6 +63,7 @@ void	shell_loop(t_shell *shell)
 			readline_error_exit(init_in, shell);
 		if (init_in == NULL)
 			break ;
+		//  printf("init_in: %s\n", init_in);
 		loop_items(shell, init_in);
 	}
 	control_d_exit(shell);

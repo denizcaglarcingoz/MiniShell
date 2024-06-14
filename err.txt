@@ -1,1 +1,1 @@
-syntax error near unexpected token 'newline'
+readline malloc: Inappropriate ioctl for device

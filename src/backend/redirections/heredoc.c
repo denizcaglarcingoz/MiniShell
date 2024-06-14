@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 21:57:58 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 00:42:22 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,10 @@ int	hdoc_check(char **input, char *whole_inp, t_shell *shell)
 	if (errno != 0)
 	{
 		if (*input != 0)
-		{
-			printf("\n-----3./m	---\n");//test
 			free(*input);
-		}
 		free_all(shell, "readline malloc", 127);
 	}
+	// printf("here\n");
 	return (0);
 }
 

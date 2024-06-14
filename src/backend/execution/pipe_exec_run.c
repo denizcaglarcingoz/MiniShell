@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/05/13 23:49:44 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 02:12:29 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	init_fork_ft(t_token_type *t_type, char **inp, char *in, char **hdoc)
 		*inp = temp_hdoc(hdoc[0]);
 	if (*t_type == LESS)
 		*inp = in;
+	if (*inp == NULL)
+		return (-1);
 	fd = open(*inp, 0);
 	if (fd == -1)
 	{
@@ -48,7 +50,8 @@ t_shell *shell)
 	char			*inp;
 	t_token_type	t_type;
 
-	t_type = in_o_hdoc(shell->tokens, 0);
+	inp = NULL;
+	t_type = in_o_hdoc(shell->tokens, shell->table_id);
 	fd = init_fork_ft(&t_type, &inp, in, hdoc);
 	if (fd == -1)
 		return ;
@@ -69,6 +72,7 @@ void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
 
 	in = check_in(table);
 	output_check(table, table_id, shell->tokens);
+	shell->table_id = table_id;
 	if (is_builtin(table.args[0]) == 1)
 	{
 		run_builtin(table, shell);

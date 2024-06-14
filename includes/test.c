@@ -3,6 +3,7 @@
 
 int	main(int ac, char **av)
 {
-	write(2, av[1], 14);
-	return (0);
+	char *axv[] = {"/bin/cat", "\"-l\"", NULL};
+
+	execve("/bin/ls", axv, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:51 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 22:37:56 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 23:51:45 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	check_squo(char *content, int *i)
 {
 	(*i)++;
+	// printf("content[i] = %s\n", content);
 	while (content[*i] && content[*i] != '\'')
 	{
 		if (content[*i] == '\'')
@@ -60,14 +61,15 @@ bool	content_check(char *content)
 	return (true);
 }
 
-void	no_such_file(char *in)
+void	no_such_file(char *in, t_shell *shell)
 {
 	ft_putstr_fd("minishell: line 1: ", 2);
 	ft_putstr_fd(in, 2);
 	ft_putstr_fd(" No such file or directory\n", 2);
+	shell->exit_status = 1;
 }
 
-bool	check_in_expandor(t_table exp_table)
+bool	check_in_expandor(t_table exp_table, t_shell *shell)
 {
 	int	i;
 
@@ -76,7 +78,7 @@ bool	check_in_expandor(t_table exp_table)
 	{
 		if (access(exp_table.in[i], F_OK) == -1)
 		{
-			no_such_file(exp_table.in[i]);
+			no_such_file(exp_table.in[i], shell);
 			return (false);
 		}
 		i++;
@@ -92,9 +94,11 @@ bool	expandor(t_shell *shell, int table_num)
 		|| redir_expand(shell->tables[table_num].in, shell) == false
 		|| redir_expand(shell->tables[table_num].out, shell) == false
 		|| redir_expand(shell->tables[table_num].append, shell) == false
-		|| check_in_expandor(shell->tables[table_num]) == false)
+		|| hdoc_expand(shell->tables[table_num].heredoc, shell) == false
+		|| check_in_expandor(shell->tables[table_num], shell) == false ) 
 	{
-		free_all(shell, "no print", 0);
+		if (shell->table_len == 1 || shell->table_len == table_num + 1)
+			free_all(shell, "no print", 3);
 		return (false);
 	}
 

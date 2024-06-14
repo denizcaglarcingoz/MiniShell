@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 17:18:08 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 01:53:24 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_shell
 	int			table_len;
 	t_table		*tables;
 	t_tokens	*tokens;
+	char		**hdoc;
+	int			table_id;
 }	t_shell;
 
 /****SHELL****/
@@ -90,6 +92,7 @@ char			*exp_s_quo(char *content, int *i, char *new_content);
 char			*exp_d_quo(char *content, int *i, char *new_content, \
 t_shell *shell);
 char			*quo_dollar_question(t_shell *shell);
+bool			hdoc_expand(char **content, t_shell *shell);
 
 /****Expansion Utils****/
 bool			content_check(char *content);
@@ -132,6 +135,7 @@ int				output_file(char *file_name, char *out_file);
 t_tokens		*start_of_pipe(t_tokens *tokens, int table_id);
 t_token_type	out_o_app(t_table exp_table, int table_id, t_tokens *tokens);
 t_token_type	in_o_hdoc(t_tokens *tokens, int table_id);
+t_token_type	pipe_in_o_hdoc(t_tokens *tokens, int table_id);
 char			*read_file(int fd);
 char			*last_str(char **strs);
 int				is_builtin(char *cmd);
@@ -163,7 +167,7 @@ int				ft_num_strcmp(char *n1, char *n2);
 
 /***ENV_UTILS***/
 char			**get_env(void);
-void			print_env(char **env);
+int				print_env(char **env);
 char			**add_env(char **env, char *variable);
 char			**del_env(char **env, char *variable);
 char			*ft_getenv(char *path, char **env);

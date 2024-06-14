@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 22:44:27 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 19:14:06 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ int	set_code(char **full_cmd)
 	long int	code;
 
 	if (!is_all_digit(full_cmd[1]))
+	{
 		print_exit_err(full_cmd, &code);
+		return (2);
+	}
 	if ((full_cmd[1][0] == '-' && ft_num_strcmp(full_cmd[1], L_MIN_STR) < 0) ||
 		(full_cmd[1][0] != '-' && ft_num_strcmp(full_cmd[1], L_MAX_STR) > 0))
 		print_exit_err(full_cmd, &code);

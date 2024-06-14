@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:27:21 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:27:22 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 22:05:03 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	init_loop(char **content, int d_quo_qty, int quo_qty, int i)
 		}
 		if ((*content)[i] == '\'')
 			quo_qty++;
-		if ((*content)[i] == ' ' && d_quo_qty % 2 == 0 && quo_qty % 2 == 0)
+		if ((((*content)[i] == ' ' || (*content)[i] == 9 || (*content)[i] == 10 || (*content)[i] == 11 || 
+			(*content)[i] == 12 ||	(*content)[i] == 13) && d_quo_qty % 2 == 0 && quo_qty % 2 == 0))
 			break ;
 		if (is_meta_char((*content)[i]) == true && d_quo_qty % 2 == 0 \
 		&& quo_qty % 2 == 0)
