@@ -33,4 +33,3 @@ size_t	ft_strlen_double(char **s)
 		i++;
 	return (i);
 }
-

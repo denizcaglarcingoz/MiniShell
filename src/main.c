@@ -14,7 +14,6 @@
 
 pid_t	g_sig_int;
 
-
 static void	loop_items(t_shell *shell, char *init_in)
 {
 	shell->input = ft_strtrim(init_in, " ");
@@ -24,12 +23,22 @@ static void	loop_items(t_shell *shell, char *init_in)
 		add_history(init_in);
 	free(init_in);
 	shell->tokens = build_token_list(shell->input, shell);
-	// print_tokens(shell->tokens);
 	free(shell->input);
 	shell->input = NULL;
 	shell->tokens = grammer_check(shell->tokens, &shell->exit_status);
 	shell->tables = parser(shell->tokens, shell);
 	execution(shell);
+}
+
+static void	else_isatty(char **init_in)
+{
+	char	*line;
+
+	errno = 0;
+	line = get_next_line(fileno(stdin));
+	if (line != 0)
+		*init_in = ft_strtrim(line, "\n");
+	free(line);
 }
 
 void	shell_loop(t_shell *shell)
@@ -45,25 +54,15 @@ void	shell_loop(t_shell *shell)
 		errno = 0;
 		init_in = NULL;
 		if (isatty(fileno(stdin)))
-		{	
 			init_in = readline("minishell$ ");
-		}
 		else
-		{
-			errno = 0;
-			char *line;
-			line = get_next_line(fileno(stdin));
-			if (line != 0)
-				init_in = ft_strtrim(line, "\n");
-			free(line);
-		}
+			else_isatty(&init_in);
 		if (errno == 4)
 			errno = 0;
 		if (errno != 0)
 			readline_error_exit(init_in, shell);
 		if (init_in == NULL)
 			break ;
-		//  printf("init_in: %s\n", init_in);
 		loop_items(shell, init_in);
 	}
 	control_d_exit(shell);
@@ -90,9 +89,3 @@ int	main(int ac, char **av)
 	shell_loop(&shell);
 	return (0);
 }
-
-	///PARSE AND TABLES TESTING-----------------
-/* 	printf("\n--------\n");//test
-	print_tables(shell->tables);
-	printf("\n--------\n");//test */
-	//-------------------------------------

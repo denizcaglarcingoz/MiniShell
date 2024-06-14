@@ -12,6 +12,17 @@
 
 #include "minishell.h"
 
+static void	d_quo_adj(int *d_quo_qty, int *quo_qty)
+{
+	(*d_quo_qty)++;
+	if (*d_quo_qty == 2)
+	{
+		*d_quo_qty = 0;
+		if (*quo_qty % 2 == 1)
+			*quo_qty = 0;
+	}
+}
+
 int	init_loop(char **content, int d_quo_qty, int quo_qty, int i)
 {
 	while (1)
@@ -19,19 +30,12 @@ int	init_loop(char **content, int d_quo_qty, int quo_qty, int i)
 		if ((*content)[i] == '\0')
 			break ;
 		if ((*content)[i] == '"')
-		{
-			d_quo_qty++;
-			if (d_quo_qty == 2)
-			{
-				d_quo_qty = 0;
-				if (quo_qty % 2 == 1)
-					quo_qty = 0;
-			}
-		}
+			d_quo_adj(&d_quo_qty, &quo_qty);
 		if ((*content)[i] == '\'')
 			quo_qty++;
-		if ((((*content)[i] == ' ' || (*content)[i] == 9 || (*content)[i] == 10 || (*content)[i] == 11 || 
-			(*content)[i] == 12 ||	(*content)[i] == 13) && d_quo_qty % 2 == 0 && quo_qty % 2 == 0))
+		if ((((*content)[i] == ' ' || (*content)[i] == 9 || \
+	(*content)[i] == 10 || (*content)[i] == 11 || (*content)[i] == 12 || \
+	(*content)[i] == 13) && d_quo_qty % 2 == 0 && quo_qty % 2 == 0))
 			break ;
 		if (is_meta_char((*content)[i]) == true && d_quo_qty % 2 == 0 \
 		&& quo_qty % 2 == 0)

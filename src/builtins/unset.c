@@ -25,7 +25,6 @@ static int	check_option(int *status, char **full_cmd)
 	return (0);
 }
 
-
 int	ft_unset(t_table *table, char **full_cmd, t_shell *shell)
 {
 	int	status;

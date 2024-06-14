@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void print_d_str(char **str)
+void	print_d_str(char **str)
 {
 	int	i;
 

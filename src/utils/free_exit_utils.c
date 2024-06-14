@@ -52,6 +52,5 @@ void	control_d_exit(t_shell *shell)
 	clear_history();
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	// ft_putstr_fd("CTRL D Exit\n", 1);
 	exit(shell->exit_status);
 }

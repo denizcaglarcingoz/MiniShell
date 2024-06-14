@@ -145,7 +145,6 @@ void			free_d_all(char **all_paths,
 					char *msg, t_shell *shell, int type);
 void			get_exit_code(t_shell *shell, pid_t pid);
 
-
 /***BUILT-INS****/
 
 int				ft_echo(char **full_cmd, t_shell *shell);
@@ -172,7 +171,7 @@ char			**add_env(char **env, char *variable);
 char			**del_env(char **env, char *variable);
 char			*ft_getenv(char *path, char **env);
 
-int				check_valid_id(char *s, t_shell *shell);
+int				check_valid_id(char **full_cmd, int j, t_shell *shell);
 int				invalid_id(char *id);
 int				update_last_cmd(char *update_cmd, t_shell *shell);
 char			*get_update_cmd(char **full_cmd, t_shell *shell);
@@ -205,6 +204,5 @@ void			sigint_handler_child(int signum);
 /***OTHER***/
 void			print_intro(void);
 void			print_d_str(char **str);
-
 
 #endif

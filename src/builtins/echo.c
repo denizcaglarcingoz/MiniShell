@@ -25,8 +25,8 @@ void	replace_cmd(char ***full_cmd, int i, t_shell *shell)
 
 void	handle_ns(char ***full_cmd, t_shell *shell)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while ((*full_cmd)[++i])
@@ -38,7 +38,7 @@ void	handle_ns(char ***full_cmd, t_shell *shell)
 				j++;
 			if ((*full_cmd)[i][j] == '\0')
 				replace_cmd(full_cmd, i, shell);
-			else 
+			else
 				break ;
 		}
 		else
@@ -53,8 +53,7 @@ int	ft_echo(char **full_cmd, t_shell *shell)
 
 	flag = false;
 	i = 1;
-	
-	handle_ns(&full_cmd, shell);	
+	handle_ns(&full_cmd, shell);
 	if (full_cmd[i] && !ft_strcmp(full_cmd[i], "-n"))
 	{
 		flag = true;

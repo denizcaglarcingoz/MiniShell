@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 void print_tokens(t_tokens *tokens)
 {
 	t_tokens *tmp;
