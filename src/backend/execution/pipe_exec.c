@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 01:45:29 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 17:30:41 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	child_pro_helper(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 
 	if (i + 1 < shell->tables->table_len)
 	{
-		if (shell->tables[i].args[0] != NULL)
+		if (shell->tables[i].args[0] != NULL || shell->tables[i].out[0] != NULL)
 		{
 			out_check = output_check(shell->tables[i], i, shell->tokens);
 			if (out_check == 0)
@@ -52,6 +52,16 @@ void	child_pro_helper(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 	}
 	else
 		close(pipefd[1]);
+
+	if (i + 1 == shell->tables->table_len)
+	{
+		if (shell->tables[i].args[0] == NULL || shell->tables[i].out[0] != NULL)
+		{
+			out_check = output_check(shell->tables[i], i, shell->tokens);
+			if (out_check == -127)
+				free_all(shell, "no print", 127);
+		}
+	}
 }
 
 void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
@@ -72,9 +82,6 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 		exit(0);
 	else
 		pipe_exec_run(shell->tables[i], i, hdoc, shell);
-	
-
-
 }
 
 void	ft_wait(t_shell *shell)

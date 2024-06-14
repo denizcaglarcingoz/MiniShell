@@ -6,16 +6,15 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:30 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:25:37 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 15:36:35 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_white_space(char is)
+bool	is_white_space(char c)
 {
-	if (is == '\t' || is == '\n' || is == '\v'
-		|| is == '\f' || is == '\r' || is == ' ')
+	if (c == ' ' || c == 9 || c == 10 || c == 11 || c == 12 || c == 13)
 		return (true);
 	return (false);
 }

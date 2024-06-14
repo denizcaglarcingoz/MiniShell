@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/13 19:14:06 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:54:11 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	print_exit_err(char **full_cmd, long int *code)
 	ft_putstr_fd(full_cmd[1], 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 	*code = 2;
+	exit(2);
 }
 
 int	is_all_digit(char *s)

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:43 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 13:11:11 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 23:58:41 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ char	**exp_check(char *content, t_shell *shell)
 	init_new_content(&new_content, shell);
 	if (content == NULL)
 		return (NULL);
+	// printf("content = %s\n", content);
 	while (content[i])
 	{
 		if (content[i] == '$')
@@ -84,5 +85,26 @@ char	**exp_check(char *content, t_shell *shell)
 		if (!content[i])
 			break ;
 	}
+
+
+	// if (new_content[0][0] == '\0')
+	// {
+	// 	write(1, "1", 1);
+	// 	write(1, &(new_content[0][0]), 1);
+	// 	write(1, "1\n", 2);
+	// 	if (new_content[0][1] != '\0')
+	// 	{
+	// 		write(1, "2", 1);
+	// 		write(1, &(new_content[0][1]), 1);
+	// 		write(1, "2\n", 2);
+	// 		if (new_content[0][2] == '\0')
+	// 		{
+	// 			write(1, "3", 1);
+	// 			write(1, &(new_content[0][2]), 1);
+	// 			write(1, "3\n", 2);
+	// 		}
+	// 	}
+	// }
+	
 	return (new_content);
 }

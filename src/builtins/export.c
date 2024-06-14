@@ -12,19 +12,6 @@
 
 #include "minishell.h"
 
-int	has_equal(char *str)
-{
-	int	i;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '=')
-			return (1);
-	}
-	return (0);
-}
-
 void	replace_cmd_noplus(char **cmd, t_shell *shell)
 {
 	int		i;
@@ -34,7 +21,6 @@ void	replace_cmd_noplus(char **cmd, t_shell *shell)
 	i = 0;
 	while ((*cmd)[i])
 		i++;
-	//printf("here is the len: %d\n", i);
 	new_cmd = (char *)malloc(sizeof(char) * i);
 	if (!new_cmd)
 		free_all(shell, "export malloc failed", 127);
@@ -49,30 +35,29 @@ void	replace_cmd_noplus(char **cmd, t_shell *shell)
 		j++;
 	}
 	new_cmd[j] = '\0';
-	//printf("here is the cmd: %s\n", new_cmd);
 	free(*cmd);
-	*cmd = NULL;
 	*cmd = new_cmd;
 }
 
-int	check_valid_id(char *s, t_shell *shell)
+int	check_valid_id(char **full_cmd, int j, t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	if (ft_isdigit(s[i]) || !(s[i] == '_' || ft_isalpha(s[i])))
+	if (ft_isdigit(full_cmd[j][i]) || !(full_cmd[j][i] == '_' \
+	|| ft_isalpha(full_cmd[j][i])))
 		return (1);
-	while (ft_isalnum(s[i]) || s[i] == '_')
+	while (ft_isalnum(full_cmd[j][i]) || full_cmd[j][i] == '_')
 		i++;
-	if (s[i] == '+' && s[i + 1] == '=')
+	if (full_cmd[j][i] == '+' && full_cmd[j][i + 1] == '=')
 	{
-		replace_cmd_noplus(&s, shell);
+		replace_cmd_noplus(&full_cmd[j], shell);
 		return (0);
 	}
 	i = -1;
-	while (s[++i] && s[i] != '=')
+	while (full_cmd[j][++i] && full_cmd[j][i] != '=')
 	{
-		if (!(ft_isalnum(s[i])) && !(s[i] == '_'))
+		if (!(ft_isalnum(full_cmd[j][i])) && !(full_cmd[j][i] == '_'))
 			return (1);
 	}
 	return (0);
@@ -106,25 +91,23 @@ void	print_export(char **env)
 	}
 }
 
-int	export_loop(char *cmd, t_shell *shell)
+int	export_loop(char **full_cmd, int i, t_shell *shell)
 {
 	int		ret;
-	//bool	plus_equal;
 
 	ret = 0;
-	//plus_equal = false;
-	if (check_valid_id(cmd, shell))
-		ret = invalid_id(cmd);
-	else if (!has_equal(cmd))
+	if (check_valid_id(full_cmd, i, shell))
+		ret = invalid_id(full_cmd[i]);
+	else if (!has_equal(full_cmd[i]))
 	{
-		shell->exported = add_env(shell->exported, cmd);
+		shell->exported = add_env(shell->exported, full_cmd[i]);
 		ft_quicksort_params(shell->exported, 0, \
 		ft_matrix_len(shell->exported) - 1);
 	}
 	else
 	{
-		shell->env = add_env(shell->env, cmd);
-		shell->exported = add_env(shell->exported, cmd);
+		shell->env = add_env(shell->env, full_cmd[i]);
+		shell->exported = add_env(shell->exported, full_cmd[i]);
 		ft_quicksort_params(shell->exported, 0, \
 		ft_matrix_len(shell->exported) - 1);
 	}
@@ -146,7 +129,7 @@ int	ft_export(char **full_cmd, t_shell *shell)
 		i = 0;
 		while (full_cmd[++i])
 		{
-			status = export_loop(full_cmd[i], shell);
+			status = export_loop(full_cmd, i, shell);
 			if (status == 2)
 				free_all(shell, "export malloc failed", 127);
 		}

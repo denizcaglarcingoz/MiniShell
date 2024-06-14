@@ -1,15 +1,1 @@
-a.out
-asd.txt
-deniz.txt
-end
-err.txt
-helpful_notes
-includes
-in.txt
-Makefile
-minishell
-obj
-out.txt
-README.md
-src
-Suppression_File
+>is this good

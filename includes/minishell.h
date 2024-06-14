@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 01:53:24 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:34:48 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ t_tokens		*token_init(t_tokens *c_token, char *content, \
 t_token_type type);
 t_tokens		*meta_content(t_tokens *c_token, char **input);
 bool			is_meta_char(char is);
+bool			is_white_space(char c);
+
 //test print
 void			print_tokens(t_tokens *tokens);
 
@@ -108,6 +110,9 @@ char			**exp_dollar(char *content, int *i,
 					char **new_content, t_shell *shell);
 char			**add_new_content(char **new_content,
 					char **d_exp, t_shell *shell);
+char	*empty_d_quo_txt();
+char	*empty_dollar_txt_s();
+
 
 /****EXECUTION****/
 void			execution(t_shell *shell);
@@ -144,7 +149,7 @@ int				ft_access(char *path, char **argv, t_shell *shell);
 void			free_d_all(char **all_paths,
 					char *msg, t_shell *shell, int type);
 void			get_exit_code(t_shell *shell, pid_t pid);
-
+int				all_path_check(char *all_path);
 
 /***BUILT-INS****/
 
@@ -172,7 +177,7 @@ char			**add_env(char **env, char *variable);
 char			**del_env(char **env, char *variable);
 char			*ft_getenv(char *path, char **env);
 
-int				check_valid_id(char *s, t_shell *shell);
+int				check_valid_id(char **full_cmd, int j, t_shell *shell);
 int				invalid_id(char *id);
 int				update_last_cmd(char *update_cmd, t_shell *shell);
 char			*get_update_cmd(char **full_cmd, t_shell *shell);

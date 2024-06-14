@@ -16,7 +16,7 @@ void	cd_not_found(char **full_cmd)
 {
 	ft_putstr_fd("minishell: cd: ", 2);
 	ft_putstr_fd(full_cmd[1], 2);
-	ft_putstr_fd(" No such file or directory\n", 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
 }
 
 int	invalid_id(char *id)
@@ -55,4 +55,17 @@ int	ft_num_strcmp(char *n1, char *n2)
 	if (*n1 == '-' && *n2 == '-')
 		return (-ft_num_strcmp(n1 + 1, n2 + 1));
 	return (ft_cmplen(n1, n2));
+}
+
+int	has_equal(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '=')
+			return (1);
+	}
+	return (0);
 }

@@ -53,6 +53,7 @@ void	free_all_env(char **env)
 	free(env);
 	env = NULL;
 }
+
 int	print_env(char **env)
 {
 	if (env == NULL)

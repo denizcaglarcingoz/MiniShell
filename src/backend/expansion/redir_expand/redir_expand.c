@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/13 18:35:52 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:48:57 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,26 @@ char **one_dollar(char **new_content, t_shell *shell, int *i)
 	return (new_content);
 }
 
+char	**empty_dollar_txt_d()
+{
+
+	char **dollar_specification;
+
+	dollar_specification = (char**)malloc(sizeof(char) * 2);
+	if (dollar_specification == NULL)
+	{
+		perror("malloc");
+		return (NULL);
+	}
+	dollar_specification[0] = (char*)malloc(sizeof(char) * 3);
+	dollar_specification[0][0] = '\0';
+	dollar_specification[0][1] = '$';
+	dollar_specification[0][2] = '\0';
+	dollar_specification[1] = NULL;
+
+	return (dollar_specification);
+}
+
 char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 {
 	char	*to_exp;
@@ -107,6 +127,8 @@ char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 		(*i)++;
 	}
 	d_exp = exps(to_exp, shell);
+	if (d_exp == NULL)
+	 	d_exp = empty_dollar_txt_d();
 	new_content = add_new_content(new_content, d_exp, shell);
 	return (new_content);
 }
