@@ -25,7 +25,7 @@ int	is_all_digit(char *s)
 	int	i;
 
 	i = -1;
-	if (s[0] == '-')
+	if (s[0] == '-' || s[0] == '+')
 		i++;
 	while (s[++i])
 	{
@@ -68,8 +68,14 @@ void	final_free(t_shell *shell)
 
 int	ft_exit(char **full_cmd, t_shell *shell)
 {
-	int	code;
+	long int	code;
 
+	code = 0;
+	if (full_cmd[1] && !is_all_digit(full_cmd[1]))
+	{
+		print_exit_err(full_cmd, &code);
+		return (2);
+	}
 	if (ft_matrix_len(full_cmd) > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
@@ -77,8 +83,6 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 	}
 	if (full_cmd[1])
 		code = set_code(full_cmd);
-	else
-		code = 0;
 	final_free(shell);
 	exit(code);
 }

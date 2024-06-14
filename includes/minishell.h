@@ -148,7 +148,7 @@ void			get_exit_code(t_shell *shell, pid_t pid);
 
 /***BUILT-INS****/
 
-int				ft_echo(char **full_cmd);
+int				ft_echo(char **full_cmd, t_shell *shell);
 int				ft_cd(char **full_cmd, t_shell *shell);
 int				ft_pwd(void);
 int				ft_exit(char **full_cmd, t_shell *shell);
@@ -172,7 +172,7 @@ char			**add_env(char **env, char *variable);
 char			**del_env(char **env, char *variable);
 char			*ft_getenv(char *path, char **env);
 
-int				check_valid_id(char *s);
+int				check_valid_id(char *s, t_shell *shell);
 int				invalid_id(char *id);
 int				update_last_cmd(char *update_cmd, t_shell *shell);
 char			*get_update_cmd(char **full_cmd, t_shell *shell);

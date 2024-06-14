@@ -5,7 +5,43 @@ INC_DIR = ./includes
 BT_DIR = ./builtins
 
 INCLUDES = $(wildcard $(INC_DIR)/*)
+
+#INCLUDES = ./includes/ansi_colors.h ./inlcudes/lexer.h ./inlcudes/minishell.h ./includes/parser.h
+
 SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*/*.c)  $(wildcard $(SRC_DIR)/*/*/*.c) $(wildcard $(SRC_DIR)/*/*/*/*.c)
+
+#SRCS = ./src/main.c ./src/frontend/lexer/lexer_meta_utils.c \
+./src/frontend/lexer/lexer_string_utils.c ./src/frontend/lexer/lexer.c \
+./src/frontend/parser/grammer_check.c ./src/frontend/parser/parser.c \
+./src/frontend/parser/table_alloc.c \
+./src/frontend/parser/table_content_alloc.c \
+./src/frontend/parser/table_init.c ./src/signals/signals.c \
+./src/utils/checker.c ./src/utils/free_all.c ./src/utils/free_d_str.c \
+./src/utils/free_exit_utils.c ./src/utils/freeing_utils.c \
+./src/utils/table_free.c ./src/builtins/add_env.c \
+./src/builtins/builtin_utils.c ./src/builtins/builtin.c ./src/builtins/cd.c \
+./src/builtins/delete_env.c ./src/builtins/echo.c \
+./src/builtins/env_update_utils.c ./src/builtins/env_utils.c \
+./src/builtins/exit.c ./src/builtins/export.c ./src/builtins/ft_getenv.c \
+./src/builtins/pwd.c ./src/builtins/quicksort_params.c ./src/builtins/unset.c \
+./src/backend/execution/exec_utils.c ./src/backend/execution/execution.c \
+./src/backend/execution/last_redirect.c \
+./src/backend/execution/pipe_exec_run.c \
+./src/backend/execution/pipe_exec.c ./src/backend/execution/single_exec.c \
+./src/backend/execve/execve_utils.c ./src/backend/execve/ft_execve.c \
+./src/backend/execve/pipe_execve.c \
+./src/backend/expansion/arg_expand/arg_expand_utils.c \
+./src/backend/expansion/arg_expand/arg_expand.c \
+./src/backend/expansion/arg_expand/split_join.c \
+./src/backend/expansion/expand_utils/expand_utils.c \
+./src/backend/expansion/redir_expand/add_new_content.c \
+./src/backend/expansion/redir_expand/exp_check.c \
+./src/backend/expansion/redir_expand/redir_expand.c \
+./src/backend/expansion/expandor.c \
+./src/backend/expansion/question_mark.c ./src/backend/expansion/quotes.c \
+./src/backend/redirections/append.c ./src/backend/redirections/heredoc.c \
+./src/backend/redirections/output.c
+
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CFLAGS := -Wall -Wextra -Werror -fPIE -g -Iincludes
 

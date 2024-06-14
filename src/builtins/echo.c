@@ -12,17 +12,54 @@
 
 #include "minishell.h"
 
-int	ft_echo(char **full_cmd)
+void	replace_cmd(char ***full_cmd, int i, t_shell *shell)
+{
+	char	*temp;
+
+	temp = ft_strdup("-n");
+	if (!temp)
+		free_all(shell, "Malloc Error\n", 127);
+	free((*full_cmd)[i]);
+	(*full_cmd)[i] = temp;
+}
+
+void	handle_ns(char ***full_cmd, t_shell *shell)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while ((*full_cmd)[++i])
+	{
+		if ((*full_cmd)[i][0] == '-' && (*full_cmd)[i][1] == 'n')
+		{
+			j = 1;
+			while ((*full_cmd)[i][j] == 'n')
+				j++;
+			if ((*full_cmd)[i][j] == '\0')
+				replace_cmd(full_cmd, i, shell);
+			else 
+				break ;
+		}
+		else
+			break ;
+	}
+}
+
+int	ft_echo(char **full_cmd, t_shell *shell)
 {
 	int		i;
 	bool	flag;
 
 	flag = false;
 	i = 1;
+	
+	handle_ns(&full_cmd, shell);	
 	if (full_cmd[i] && !ft_strcmp(full_cmd[i], "-n"))
 	{
 		flag = true;
-		i++;
+		while (full_cmd[i] && !ft_strcmp(full_cmd[i], "-n"))
+			i++;
 	}
 	while (full_cmd[i] && *(full_cmd[i]))
 	{
