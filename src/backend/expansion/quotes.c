@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 15:50:30 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:07:46 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,46 @@ char	*quo_exp(char *exp, t_shell *shell)
 	free(exp);
 	return (new_exp);
 }
+
+char	*empty_s_quo_txt()
+{
+
+	char *d_quo_specification;
+
+	d_quo_specification = (char*)malloc(sizeof(char) * 3);
+	d_quo_specification[0] = '\0';
+	d_quo_specification[1] = '"';
+	d_quo_specification[2] = '\0';
+
+	return (d_quo_specification);
+}
+
+char	*empty_d_quo_txt()
+{
+
+	char *d_quo_specification;
+
+	d_quo_specification = (char*)malloc(sizeof(char) * 3);
+	d_quo_specification[0] = '\0';
+	d_quo_specification[1] = '"';
+	d_quo_specification[2] = '\0';
+
+	return (d_quo_specification);
+}
+
+char	*empty_dollar_txt_s()
+{
+
+	char *d_quo_specification;
+
+	d_quo_specification = (char*)malloc(sizeof(char) * 3);
+	d_quo_specification[0] = '\0';
+	d_quo_specification[1] = '$';
+	d_quo_specification[2] = '\0';
+
+	return (d_quo_specification);
+}
+
 
 char	*quo_exp_dollar(char *cntnt, int *i, char *new_cntnt, \
 t_shell *shell)
@@ -85,6 +125,11 @@ char	*exp_d_quo(char *cntnt, int *i, char *new_cntnt, t_shell *shell)
 	}
 	if (cntnt[*i] && cntnt[*i] == '"')
 		(*i)++;
+	if (ft_strlen(new_cntnt) == 0 && new_cntnt[0] == '\0')
+	{	
+		free(new_cntnt);
+		new_cntnt =	empty_d_quo_txt();
+	}
 	return (new_cntnt);
 }
 
@@ -100,5 +145,10 @@ char	*exp_s_quo(char *cntnt, int *i, char *new_cntnt)
 	}
 	if (cntnt[*i] && cntnt[*i] == '\'')
 		(*i)++;
+	if (ft_strlen(new_cntnt) == 0 && new_cntnt[0] == '\0')
+	{	
+		free(new_cntnt);
+		new_cntnt =	empty_s_quo_txt();
+	}
 	return (new_cntnt);
 }

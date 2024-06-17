@@ -89,8 +89,6 @@ char	**add_env(char **env, char *variable)
 			return (env);
 	}
 	new_env = add_env_helper(env, variable, i - flag, flag);
-	if (!new_env)
-		return (NULL);
 	free_envs(env, i);
 	return (new_env);
 }

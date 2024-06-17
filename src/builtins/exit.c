@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 16:59:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:54:11 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	print_exit_err(char **full_cmd, long int *code)
 	ft_putstr_fd(full_cmd[1], 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 	*code = 2;
+	exit(2);
 }
 
 int	is_all_digit(char *s)
@@ -25,7 +26,7 @@ int	is_all_digit(char *s)
 	int	i;
 
 	i = -1;
-	if (s[0] == '-')
+	if (s[0] == '-' || s[0] == '+')
 		i++;
 	while (s[++i])
 	{
@@ -40,7 +41,10 @@ int	set_code(char **full_cmd)
 	long int	code;
 
 	if (!is_all_digit(full_cmd[1]))
+	{
 		print_exit_err(full_cmd, &code);
+		return (2);
+	}
 	if ((full_cmd[1][0] == '-' && ft_num_strcmp(full_cmd[1], L_MIN_STR) < 0) ||
 		(full_cmd[1][0] != '-' && ft_num_strcmp(full_cmd[1], L_MAX_STR) > 0))
 		print_exit_err(full_cmd, &code);
@@ -65,9 +69,16 @@ void	final_free(t_shell *shell)
 
 int	ft_exit(char **full_cmd, t_shell *shell)
 {
-	int	code;
+	long int	code;
 
-	//ft_putstr_fd("exit\n", 1);
+	code = 0;
+	if (full_cmd[1] && full_cmd[1][0] == '\0')
+		print_exit_err(full_cmd, &code);
+	if (full_cmd[1] && !is_all_digit(full_cmd[1]))
+	{
+		print_exit_err(full_cmd, &code);
+		return (2);
+	}
 	if (ft_matrix_len(full_cmd) > 2)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
@@ -75,8 +86,6 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 	}
 	if (full_cmd[1])
 		code = set_code(full_cmd);
-	else
-		code = 0;
 	final_free(shell);
 	exit(code);
 }

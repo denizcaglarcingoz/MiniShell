@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:16 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 17:57:20 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:35:19 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_shell *shell)
 	i = 0;
 	while (all_paths[i] != NULL)
 	{
-		if (access(all_paths[i], X_OK) == 0)
+		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0 && all_path_check(all_paths[i]) == 1)
 		{
 			if (execve(all_paths[i], argv, environ) == -1)
 			{
@@ -56,7 +56,7 @@ t_shell *shell)
 		i++;
 	}
 	write(2, argv[0], ft_strlen(argv[0]));
-	if (ft_strlen(argv[0]) > 0)
+	if (argv[0] != NULL)
 		write(2, ": command not found\n", 20);
 	free_d_str(all_paths);
 	free_all(shell, NULL, 127);

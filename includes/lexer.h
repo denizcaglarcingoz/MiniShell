@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:50 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:30:51 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 15:40:15 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ typedef enum e_token_type
 	R_PAR,
 	QUOTE,
 	D_QUOTE,
-	NO_TYPE
+	NO_TYPE,
+	ERR_TYPE
 }	t_token_type;
 
 typedef struct s_tokens

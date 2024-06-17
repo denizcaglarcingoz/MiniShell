@@ -12,29 +12,52 @@
 
 #include "minishell.h"
 
-int	has_equal(char *str)
+void	replace_cmd_noplus(char **cmd, t_shell *shell)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	*new_cmd;
 
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while ((*cmd)[i])
+		i++;
+	new_cmd = (char *)malloc(sizeof(char) * i);
+	if (!new_cmd)
+		free_all(shell, "export malloc failed", 127);
+	i = 0;
+	j = 0;
+	while ((*cmd)[i])
 	{
-		if (str[i] == '=')
-			return (1);
+		if ((*cmd)[i] == '+')
+			i++;
+		new_cmd[j] = (*cmd)[i];
+		i++;
+		j++;
 	}
-	return (0);
+	new_cmd[j] = '\0';
+	free(*cmd);
+	*cmd = new_cmd;
 }
 
-int	check_valid_id(char *s)
+int	check_valid_id(char **full_cmd, int j, t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	if (ft_isdigit(s[i]) || !(s[i] == '_' || ft_isalpha(s[i])))
+	if (ft_isdigit(full_cmd[j][i]) || !(full_cmd[j][i] == '_' \
+	|| ft_isalpha(full_cmd[j][i])))
 		return (1);
-	while (s[++i] && s[i] != '=')
+	while (ft_isalnum(full_cmd[j][i]) || full_cmd[j][i] == '_')
+		i++;
+	if (full_cmd[j][i] == '+' && full_cmd[j][i + 1] == '=')
 	{
-		if (!(ft_isalnum(s[i])) && !(s[i] == '_'))
+		replace_cmd_noplus(&full_cmd[j], shell);
+		return (0);
+	}
+	i = -1;
+	while (full_cmd[j][++i] && full_cmd[j][i] != '=')
+	{
+		if (!(ft_isalnum(full_cmd[j][i])) && !(full_cmd[j][i] == '_'))
 			return (1);
 	}
 	return (0);
@@ -68,28 +91,29 @@ void	print_export(char **env)
 	}
 }
 
-int	export_loop(char *cmd, t_shell *shell)
+int	export_loop(char **full_cmd, int i, t_shell *shell)
 {
-	int	ret;	
+	int		ret;
 
 	ret = 0;
-	if (check_valid_id(cmd))
-		ret = invalid_id(cmd);
-	else if (!has_equal(cmd))
+	if (check_valid_id(full_cmd, i, shell))
+		ret = invalid_id(full_cmd[i]);
+	else if (!has_equal(full_cmd[i]))
 	{
-		shell->exported = add_env(shell->exported, cmd);
+		shell->exported = add_env(shell->exported, full_cmd[i]);
+		if (shell->exported == NULL)
+		{
+			free_all_env(shell->env);
+			return (2);
+		}
 		ft_quicksort_params(shell->exported, 0, \
 		ft_matrix_len(shell->exported) - 1);
 	}
 	else
 	{
-		shell->env = add_env(shell->env, cmd);
-		shell->exported = add_env(shell->exported, cmd);
-		ft_quicksort_params(shell->exported, 0, \
-		ft_matrix_len(shell->exported) - 1);
+		if (no_equal_case(shell, full_cmd[i]))
+			return (2);
 	}
-	if (shell->env == NULL || shell->exported == NULL)
-		ret = 2;
 	return (ret);
 }
 
@@ -106,9 +130,15 @@ int	ft_export(char **full_cmd, t_shell *shell)
 		i = 0;
 		while (full_cmd[++i])
 		{
-			status = export_loop(full_cmd[i], shell);
+			status = export_loop(full_cmd, i, shell);
 			if (status == 2)
-				free_all(shell, "export malloc failed", 127);
+			{
+				perror("env malloc failure\n");
+				clear_history();
+				free_list(shell->tokens);
+				free_table(shell->tables);
+				exit(1);
+			}
 		}
 	}
 	return (status);

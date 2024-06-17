@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 17:10:53 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 23:32:40 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,34 @@ static void	free_list_env(t_shell *shell)
 	if (shell->exported)
 		free_all_env(shell->exported);
 	free_list(shell->tokens);
+}
+
+static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
+{
+	if (exit_type == 2)
+	{
+		clear_history();
+		free_list_env(shell);
+		perror(print);
+		exit (2);
+	}
+	else if (exit_type == 4)
+	{
+		if (ft_strcmp(print, "no print") != 0)
+			perror(print);
+		clear_history();
+		free_list_env(shell);
+		exit(2);
+	}
+	else if (exit_type == 5)
+	{
+		if (ft_strcmp(print, "no print") != 0)
+			perror(print);
+		clear_history();
+		free_list(shell->tokens);
+		free_table(shell->tables);
+		exit(1);
+	}
 }
 
 static void	free_all_ops(t_shell *shell, char *print, int exit_type)
@@ -41,18 +69,13 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 		free_list(shell->tokens);
 		free_table(shell->tables);
 	}
-	else if (exit_type == 2)
-	{
-		clear_history();
-		free_list_env(shell);
-		perror(print);
-		exit (2);
-	}
 	else if (exit_type == 3)
 	{
 		free_list(shell->tokens);
 		free_table(shell->tables);
 	}
+	else
+		free_all_ops2(shell, print, exit_type);
 }
 
 void	free_all(t_shell *shell, char *print, int exit_type)
@@ -61,8 +84,8 @@ void	free_all(t_shell *shell, char *print, int exit_type)
 	{
 		if (ft_strcmp(print, "no print") != 0)
 			perror(print);
-		free_list_env(shell);
 		clear_history();
+		free_list_env(shell);
 		free_table(shell->tables);
 		exit(127);
 	}

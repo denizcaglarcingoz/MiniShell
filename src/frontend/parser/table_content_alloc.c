@@ -74,7 +74,6 @@ int	t_content_alloc(t_tokens *tokens, t_table *table)
 	if (table->args == NULL || table->in == NULL || table->out == NULL \
 	|| table->append == NULL || table->heredoc == NULL)
 	{
-		perror("t_content_init");
 		free_content_first_allocs_only(table);
 		return (-1);
 	}

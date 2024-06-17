@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 22:24:52 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/14 02:09:00 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	output_check(t_table table, int table_id, t_tokens *tokens)
 	if (table.out[0] != NULL || table.append[0] != NULL)
 	{
 		t_type = out_o_app(table, table_id, tokens);
+		if (t_type == ERR_TYPE)
+			return (-127);
 		if (t_type == GREATER)
 		{
 			out = last_str(table.out);
@@ -74,7 +76,7 @@ int	output_check(t_table table, int table_id, t_tokens *tokens)
 			fd = open(out, O_RDWR | O_CREAT | O_APPEND, 0644);
 		}
 		if (fd == -1)
-			return (perror("output_check_open"), 0);
+			return (perror("output_check_open"), -127);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 		return (fd);
@@ -107,6 +109,12 @@ void	single_exec(t_shell *shell)
 		return ;
 	in = check_in(shell->tables[0]);
 	is_out = output_check(shell->tables[0], 0, shell->tokens);
+	if (is_out == -127)
+	{
+		shell->exit_status = 1;
+		free_all(shell, "no print", 3);
+		return ;
+	}
 	if (is_builtin(shell->tables[0].args[0]) == 1)
 		run_builtin(shell->tables[0], shell);
 	else if (shell->tables[0].args[1] != NULL || (shell->tables[0].in[0] \

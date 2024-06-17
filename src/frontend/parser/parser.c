@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:26:19 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/11 22:25:43 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 12:23:01 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,52 +33,3 @@ size_t	ft_strlen_double(char **s)
 		i++;
 	return (i);
 }
-
-int print_tables(t_table *table)
-{
-	int i;
-	int j;
-
-	i = 0;
-	if (table == NULL)
-		return (0);
-	while (i < table->table_len)
-	{
-		j = 0;
-		while (table[i].args[j] != NULL)
-		{
-			printf("table[%d].args[%d] = %s\n", i, j, table[i].args[j]);
-			// printf("table[%d].args_len = %zu\n", i, 
-			// ft_strlen_double(table[i].args));
-			j++;
-		}
-		j = 0;
-		while (table[i].in[j] != NULL)
-		{
-			printf("table[%d].in[%d] = %s\n", i, j, table[i].in[j]);
-			j++;
-		}
-		j = 0;
-		while (table[i].out[j] != NULL)
-		{
-			printf("table[%d].out[%d] = %s\n", i, j, table[i].out[j]);
-			printf("table[%d].out_len = %zu\n", i, \
-			ft_strlen_double(table[i].out));
-			j++;
-		}
-		j = 0;
-		while (table[i].append[j] != NULL)
-		{
-			printf("table[%d].append[%d] = %s\n", i, j, table[i].append[j]);
-			j++;
-		}
-		j = 0;
-		while (table[i].heredoc[j] != NULL)
-		{
-			printf("table[%d].heredoc[%d] = %s\n", i, j, table[i].heredoc[j]);
-			j++;
-		}
-		i++;
-	}
-	return  (0);
-} 

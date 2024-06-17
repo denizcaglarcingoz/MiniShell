@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:29 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:30:30 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 15:22:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	output_file(char *file_name, char *out_file)
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror("open");
+		perror("open x");
 		return (1);
 	}
 	if (out_file == NULL)

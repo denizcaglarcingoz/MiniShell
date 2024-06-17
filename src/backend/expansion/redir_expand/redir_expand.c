@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 22:22:02 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/15 00:48:57 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,50 @@ char	**exps(char *to_exp, t_shell *shell)
 	return (new_d_exp);
 }
 
+char **one_dollar(char **new_content, t_shell *shell, int *i)
+{
+	char **question_mark;
+
+	question_mark = (char **)malloc(sizeof(char *) * 2);
+	question_mark[0] = ft_strdup("$");
+	if (question_mark[0] == NULL)
+	{
+		free_d_str(new_content);
+		free_all(shell, "Malloc Error\n", 127);
+	}
+	new_content = add_new_content(new_content, question_mark, shell);
+	(*i)++;
+	return (new_content);
+}
+
+char	**empty_dollar_txt_d()
+{
+
+	char **dollar_specification;
+
+	dollar_specification = (char**)malloc(sizeof(char) * 2);
+	if (dollar_specification == NULL)
+	{
+		perror("malloc");
+		return (NULL);
+	}
+	dollar_specification[0] = (char*)malloc(sizeof(char) * 3);
+	dollar_specification[0][0] = '\0';
+	dollar_specification[0][1] = '$';
+	dollar_specification[0][2] = '\0';
+	dollar_specification[1] = NULL;
+
+	return (dollar_specification);
+}
+
 char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 {
 	char	*to_exp;
 	char	**d_exp;
 
 	to_exp = NULL;
+	if (content[*i] == '$' && content[*i + 1] == '\0')
+		return (one_dollar(new_content, shell, i));
 	(*i)++;
 	if (content[*i] == '?')
 	{
@@ -89,6 +127,8 @@ char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 		(*i)++;
 	}
 	d_exp = exps(to_exp, shell);
+	if (d_exp == NULL)
+	 	d_exp = empty_dollar_txt_d();
 	new_content = add_new_content(new_content, d_exp, shell);
 	return (new_content);
 }

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:07 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:28:08 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/13 18:58:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,19 @@ void	free_all_env(char **env)
 	env = NULL;
 }
 
-void	print_env(char **env)
+int	print_env(char **env)
 {
 	if (env == NULL)
 	{
-		printf("Empty Environmental Variable List\n");
-		return ;
+		ft_putstr_fd("Empty Environmental Variable List\n", 2);
+		return (2);
 	}
 	while (*env != NULL)
 	{
 		printf("%s\n", *env);
 		env++;
 	}
+	return (0);
 }
 
 char	**get_env(void)

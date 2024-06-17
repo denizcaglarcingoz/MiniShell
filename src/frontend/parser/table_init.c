@@ -79,6 +79,7 @@ t_table	*table_init(t_tokens *tokens, t_table *table, t_shell *shell)
 		if (t_content_alloc(tokens, &table[i]) == -1)
 		{
 			free_t_content_alloc_and_table(table, i);
+			free_all(shell, "t_content_alloc malloc failure", 4);
 			return (NULL);
 		}
 		tokens = table_content_init(tokens, table, shell, i);
