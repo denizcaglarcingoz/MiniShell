@@ -89,7 +89,7 @@ SRCS =	./src/backend/execution/exec_utils.c\
 
 
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-CFLAGS := -Wall -Wextra -Werror -fPIE -g -Iincludes
+CFLAGS := -Wall -Wextra -Werror -fPIE -Iincludes
 
 RM := rm -f
 
