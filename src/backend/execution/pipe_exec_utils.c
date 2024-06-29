@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 14:11:32 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 20:00:08 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@ pid_t	pipe_fork(t_shell *shell, int pipefd[2])
 	return (pid);
 }
 
-void	exec_init(t_pipe_exec_var *exec)
+void	exec_init(t_pipe_exec_var *exec, t_shell *shell)
 {
 	exec->pid = -1;
+	exec->str_pid = malloc(sizeof(pid_t) * shell->tables->table_len);
+	if (exec->str_pid == NULL)
+		free_all(shell, "Malloc Fail\n", 127);
 	exec->i = 0;
 	exec->prev_read_fd = -1;
 	exec->expandor_check = 0;

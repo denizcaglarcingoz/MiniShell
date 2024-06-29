@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/28 01:42:25 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 19:51:21 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_pipe_exec_var
 	int		pipefd[2];
 	int		prev_read_fd;
 	pid_t	pid;
+	pid_t	*str_pid;
 	int		i;
 	int		expandor_check;
 	int		hdoc_check;

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 14:14:44 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 19:18:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void			pipe_execution(t_shell *shell);
 void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc, \
 t_shell *shell);
 pid_t			pipe_fork(t_shell *shell, int pipefd[2]);
-void			exec_init(t_pipe_exec_var *exec);
+void			exec_init(t_pipe_exec_var *exec, t_shell *shell);
 
 //single execution
 void			single_exec(t_shell *shell);
@@ -169,6 +169,7 @@ int				ft_access(char *path, char **argv, t_shell *shell);
 void			free_d_all(char **all_paths,
 					char *msg, t_shell *shell, int type);
 void			get_exit_code(t_shell *shell, pid_t pid);
+void			get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec);
 int				all_path_check(char *all_path);
 char			*it_is_directory(char *first_arg, t_shell *shell);
 

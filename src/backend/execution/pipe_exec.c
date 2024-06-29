@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 14:11:28 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 20:04:21 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	signal(SIGINT, sigint_handler_int_exec);
 	g_sig_int = exec->pid;
 	if (exec->expandor_check == 0)
-		(get_exit_code(shell, exec->pid), free_all(shell, "no exit", 3));
+		(get_exit_code_p(shell, exec), free_all(shell, "no exit", 3));
 	if (exec->expandor_check == 0)
 		close(exec->pipefd[0]);
 	if (exec->pid != -1)
@@ -108,13 +108,14 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	dup2(exec->std_out, STDOUT_FILENO);
 	close(exec->std_out);
 	signal(SIGQUIT, SIG_IGN);
+	free(exec->str_pid);
 }
 
 void	pipe_execution(t_shell *shell)
 {
 	t_pipe_exec_var	exec;
 
-	exec_init(&exec);
+	exec_init(&exec, shell);
 	while (exec.i < shell->table_len)
 	{
 		if (expandor_hdoc(shell, exec.i) == false)
@@ -128,6 +129,7 @@ void	pipe_execution(t_shell *shell)
 		if (exec.i < shell->table_len)
 			if (exec.hdoc_check == 0 && exec.expandor_check == 1)
 				free_d_str(shell->hdoc);
+		exec.str_pid[exec.i] = exec.pid;
 		(exec.i)++;
 		if (exec.i < shell->table_len)
 		{
