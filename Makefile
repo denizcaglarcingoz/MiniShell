@@ -90,7 +90,7 @@ SRCS =	./src/backend/execution/exec_utils.c\
 		./src/main.c
 
 
-OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+#OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 CFLAGS := -Wall -Wextra -Werror -fPIE -g -Iincludes
 
 RM := rm -f
@@ -110,18 +110,18 @@ MAKEFLAGS += --no-print-directory
 
 all: $(LIBFT_ARCH) $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJ)
+$(EXECUTABLE): $(OBS)
 	$(CC) $^ -L$(LIBFT_PATH) -lft -lreadline -lhistory -o $@ 
 
 $(LIBFT_ARCH):
 	$(MAKE) -C $(LIBFT_PATH)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS)  -c $< -o $@
+#$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+#	$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
 	$(MAKE) -C $(LIBFT_PATH) clean
-	$(RM) $(OBJ)
+	$(RM) $(OBS)
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_PATH) fclean
