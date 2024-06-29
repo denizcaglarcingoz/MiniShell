@@ -29,8 +29,12 @@ int	update_old(t_shell *shell)
 	if (!temp)
 		return (2);
 	shell->env = add_env(shell->env, temp);
+	free(temp);
 	if (!shell->env)
-		return (2);
+	{
+		free_all_env(shell->exported);
+		free_all(shell, "cd add_env", 5);
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -131,6 +135,6 @@ int	ft_cd(char **full_cmd, t_shell *shell)
 	if (status == 1)
 		return (1);
 	if (update_old(shell) || update_pwd(shell) || status == 2)
-		free_all(shell, "unset malloc failed", 127);
+		free_all(shell, "cd malloc failed", 127);
 	return (EXIT_SUCCESS);
 }

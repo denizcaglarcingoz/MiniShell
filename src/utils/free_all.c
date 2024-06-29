@@ -21,6 +21,34 @@ static void	free_list_env(t_shell *shell)
 	free_list(shell->tokens);
 }
 
+static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
+{
+	if (exit_type == 2)
+	{
+		clear_history();
+		free_list_env(shell);
+		perror(print);
+		exit (2);
+	}
+	else if (exit_type == 4)
+	{
+		if (ft_strcmp(print, "no print") != 0)
+			perror(print);
+		clear_history();
+		free_list_env(shell);
+		exit(2);
+	}
+	else if (exit_type == 5)
+	{
+		if (ft_strcmp(print, "no print") != 0)
+			perror(print);
+		clear_history();
+		free_list(shell->tokens);
+		free_table(shell->tables);
+		exit(1);
+	}
+}
+
 static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 {
 	if (exit_type == 0)
@@ -41,18 +69,13 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 		free_list(shell->tokens);
 		free_table(shell->tables);
 	}
-	else if (exit_type == 2)
-	{
-		clear_history();
-		free_list_env(shell);
-		perror(print);
-		exit (2);
-	}
 	else if (exit_type == 3)
 	{
 		free_list(shell->tokens);
 		free_table(shell->tables);
 	}
+	else
+		free_all_ops2(shell, print, exit_type);
 }
 
 void	free_all(t_shell *shell, char *print, int exit_type)

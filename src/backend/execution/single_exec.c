@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 02:09:00 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 02:52:58 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,82 +47,83 @@ void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)
 	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+	free_d_str(hdoc);
 	ft_execve(exp_table.args[0], exp_table.args, shell);
 	dup2(in_fd, STDIN_FILENO);
+	close(in_fd);
 	if (t_type == D_LESS)
 		unlink(inp);
-}
-
-int	output_check(t_table table, int table_id, t_tokens *tokens)
-{
-	t_token_type	t_type;
-	int				fd;
-	char			*out;
-
-	fd = -1;
-	if (table.out[0] != NULL || table.append[0] != NULL)
-	{
-		t_type = out_o_app(table, table_id, tokens);
-		if (t_type == ERR_TYPE)
-			return (-127);
-		if (t_type == GREATER)
-		{
-			out = last_str(table.out);
-			fd = open(out, O_RDWR | O_CREAT | O_TRUNC, 0644);
-		}
-		if (t_type == D_GREATER)
-		{
-			out = last_str(table.append);
-			fd = open(out, O_RDWR | O_CREAT | O_APPEND, 0644);
-		}
-		if (fd == -1)
-			return (perror("output_check_open"), -127);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-		return (fd);
-	}
-	return (0);
 }
 
 int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 {
 	*out_fd = dup(STDOUT_FILENO);
-	if (expandor(shell, 0) == false)
-		return (1);
+	if (*out_fd == -1)
+		free_all(shell, "dup error", 127);
+	if (expandor_hdoc(shell, 0) == false)
+		return (close(*out_fd), 1);
+	*hdoc = NULL;
 	*hdoc = check_hdoc(shell->tables[0], shell);
 	if (g_sig_int == 1)
 	{
+		close(*out_fd);
+		free_all(shell, "no print", 3);
+		free(*hdoc);
 		g_sig_int = getpid();
 		return (1);
 	}
+	if (expandor(shell, 0) == false)
+		return (close(*out_fd), 1);
+	if (shell->tables[0].args[0] == NULL)
+		return (free_all(shell, "no print", 3), 1);
 	return (0);
+}
+
+void	single_exec_run(t_shell *shell, t_single_exec_var *var)
+{
+	if (shell->tables[0].args[0] == NULL )
+	{
+		if (var->is_out == 0)
+			close(var->out_fd);
+		return (free_all(shell, "no print", 3));
+	}
+	if (is_builtin(shell->tables[0].args[0]) == 1)
+	{
+		if (var->is_out == 0)
+			close(var->out_fd);
+		free_d_str(var->hdoc);
+		run_builtin(shell->tables[0], shell);
+	}
+	else if (shell->tables[0].args[1] != NULL || (shell->tables[0].in[0] \
+	== NULL && shell->tables[0].heredoc[0] == NULL))
+	{
+		free_d_str(var->hdoc);
+		if (var->is_out == 0)
+			close(var->out_fd);
+		ft_execve(shell->tables[0].args[0], shell->tables[0].args, shell);
+	}
+	else
+		inp_cmd_run(shell->tables[0], var->in, var->hdoc, shell);
 }
 
 void	single_exec(t_shell *shell)
 {
-	char	**hdoc;
-	char	*in;
-	int		out_fd;
-	int		is_out;
+	t_single_exec_var	var;
 
-	if (check_and_set(&out_fd, &hdoc, shell))
+	if (check_and_set(&(var.out_fd), &(var.hdoc), shell))
 		return ;
-	in = check_in(shell->tables[0]);
-	is_out = output_check(shell->tables[0], 0, shell->tokens);
-	if (is_out == -127)
+	var.in = check_in(shell->tables[0]);
+	var.is_out = output_check(shell->tables[0], 0, shell->tokens);
+	if (var.is_out != 0 && shell->tables[0].args[0] == NULL)
 	{
-		shell->exit_status = 1;
-		free_all(shell, "no print", 3);
-		return ;
+		dup2(var.out_fd, STDOUT_FILENO);
+		close(var.out_fd);
+		return (free_all(shell, "no print", 3));
 	}
-	if (is_builtin(shell->tables[0].args[0]) == 1)
-		run_builtin(shell->tables[0], shell);
-	else if (shell->tables[0].args[1] != NULL || (shell->tables[0].in[0] \
-	== NULL && shell->tables[0].heredoc[0] == NULL))
-		ft_execve(shell->tables[0].args[0], shell->tables[0].args, shell);
-	else
-		inp_cmd_run(shell->tables[0], in, hdoc, shell);
-	if (is_out != 0)
-		dup2(out_fd, STDOUT_FILENO);
-	close(out_fd);
+	if (var.is_out == -127)
+		return (shell->exit_status = 1, free_all(shell, "no print", 3));
+	single_exec_run(shell, &var);
+	if (var.is_out != 0)
+		dup2(var.out_fd, STDOUT_FILENO);
+	close(var.out_fd);
 }

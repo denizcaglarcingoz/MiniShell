@@ -27,6 +27,6 @@ void	run_builtin(t_table table, t_shell *shell)
 	else if (ft_strcmp(table.args[0], "export") == 0)
 		shell->exit_status = ft_export(table.args, shell);
 	else if (ft_strcmp(table.args[0], "unset") == 0)
-		shell->exit_status = ft_unset(&table, table.args, shell);
+		shell->exit_status = ft_unset(table.args, shell);
 	free_all(shell, "no exit", 3);
 }

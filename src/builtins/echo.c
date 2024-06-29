@@ -60,7 +60,7 @@ int	ft_echo(char **full_cmd, t_shell *shell)
 		while (full_cmd[i] && !ft_strcmp(full_cmd[i], "-n"))
 			i++;
 	}
-	while (full_cmd[i] && *(full_cmd[i]))
+	while (full_cmd[i])
 	{
 		ft_putstr_fd(full_cmd[i], 1);
 		i++;

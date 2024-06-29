@@ -101,18 +101,19 @@ int	export_loop(char **full_cmd, int i, t_shell *shell)
 	else if (!has_equal(full_cmd[i]))
 	{
 		shell->exported = add_env(shell->exported, full_cmd[i]);
+		if (shell->exported == NULL)
+		{
+			free_all_env(shell->env);
+			return (2);
+		}
 		ft_quicksort_params(shell->exported, 0, \
 		ft_matrix_len(shell->exported) - 1);
 	}
 	else
 	{
-		shell->env = add_env(shell->env, full_cmd[i]);
-		shell->exported = add_env(shell->exported, full_cmd[i]);
-		ft_quicksort_params(shell->exported, 0, \
-		ft_matrix_len(shell->exported) - 1);
+		if (no_equal_case(shell, full_cmd[i]))
+			return (2);
 	}
-	if (shell->env == NULL || shell->exported == NULL)
-		ret = 2;
 	return (ret);
 }
 
@@ -131,7 +132,13 @@ int	ft_export(char **full_cmd, t_shell *shell)
 		{
 			status = export_loop(full_cmd, i, shell);
 			if (status == 2)
-				free_all(shell, "export malloc failed", 127);
+			{
+				perror("env malloc failure\n");
+				clear_history();
+				free_list(shell->tokens);
+				free_table(shell->tables);
+				exit(1);
+			}
 		}
 	}
 	return (status);

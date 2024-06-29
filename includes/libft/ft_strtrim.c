@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 17:16:51 by jhotchki          #+#    #+#             */
-/*   Updated: 2023/09/18 15:56:34 by jhotchki         ###   ########.fr       */
+/*   Updated: 2024/06/28 02:36:01 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
 #include "libft.h"
 
 static int	isset(char c, const char *s)
@@ -25,31 +26,29 @@ static int	isset(char c, const char *s)
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	i;
 	size_t	j;
 	char	*s12;
 	char	*result;
+	int		t;
 
 	if (s1[0] == '\0')
 		return (ft_strdup(""));
 	if (!s1)
 		return (NULL);
+	t = 0;
+	while (s1[t] != '\0' && is_white_space(s1[t]))
+		t++;
+	if (s1[t] == '\0')
+		return (ft_strdup(""));
 	if (!set)
 		return (ft_strdup(s1));
 	s12 = (char *)s1;
-	i = 0;
 	j = ft_strlen(s12) - 1 ;
-	while (isset(s12[i], set) && s12[i])
-	{
-		i++;
-	}
+	while (isset(s12[t], set) && s12[t])
+		t++;
 	while (isset(s12[j], set) && s12[j])
-	{
 		j--;
-	}
-	j++;
-	result = ft_substr(s12, i, j - i);
-	return (result);
+	return (j++, result = ft_substr(s12, t, j - t), result);
 }
 /*
 int main()

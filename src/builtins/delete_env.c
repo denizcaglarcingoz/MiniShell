@@ -25,11 +25,11 @@ int	compare_names(char *name, char *var)
 		return (*name - *var);
 }
 
-static char	**del_env_helper(char **env, char **new_env, \
-	char *variable, int size)
+static char	**del_env_helper(char **env, char *variable, int size)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	**new_env;
 
 	i = -1;
 	j = 0;
@@ -61,12 +61,9 @@ char	**del_env(char **env, char *variable)
 	i = 0;
 	if (variable == NULL || *variable == '\0')
 		return (env);
-	new_env = NULL;
 	while (env[i] != NULL)
 		i++;
-	new_env = del_env_helper(env, new_env, variable, i);
-	if (!new_env)
-		return (NULL);
+	new_env = del_env_helper(env, variable, i);
 	free_envs(env, i);
 	return (new_env);
 }

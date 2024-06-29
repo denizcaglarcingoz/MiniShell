@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/15 00:32:24 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:22:31 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,11 @@ int	init_fork_ft(t_token_type *t_type, char **inp, char *in, char **hdoc)
 	return (fd);
 }
 
-void	wait_ft(t_token_type t_type, char *inp, int in_fd, int fd)
+void	wait_ft(t_token_type t_type, char *inp)
 {
 	wait(NULL);
-	dup2(in_fd, STDIN_FILENO);
 	if (t_type == D_LESS)
 		unlink(inp);
-	close(fd);
 	exit(0);
 }
 
@@ -45,7 +43,6 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, \
 t_shell *shell)
 {
 	int				fd;
-	int				in_fd;
 	int				pid;
 	char			*inp;
 	t_token_type	t_type;
@@ -55,15 +52,19 @@ t_shell *shell)
 	fd = init_fork_ft(&t_type, &inp, in, hdoc);
 	if (fd == -1)
 		return ;
-	in_fd = dup(STDIN_FILENO);
 	dup2(fd, STDIN_FILENO);
+	close(fd);
 	pid = fork();
 	if (pid == -1)
-		free_all(shell, "Fork Fail\n", 127);
+		(free_d_str(hdoc), free_all(shell, "Fork Fail\n", 127));
 	if (pid == 0)
 		ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
 	else
-		wait_ft(t_type, inp, in_fd, fd);
+	{
+		free_d_str(hdoc);
+		free_all(shell, "no print", 127);
+		wait_ft(t_type, inp);
+	}
 }
 
 void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
@@ -75,12 +76,18 @@ void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
 	shell->table_id = table_id;
 	if (is_builtin(table.args[0]) == 1)
 	{
+		free_d_str(hdoc);
 		run_builtin(table, shell);
+		free_all_env(shell->env);
+		free_all_env(shell->exported);
 		exit(shell->exit_status);
 	}
 	else if (table.args[1] != NULL || (table.in[0] == NULL \
 	&& table.heredoc[0] == NULL))
+	{
+		free_d_str(hdoc);
 		ft_pipe_execve(table.args[0], table.args, shell);
+	}
 	else
 		pipe_inp_cmd_run(table, in, hdoc, shell);
 }

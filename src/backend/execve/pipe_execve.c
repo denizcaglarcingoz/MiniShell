@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:16 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/15 00:35:19 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/28 23:58:20 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ char	**pipe_append_path(char **str, char *path_add)
 	int		i;
 
 	i = 0;
+	if (str == NULL)
+		return (NULL);
+	if (path_add == NULL)
+		return (NULL);
 	while (str[i])
 		i++;
 	new = (char **)malloc((i + 1) * sizeof(char *));
@@ -45,7 +49,8 @@ t_shell *shell)
 	i = 0;
 	while (all_paths[i] != NULL)
 	{
-		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0 && all_path_check(all_paths[i]) == 1)
+		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0
+			&& all_path_check(all_paths[i]) == 1)
 		{
 			if (execve(all_paths[i], argv, environ) == -1)
 			{
@@ -59,13 +64,23 @@ t_shell *shell)
 	if (argv[0] != NULL)
 		write(2, ": command not found\n", 20);
 	free_d_str(all_paths);
-	free_all(shell, NULL, 127);
+	free_all(shell, "no print", 127);
+}
+
+void	null_path(char *argv, t_shell *shell)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(argv, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	shell->exit_status = 127;
+	free_all(shell, "no print", 127);
 }
 
 void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
 {
 	char	**all_paths;
 	char	**paths;
+	char	*env;
 
 	if (argv[0] == NULL)
 		return ;
@@ -76,11 +91,12 @@ void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
 		exit(126);
 	}
 	if (access(path, X_OK) == 0)
-	{
 		if (execve(path, argv, shell->env) == -1)
 			free_all(shell, "Pipe Execve Error\n", 127);
-	}
-	paths = ft_split(ft_getenv("PATH", shell->env), ':');
+	env = ft_getenv("PATH", shell->env);
+	if (env == NULL)
+		return (null_path(argv[0], shell));
+	paths = ft_split(env, ':');
 	all_paths = pipe_append_path(paths, ft_strjoin("/", path));
 	free_d_str(paths);
 	if (all_paths == NULL)

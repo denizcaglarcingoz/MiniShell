@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:27:17 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:27:18 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 02:13:26 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,17 @@ t_tokens	*token_init(t_tokens *c_token, char *content, t_token_type type)
 {
 	t_tokens	*new_token;
 
+	new_token = NULL;
 	new_token = (t_tokens *)malloc(sizeof(t_tokens));
 	if (new_token == NULL)
 		return (NULL);
 	if (c_token != NULL)
 		c_token->next = new_token;
 	new_token->content = ft_strdup(content);
-	if (new_token->content == NULL)
-	{
-		free(new_token);
-		return (NULL);
-	}
 	new_token->type = type;
 	new_token->next = NULL;
+	if (new_token->content == NULL)
+		return (NULL);
 	return (new_token);
 }
 

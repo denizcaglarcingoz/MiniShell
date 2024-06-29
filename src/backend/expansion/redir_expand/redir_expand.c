@@ -6,23 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/15 00:48:57 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/27 22:43:18 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**word_split(char *new_exp, t_shell *shell)
-{
-	char	**new_d_exp;
-
-	new_d_exp = ft_split(new_exp, ' ');
-	if (new_d_exp == 0)
-		free_all(shell, "Malloc Error\n", 127);
-	return (new_d_exp);
-}
-
-void	exps_loop(char **to_exp, char ***new_d_exp, char **new_exp, \
+int	env_loop(char **to_exp, char ***new_d_exp, char **new_exp, \
 t_shell *shell)
 {
 	char	*temp;
@@ -37,19 +27,19 @@ t_shell *shell)
 			*new_exp = ft_strjoin(*new_exp, shell->env[i] + ft_strlen(*to_exp));
 			free(temp);
 			if (*new_exp == NULL)
-			{
-				free_d_str(*new_d_exp);
-				free_all(shell, "Malloc Error\n", 127);
-			}
-			*new_d_exp = word_split(*new_exp, shell);
+				return (free_d_str(*new_d_exp), free(to_exp), 1);
+			*new_d_exp = word_split(*new_exp);
+			if (*new_d_exp == NULL)
+				return (free(*new_exp), free(to_exp), 1);
 			break ;
 		}
 		i++;
 	}
 	free(*to_exp);
+	return (0);
 }
 
-char	**exps(char *to_exp, t_shell *shell)
+char	**exps(char *to_exp, t_shell *shell, char **new_content)
 {
 	char	**new_d_exp;
 	char	*new_exp;
@@ -58,49 +48,14 @@ char	**exps(char *to_exp, t_shell *shell)
 		return (NULL);
 	to_exp = ft_strjoin_char(to_exp, '=');
 	if (to_exp == NULL)
-		free_all(shell, "Malloc Error\n", 127);
+		(free_d_str(new_content), free_all(shell, "Malloc Error\n", 127));
 	new_exp = NULL;
 	new_d_exp = NULL;
-	exps_loop(&to_exp, &new_d_exp, &new_exp, shell);
+	if (env_loop(&to_exp, &new_d_exp, &new_exp, shell) == 1)
+		(free_d_str(new_content), free_all(shell, "Malloc Error\n", 127));
 	if (new_exp != NULL)
 		free(new_exp);
 	return (new_d_exp);
-}
-
-char **one_dollar(char **new_content, t_shell *shell, int *i)
-{
-	char **question_mark;
-
-	question_mark = (char **)malloc(sizeof(char *) * 2);
-	question_mark[0] = ft_strdup("$");
-	if (question_mark[0] == NULL)
-	{
-		free_d_str(new_content);
-		free_all(shell, "Malloc Error\n", 127);
-	}
-	new_content = add_new_content(new_content, question_mark, shell);
-	(*i)++;
-	return (new_content);
-}
-
-char	**empty_dollar_txt_d()
-{
-
-	char **dollar_specification;
-
-	dollar_specification = (char**)malloc(sizeof(char) * 2);
-	if (dollar_specification == NULL)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	dollar_specification[0] = (char*)malloc(sizeof(char) * 3);
-	dollar_specification[0][0] = '\0';
-	dollar_specification[0][1] = '$';
-	dollar_specification[0][2] = '\0';
-	dollar_specification[1] = NULL;
-
-	return (dollar_specification);
 }
 
 char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
@@ -116,21 +71,19 @@ char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 	{
 		(*i)++;
 		d_exp = dollar_question(shell);
-		new_content = add_new_content(new_content, d_exp, shell);
-		return (new_content);
+		return (add_new_content(new_content, d_exp, shell));
 	}
 	while (content[*i] && is_alfa_num(content[*i]) == true)
 	{
 		to_exp = ft_strjoin_char(to_exp, content[*i]);
-		if (to_exp == NULL)
-			to_exp_fail(new_content, content, shell);
+		if (to_exp == NULL && free_d_str_int(new_content) == 1)
+			free_all(shell, "Malloc Error\n", 127);
 		(*i)++;
 	}
-	d_exp = exps(to_exp, shell);
+	d_exp = exps(to_exp, shell, new_content);
 	if (d_exp == NULL)
-	 	d_exp = empty_dollar_txt_d();
-	new_content = add_new_content(new_content, d_exp, shell);
-	return (new_content);
+		d_exp = empty_dollar_txt_d();
+	return (add_new_content(new_content, d_exp, shell));
 }
 
 bool	redir_expand(char **content, t_shell *shell)
@@ -142,19 +95,20 @@ bool	redir_expand(char **content, t_shell *shell)
 	while (content[i])
 	{
 		if (content_check(content[i]) == false)
-		{
-			printf("minishell: syntax error\n");
-			return (false);
-		}
+			return (printf("minishell: syntax error\n"), false);
 		if (str_is_alfa_num(content[i]) == false)
 		{
 			exp = exp_check(content[i], shell);
 			if (exp[1] != 0 || (exp[0][0] == '\0' && exp[1] == NULL))
 			{
 				printf("bash: %s: ambiguous redirect\n", content[i]);
-				return (false);
+				return (free_d_str(exp), shell->exit_status = 1, false);
 			}
-			content[i] = exp[0];
+			free(content[i]);
+			content[i] = ft_strdup(exp[0]);
+			free_d_str(exp);
+			if (content[i] == NULL)
+				free_all(shell, "content malloc", 127);
 		}
 		i++;
 	}

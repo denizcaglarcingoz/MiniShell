@@ -48,7 +48,7 @@ t_table	*table_alloc(t_tokens *tokens, t_shell *shell)
 	}
 	table = malloc(sizeof(t_table) * (len + 2));
 	if (table == NULL)
-		free_all(shell, "table_alloc failure", 2);
+		free_all(shell, "table_alloc malloc failure", 2);
 	table[len + 1] = struct_null(table[len + 1]);
 	t_table_len_assign(table, len + 1);
 	return (table);

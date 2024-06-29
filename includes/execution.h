@@ -1,20 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir_utils.c                                      :+:      :+:    :+:   */
+/*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 21:56:35 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 22:05:28 by dcingoz          ###   ########.fr       */
+/*   Created: 2024/06/10 19:30:59 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/06/28 01:42:25 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef EXECUTION_H
+# define EXECUTION_H
 
-void	to_exp_fail(char **new_cntnt, char *cntnt, t_shell *shell)
+# include "minishell.h"
+# include "lexer.h"
+# include "parser.h"
+
+typedef struct s_pipe_exec_var
 {
-	free(cntnt);
-	free_d_str(new_cntnt);
-	free_all(shell, "Malloc Error\n", 127);
-}
+	int		pipefd[2];
+	int		prev_read_fd;
+	pid_t	pid;
+	int		i;
+	int		expandor_check;
+	int		hdoc_check;
+	int		std_out;
+	int		std_in;
+}	t_pipe_exec_var;
+
+typedef struct s_single_exec_var
+{
+	char	**hdoc;
+	char	*in;
+	int		out_fd;
+	int		is_out;
+}	t_single_exec_var;
+
+#endif

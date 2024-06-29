@@ -6,20 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 00:42:22 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/27 23:03:45 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 extern pid_t	g_sig_int;
-//basic implementation of heredoc
-// after returned the string
-// complexcases such as  cat << "EOF" or cat << 'EOF' or  
-// cat << EOF
-// >$HOME
-// >EOF
-// shold be handled
 
 char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len, t_shell *shell)
 {
@@ -54,7 +47,6 @@ int	hdoc_check(char **input, char *whole_inp, t_shell *shell)
 	{
 		if (whole_inp != NULL)
 			free(whole_inp);
-		free_all(shell, "no print", 0);
 		return (1);
 	}
 	errno = 0;
@@ -65,7 +57,6 @@ int	hdoc_check(char **input, char *whole_inp, t_shell *shell)
 			free(*input);
 		free_all(shell, "readline malloc", 127);
 	}
-	// printf("here\n");
 	return (0);
 }
 
@@ -96,4 +87,32 @@ char	*hdoc_inp(char *h_name, t_shell *shell)
 		free(input);
 	}
 	return (free(input), whole_inp);
+}
+
+char	**check_hdoc(t_table table, t_shell *shell)
+{
+	int		i;
+	char	*hdoc;
+	char	**hdocs;
+
+	if (table.heredoc[0] == NULL)
+		return (NULL);
+	i = 0;
+	hdoc = NULL;
+	while (table.heredoc[i] != NULL)
+	{
+		if (hdoc != NULL)
+			free(hdoc);
+		hdoc = hdoc_inp((table.heredoc)[i], shell);
+		i++;
+	}
+	hdocs = (char **)malloc(sizeof(char *) * 2);
+	if (!hdocs)
+	{
+		free(hdoc);
+		free_all(shell, "hdocs malloc error", 127);
+	}
+	hdocs[0] = hdoc;
+	hdocs[1] = NULL;
+	return (hdocs);
 }

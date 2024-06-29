@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:31:00 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/26 14:11:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ typedef struct s_table
 	int			job_len;
 	int			table_len;
 }	t_table;
-
-	//export  daria="cat deniz.txt  out.txt"
-
-	// cat "$daria" out.txt
-	// arg[0] = cat arg[1]= "cat deniz.txt  out.txt" arg[2]= out.txt
-
-	// cat $daria"asd"$deniz out.txt
-	// arg[0]= cat arg[1]= cat arg[2]= deniz.txt arg[3]= out.txt arg[4]=out.txt
 
 typedef struct s_table_content_len
 {

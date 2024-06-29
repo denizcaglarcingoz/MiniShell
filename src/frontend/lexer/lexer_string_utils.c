@@ -6,114 +6,45 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:27:21 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 16:31:39 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 00:06:04 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// f_quo means first_quo
+// d_qty means double quote quantity
+// s_qty means single quote quantity
 
-int	init_loop(char **content, int d_quo_qty, int quo_qty, int i)
+int	init_loop(char **inp, int d_qty, int s_qty, int i)
 {
-	// ft_putstr_fd("content: -", 1);
-	// ft_putstr_fd(*content, 1);
-	// ft_putchar_fd('-', 1);
-	// ft_putchar_fd('\n', 1);
-	int first_quo = 0;
+	int	f_quo;
 
-	while (1)
+	f_quo = 0;
+	while ((*inp)[i] != '\0')
 	{
-		if ((*content)[i] == '\0')
+		if ((*inp)[i] == '"')
+			if_dquo(&f_quo, &d_qty);
+		if ((*inp)[i] == '\'')
+			if_squo(&f_quo, &s_qty);
+		if (is_white_space((*inp)[i]) == true)
+			if (if_wspace(f_quo, s_qty, d_qty))
+				break ;
+		if (((*inp)[i] == '\'' || (*inp)[i] == '"') && (inp[0][i + 1] == '\0' \
+		|| is_white_space(inp[0][i + 1]) == true))
+			if (if_quo_null(f_quo, s_qty, d_qty, &i))
+				break ;
+		if (is_meta_char((*inp)[i]) == true)
+			if (if_meta(f_quo, s_qty, d_qty))
+				break ;
+		if ((*inp)[i] == '\0')
 			break ;
-		if ((*content)[i] == '"')
-		{
-			if (first_quo == 0)
-				first_quo = 1;
-			d_quo_qty++;
-			// if (d_quo_qty == 2)
-			// {
-			// 	d_quo_qty = 0;
-			// 	// if (quo_qty % 2 == 1)
-			// 	// {	
-			// 	// write(1, "BBBBBBBaa\n", 11);
-			// 	// 	quo_qty = 0;
-			// 	// }
-			// }
-		}
-		if ((*content)[i] == '\'')
-		{		
-			if (first_quo == 0)
-				first_quo = 2;	
-			quo_qty++;
-			// if (quo_qty == 2)
-			// {
-			// 	quo_qty = 0;
-			// }
-			// ft_putstr_fd("IN quo_qty: ", 1);
-			// ft_putnbr_fd(quo_qty, 1);
-			// ft_putstr_fd("\n", 1);
-		}
-		if (is_white_space((*content)[i]) == true)
-		{	
-			// ft_putstr_fd("contentchar: a", 1);
-			// ft_putchar_fd((*content)[i], 1);
-			// ft_putstr_fd("a\n", 1);
-			// ft_putstr_fd("Break d_quo_qty: ", 1);
-			// ft_putnbr_fd(d_quo_qty, 1);
-			// ft_putstr_fd("\n", 1);
-			// ft_putstr_fd("Break quo_qty: ", 1);
-			// ft_putnbr_fd(quo_qty, 1);
-			// ft_putstr_fd("\n", 1);
-			// ft_putstr_fd("Break first_quo: ", 1);
-			// ft_putnbr_fd(first_quo, 1);
-			// ft_putstr_fd("\n", 1);
-			if (first_quo == 2 && quo_qty % 2 == 0 && quo_qty != 0)
-				break ;
-			if (first_quo == 1 && d_quo_qty % 2 == 0 && d_quo_qty != 0)
-				break ;
-			if (first_quo == 0 && d_quo_qty % 2 == 0 && quo_qty % 2 == 0)
-				break ;
-		}
-		if (((*content)[i] == '\'' || (*content)[i] == '"') && (content[0][i + 1] == '\0' || is_white_space(content[0][i + 1]) == true))
-		{
-			
-			i++;
-			if (first_quo == 2 && quo_qty % 2 == 0 && quo_qty != 0)
-				break ;
-			if (first_quo == 1 && d_quo_qty % 2 == 0 && d_quo_qty != 0)
-				break ;
-			if (first_quo == 0 && d_quo_qty % 2 == 0 && quo_qty % 2 == 0)
-				break ;
-		}
-		
-		if (is_meta_char((*content)[i]) == true)
-		{	
-			// ft_putstr_fd("contentchar: a", 1);
-			// ft_putchar_fd((*content)[i], 1);
-			// ft_putstr_fd("a\n", 1);
-			// ft_putstr_fd("Meta d_quo_qty: ", 1);
-			// ft_putnbr_fd(d_quo_qty, 1);
-			// ft_putstr_fd("\n", 1);
-			// ft_putstr_fd("Meta quo_qty: ", 1);
-			// ft_putnbr_fd(quo_qty, 1);
-			// ft_putstr_fd("\n", 1);
-			// ft_putstr_fd("Meta first_quo: ", 1);
-			// ft_putnbr_fd(first_quo, 1);
-			// ft_putstr_fd("\n", 1);
-			if (first_quo == 2 && quo_qty % 2 == 0 && quo_qty != 0)
-				break ;
-			if (first_quo == 1 && d_quo_qty % 2 == 0 && d_quo_qty != 0)
-				break ;
-			if (first_quo == 0 && d_quo_qty % 2 == 0 && quo_qty % 2 == 0)
-				break ;
-			// write(1, "BBBBBBB\n", 8);
-		} 
 		i++;
 	}
 	return (i);
 }
 
-t_tokens	*token_init_string(t_tokens *c_token, char **content, \
+t_tokens	*token_init_string(t_tokens *c_token, char **inp, \
 t_token_type type)
 {
 	t_tokens	*new_token;
@@ -124,17 +55,20 @@ t_token_type type)
 		return (NULL);
 	if (c_token != NULL)
 		c_token->next = new_token;
-	i = init_loop(content, 0, 0, 0);
+	i = init_loop(inp, 0, 0, 0);
 	new_token->content = (char *)malloc(i + 1);
 	if (new_token->content == NULL)
+	{
+		free(new_token);
 		return (NULL);
-	ft_strlcpy(new_token->content, *content, i + 1);
+	}
+	ft_strlcpy(new_token->content, *inp, i + 1);
 	while (i > 0)
 	{
-		(*content)++;
+		(*inp)++;
 		i--;
 	}
-	(*content)--;
+	(*inp)--;
 	new_token->type = type;
 	new_token->next = NULL;
 	return (new_token);

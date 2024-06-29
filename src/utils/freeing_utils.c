@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:33:17 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 02:19:43 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ void	free_t_content_alloc_and_table(t_table *table, int i)
 		if (table[i].heredoc)
 			free_matrix(table[i].heredoc, ft_matrix_len(table[i].heredoc));
 	}
-	free(table);
-	table = NULL;
 }
 
 void	free_content_first_allocs_only(t_table *table)

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:27:08 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:27:09 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 02:14:46 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ t_table	*table_init(t_tokens *tokens, t_table *table, t_shell *shell)
 		if (t_content_alloc(tokens, &table[i]) == -1)
 		{
 			free_t_content_alloc_and_table(table, i);
+			free_all(shell, "t_content_alloc malloc failure", 4);
 			return (NULL);
 		}
 		tokens = table_content_init(tokens, table, shell, i);
