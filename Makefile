@@ -6,7 +6,7 @@ OBJ_DIR = ./obj
 INC_DIR = ./includes
 BT_DIR = ./builtins
 
-INCLUDES = ./inlcudes/execution.h ./inlcudes/lexer.h ./inlcudes/minishell.h ./includes/parser.h
+INCLUDES = ./includes/execution.h ./includes/lexer.h ./includes/minishell.h ./includes/parser.h
 
 SRCS =	./src/backend/execution/exec_utils.c\
 		./src/backend/execution/execution.c \

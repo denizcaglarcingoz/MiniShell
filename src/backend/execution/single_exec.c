@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 14:10:37 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 18:00:37 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,9 @@ void	single_exec_run(t_shell *shell, t_single_exec_var *var)
 		free_d_str(var->hdoc);
 		run_builtin(shell->tables[0], shell);
 	}
-	else if (shell->tables[0].args[1] != NULL || (shell->tables[0].in[0] \
-	== NULL && shell->tables[0].heredoc[0] == NULL))
+	else if ((shell->tables[0].args[1] != NULL \
+	&& shell->tables[0].in[0] == NULL) \
+	|| (shell->tables[0].in[0] == NULL && shell->tables[0].heredoc[0] == NULL))
 	{
 		free_d_str(var->hdoc);
 		if (var->is_out == 0)
