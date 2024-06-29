@@ -1,1 +1,16 @@
->is this good
+s
+s
+s
+s
+s
+a
+a
+a
+a
+a
+a
+a
+cat << asd >> out.txt 
+d
+d
+d

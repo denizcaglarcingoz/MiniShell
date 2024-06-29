@@ -6,33 +6,52 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:27 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 23:59:26 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/27 21:47:30 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**n_content_alloc_fill(char **content, int k, t_shell *shell)
+{
+	char	**new_content;
+	int		i;
+
+	i = 0;
+	new_content = (char **)malloc(sizeof(char *) * (k + 1));
+	if (new_content == NULL)
+		(free_d_str(content), free_all(shell, "New C Malloc Error", 127));
+	new_content[k] = NULL;
+	k = 0;
+	while (content[i])
+	{
+		if (content[i][0] == '\0')
+		{
+			if (content[i][1] == '"')
+				empt_str_dup(content, &new_content, &k, shell);
+		}
+		else
+			n_content_dup(content, &new_content, &k, shell);
+		i++;
+	}
+	return (new_content);
+}
 
 int	check_expand_content(char ***content, int *i, t_shell *shell)
 {
 	int		exp_len;
 	char	**exp;
 
-	exp = exp_check((*content)[*i], shell);//protect here
-	*content = split_join((*content), exp, *i, shell);//pro ret null from content_checker on fail
+	exp = exp_check((*content)[*i], shell);
+	*content = split_join((*content), exp, *i, shell);
 	exp_len = 0;
-
-	
-	// -----------
 	while (exp[exp_len] != NULL)
 	{
 		free(exp[exp_len]);
 		exp_len++;
 	}
-
-	
 	free(exp);
 	*i = *i + exp_len - 1;
-	
 	return (0);
 }
 
@@ -49,82 +68,17 @@ char	**content_checker(char ***ref_content, t_shell *shell)
 	{
 		if (content_check(content[i]) == false)
 		{
-			printf("minishell: syntax error\n");
 			*ref_content = content;
-			return (NULL);
+			return (printf("minishell: syntax error\n"), (NULL));
 		}
 		if (str_is_alfa_num(content[i]) == false)
 		{
-			if (check_expand_content(&content, &i, shell))
-				return (NULL);
+			check_expand_content(&content, &i, shell);
 			j++;
 		}
 		i++;
 	}
-	// -----------
-	// int k = 0;
-
-	// write(1, "after split join\n", 17);
-	
-	// while ((content)[k] != NULL)
-	// {
-	// 	write(1, &((content)[0][0]), 1);
-	// 	write(1, "1 ", 2);
-	// 	if ((content)[0][1] != '\0')
-	// 	{
-	// 		write(1, "2", 1);
-	// 		write(1, &((content)[0][1]), 1);
-	// 		write(1, "2 ", 2);
-	// 		if ((content)[0][2] == '\0')
-	// 		{
-	// 			write(1, "3", 1);
-	// 			write(1, &(content[0][2]), 1);
-	// 			write(1, "3\n", 2);
-	// 		}
-	// 	}	
-	// 	k++;
-	// }
-
-	// -----------
 	return (content);
-}
-
-char	**n_content_alloc_fill(char **content, int k)
-{
-	char	**new_content;
-	int		i;
-
-	i = 0;
-	new_content = (char **)malloc(sizeof(char *) * (k + 1));//check pro here
-	// ft_putchar_fd('k', 1);
-	// ft_putnbr_fd(k, 1);
-	// ft_putchar_fd('\n', 1);
-	if (new_content == NULL)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	new_content[k] = NULL;
-	k = 0;
-	while (content[i])
-	{
-		if (content[i][0] == '\0')
-		{
-			if (content[i][1] == '"')
-			{
-				// write(1, "here\n", 5);
-				new_content[k] = ft_strdup("");
-				k++;
-			}
-		}
-		else	
-		{
-			new_content[k] = ft_strdup(content[i]);//pro free all prev, use free matrix func.
-			k++;
-		}
-		i++;
-	}
-	return (new_content);
 }
 
 bool	arg_expand(char ***ref_content, t_shell *shell)
@@ -145,31 +99,10 @@ bool	arg_expand(char ***ref_content, t_shell *shell)
 	}
 	k = 0;
 	len_loop_2(content, &k);
-	// if (content[0][0] == '\0')
-	// {
-	// 	write(1, "contetn", 6);
-	// 	write(1, &(content[0][0]), 1);
-	// 	write(1, "1\n", 2);
-	// 	if (content[0][1] != '\0')
-	// 	{
-	// 		write(1, "content", 6);
-	// 		write(1, &(content[0][1]), 1);
-	// 		write(1, "2\n", 2);
-	// 		if (content[0][2] == '\0')
-	// 		{
-	// 			write(1, "content", 6);
-	// 			write(1, &(content[0][2]), 1);
-	// 			write(1, "3\n", 2);
-	// 		}
-	// 	}
-	// }
-	// ft_putchar_fd('k', 1);
-	// ft_putnbr_fd(k, 1);
-	// ft_putchar_fd('\n', 1);
-	new_content = n_content_alloc_fill(content, k);
+	new_content = n_content_alloc_fill(content, k, shell);
 	if (!new_content)
 		return (false);
-	free_content(content);
+	free_d_str(content);
 	*ref_content = new_content;
 	return (true);
 }

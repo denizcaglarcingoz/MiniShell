@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:21 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 23:56:19 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/26 20:36:11 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,12 @@ void	len_loop_2(char **content, int *k)
 	{
 		if (content[i][0] == '\0')
 		{
-			// ft_putchar_fd('I', 1);
-			// ft_putnbr_fd(i, 1);
-			// ft_putchar_fd(content[i][1], 1);
-			// ft_putchar_fd('\n', 1);
 			if (content[i][1] == '"')
-			{
-				// write(1, "XERE\n", 5);	
 				(*k)++;
-			}
 		}
 		else
-		{	
 			(*k)++;
-		}
 		i++;
-		// write(1, "HERE\n", 5);
 	}
 }
 
@@ -65,4 +55,30 @@ void	free_content(char **content)
 	}
 	free(content);
 	content = NULL;
+}
+
+void	empt_str_dup(char **content, char ***new_content, \
+int *k, t_shell *shell)
+{
+	(*new_content)[*k] = ft_strdup("");
+	if ((*new_content)[*k] == NULL)
+	{
+		free_d_str(content);
+		free_d_str_till(*new_content, *k - 1);
+		free_all(shell, "New C Malloc Error", 127);
+	}
+	(*k)++;
+}
+
+void	n_content_dup(char **content, char ***new_content, \
+int *k, t_shell *shell)
+{
+	(*new_content)[*k] = ft_strdup(content[*k]);
+	if ((*new_content)[*k] == NULL)
+	{
+		free_d_str(content);
+		free_d_str_till(*new_content, *k - 1);
+		free_all(shell, "New C Malloc Error", 127);
+	}
+	(*k)++;
 }

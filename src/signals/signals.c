@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:50 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/12 16:17:49 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/27 22:32:37 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 extern pid_t	g_sig_int;
 
-void	sigint_handler_int(int signum)
+void	sigint_handler_quit(int signum)
 {
 	(void)signum;
-	if (g_sig_int != getpid() && kill(g_sig_int, SIGUSR1) == 0)
-		return ;
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	printf("Quit (core dumped or did it ;) )\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
+	kill(g_sig_int, SIGTERM);
+	g_sig_int = 5;
 }
 
 void	signal_handler(int signum, siginfo_t *info, void *context)

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 02:12:07 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 01:43:18 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token_type	in_o_hdoc(t_tokens *tokens, int table_id)
 		return (NO_TYPE);
 	i = 0;
 	if (first->type == PIPE)
-			first = first->next;
+		first = first->next;
 	while (first)
 	{
 		if (first->type == LESS)
@@ -38,7 +38,6 @@ t_token_type	in_o_hdoc(t_tokens *tokens, int table_id)
 	else
 		return (D_LESS);
 }
-
 
 int	create_files(t_table exp_table)
 {

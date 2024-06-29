@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 16:23:27 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 02:19:57 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,16 @@
 
 pid_t	g_sig_int;
 
+void	trims(char **init_in, t_shell *shell)
+{
+	shell->input = ft_strtrim(*init_in, " ");
+	if (shell->input == NULL)
+		trim_error_exit(*init_in, shell);
+}
+
 static void	loop_items(t_shell *shell, char *init_in)
 {
-	shell->input = ft_strtrim(init_in, " ");
-	if (shell->input == NULL)
-		trim_error_exit(init_in, shell);
+	trims(&init_in, shell);
 	if (ft_strcmp(shell->input, "") != 0)
 		add_history(init_in);
 	free(init_in);
@@ -50,7 +55,8 @@ void	shell_loop(t_shell *shell)
 	shell->tables = NULL;
 	while (1)
 	{
-		signal(SIGINT, sigint_handler_int);
+		g_sig_int = 0;
+		usleep(1000);
 		signal(SIGINT, sigint_handler_int);
 		errno = 0;
 		init_in = NULL;
@@ -78,7 +84,7 @@ int	main(int ac, char **av)
 	sig.sa_flags = SA_SIGINFO | SA_RESTART;
 	sigemptyset(&sig.sa_mask);
 	sigaction(SIGUSR1, &sig, 0);
-	g_sig_int = getpid();
+	g_sig_int = 0;
 	(void)av;
 	signal(SIGQUIT, SIG_IGN);
 	if (ac != 1)

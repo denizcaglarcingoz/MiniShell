@@ -6,25 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:30 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/14 23:54:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:44:32 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**join_malloc(char **content, char **exp, t_shell *shell, int join_len)
-{
-	char	**joined;
-
-	joined = (char **)malloc(sizeof(char *) * (join_len + 1));
-	if (joined == NULL)
-	{
-		free_d_str(content);
-		free_d_str(exp);
-		free_all(shell, "Malloc Error\n", 127);
-	}
-	return (joined);
-}
 
 char	**join_dup(char **joined, int *join, char **dup, int dup_int)
 {
@@ -33,10 +19,7 @@ char	**join_dup(char **joined, int *join, char **dup, int dup_int)
 		if (dup[dup_int][0] == '\0')
 		{
 			if (dup[dup_int][1] == '"')
-			{	
-				// write(1, "empty_d_quo_txt\n", 16);
 				joined[*join] = empty_d_quo_txt();
-			}
 			else if (dup[dup_int][1] == '$')
 				joined[*join] = empty_dollar_txt_s();
 		}
@@ -48,10 +31,34 @@ char	**join_dup(char **joined, int *join, char **dup, int dup_int)
 	return (joined);
 }
 
+int	empty_assign(char **content, char **exp, int *k, char **joined)
+{
+	if (content[*k][1] == '"')
+	{
+		joined[*k] = empty_d_quo_txt();
+		if (joined[*k] == NULL)
+		{
+			free_d_str(exp);
+			free_d_str_till(joined, *k - 1);
+			return (1);
+		}
+	}
+	else if (content[*k][1] == '$')
+	{
+		joined[*k] = empty_dollar_txt_s();
+		if (joined[*k] == NULL)
+		{
+			free_d_str(exp);
+			free_d_str_till(joined, *k - 1);
+			return (1);
+		}
+	}
+	return (0);
+}
+
 char	**join_init(char **content, char **exp, int add_split_from, \
 char **joined)
 {
-	int		i;
 	int		k;
 
 	k = 0;
@@ -59,21 +66,33 @@ char **joined)
 	{
 		if (content[k][0] == '\0')
 		{
-			if (content[k][1] == '"')
-			{	
-				joined[k] = empty_d_quo_txt();
-			}
-			else if (content[k][1] == '$')
-				joined[k] = empty_dollar_txt_s();
+			if (empty_assign(content, exp, &k, joined))
+				return (NULL);
 		}
 		else
+		{
 			joined[k] = ft_strdup(content[k]);
+			if (joined[k] == NULL)
+				return (free_d_str(exp), free_d_str_till(joined, k - 1), NULL);
+		}
 		k++;
 	}
-	i = 0;
-	join_dup(joined, &k, exp, i);
+	join_dup(joined, &k, exp, 0);
 	join_dup(joined, &k, content, ++add_split_from);
 	joined[k] = NULL;
+	return (joined);
+}
+
+char	**join_malloc(char **exp, t_shell *shell, int join_len)
+{
+	char	**joined;
+
+	joined = (char **)malloc(sizeof(char *) * (join_len + 1));
+	if (joined == NULL)
+	{
+		free_d_str(exp);
+		free_all(shell, "Malloc Error\n", 127);
+	}
 	return (joined);
 }
 
@@ -90,29 +109,10 @@ t_shell *shell)
 		return (exp);
 	content_len = d_str_len(content) - 1;
 	exp_len = d_str_len(exp);
-	// printf("joined_len: %d\n", exp_len + content_len);
-	joined = join_malloc(content, exp, shell, content_len + exp_len);
+	joined = join_malloc(exp, shell, content_len + exp_len);
 	joined = join_init(content, exp, add_split_from, joined);
+	if (joined == NULL)
+		free_all(shell, "Malloc Error\n", 127);
 	free_d_str(content);
-	// print_d_str(joined);
-	
-	// if (joined[0][0] == '\0')
-	// {
-	// 	write(1, "joined", 6);
-	// 	write(1, &(joined[0][0]), 1);
-	// 	write(1, "1\n", 2);
-	// 	if (joined[0][1] != '\0')
-	// 	{
-	// 		write(1, "joined", 6);
-	// 		write(1, &(joined[0][1]), 1);
-	// 		write(1, "2\n", 2);
-	// 		if (joined[0][2] == '\0')
-	// 		{
-	// 			write(1, "joined", 6);
-	// 			write(1, &(joined[0][2]), 1);
-	// 			write(1, "3\n", 2);
-	// 		}
-	// 	}
-	// }
 	return (joined);
 }
