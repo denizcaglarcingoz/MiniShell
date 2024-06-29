@@ -6,13 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 23:03:45 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 14:11:21 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern pid_t	g_sig_int;
+// extern pid_t	g_sig_int;
 
 char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len, t_shell *shell)
 {

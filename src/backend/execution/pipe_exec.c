@@ -6,13 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 02:46:04 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 14:11:28 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern pid_t	g_sig_int;
+// extern pid_t	g_sig_int;
 
 void	child_pro_helper(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 {

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 01:23:01 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 14:14:44 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define BUFFER_SIZE 4084
 # define L_MAX_STR "9223372036854775807"
 # define L_MIN_STR "-9223372036854775808"
+
+extern pid_t	g_sig_int;
 
 typedef struct s_shell
 {

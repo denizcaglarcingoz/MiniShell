@@ -6,13 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 02:52:58 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 14:10:37 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_sig_int;
+// extern int	g_sig_int;
 
 char	*temp_hdoc(char *hdoc)
 {

@@ -6,13 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:50 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 22:32:26 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 14:08:16 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern pid_t	g_sig_int;
+// extern pid_t	g_sig_int;
 
 void	sigint_handler_int(int signum)
 {

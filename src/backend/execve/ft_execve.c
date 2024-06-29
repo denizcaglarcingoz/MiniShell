@@ -6,13 +6,13 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 21:05:10 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/06/29 14:10:21 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern pid_t	g_sig_int;
+// extern pid_t	g_sig_int;
 
 char	**app_assign_new(char **new, char **str, char *path_add)
 {
