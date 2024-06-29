@@ -1,3 +1,5 @@
+
+
 EXECUTABLE := minishell
 SRC_DIR = ./src
 OBJ_DIR = ./obj
@@ -117,16 +119,21 @@ $(LIBFT_ARCH):
 	$(MAKE) -C $(LIBFT_PATH)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(@D)
 	$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
+	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(LIBFT_PATH) clean
 	$(RM) $(OBJ)
 
 fclean: clean
+	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(LIBFT_PATH) fclean
 	$(RM) $(EXECUTABLE)
 
 re: fclean all
+
+
 
 .PHONY: all clean fclean re
