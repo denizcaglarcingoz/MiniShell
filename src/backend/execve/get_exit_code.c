@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:15:43 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 14:44:24 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 17:48:07 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,13 @@ void	get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec)
 			else
 				shell->exit_status = 127;
 		}
+		i++;
+	}
+	i = 0;
+	while (i < shell->table_len)
+	{
+		if (shell->tables[i].heredoc[0] != NULL)
+			unlink("temp_hdoc");
 		i++;
 	}
 }
