@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 17:34:11 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 18:29:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	expansion_ok_run(t_shell *shell, t_pipe_exec_var *exec)
 	exec->pid = pipe_fork(shell, exec->pipefd);
 	if (exec->pid == 0)
 	{
+		free(exec->str_pid);
 		close(exec->std_in);
 		close(exec->std_out);
 		child_pro(shell, exec->pipefd, exec->prev_read_fd, exec->i);

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:16 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 17:17:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 18:22:01 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	null_path(char *argv, t_shell *shell)
 	if (shell->table_len > 1)
 		free_all(shell, "no print", 127);
 	if (shell->table_len == 1)
-		free_all(shell, "no print", 3);;
+		free_all(shell, "no print", 3);
 }
 
 void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
