@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:15:43 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 19:59:54 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 14:44:24 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,13 @@ void	get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec)
 		}
 		i++;
 	}
+}
+
+void	path_run_signals(pid_t pid, t_shell *shell)
+{
+	signal(SIGQUIT, sigint_handler_quit);
+	signal(SIGINT, sigint_handler_int_exec);
+	g_sig_int = pid;
+	get_exit_code(shell, pid);
+	signal(SIGQUIT, SIG_IGN);
 }

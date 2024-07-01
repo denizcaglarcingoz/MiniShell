@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/26 17:22:31 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 13:40:57 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
 		free_all_env(shell->exported);
 		exit(shell->exit_status);
 	}
-	else if (table.args[1] != NULL || (table.in[0] == NULL \
-	&& table.heredoc[0] == NULL))
+	else if ((table.args[1] != NULL || table.heredoc[0] == NULL) \
+	&& table.in[0] == NULL)
 	{
 		free_d_str(hdoc);
 		ft_pipe_execve(table.args[0], table.args, shell);

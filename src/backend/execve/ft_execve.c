@@ -6,13 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 14:10:21 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 14:45:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// extern pid_t	g_sig_int;
 
 char	**app_assign_new(char **new, char **str, char *path_add)
 {
@@ -77,13 +75,13 @@ char **environ, t_shell *shell)
 			if (pid == -1)
 				free_d_all(all_paths, "execve fail\n", shell, 127);
 			if (pid == 0)
-				(execve(all_paths[i], argv, environ),
-					free_d_all(all_paths, "execve fail\n", shell, 127));
-			signal(SIGQUIT, sigint_handler_quit);
-			signal(SIGINT, sigint_handler_int_exec);
-			g_sig_int = pid;
-			get_exit_code(shell, pid);
-			signal(SIGQUIT, SIG_IGN);
+			{
+				if (shell->in_fd != -1)
+					close(shell->in_fd);
+				execve(all_paths[i], argv, environ);
+				free_d_all(all_paths, "execve fail\n", shell, 127);
+			}
+			path_run_signals(pid, shell);
 			return (free_d_all(all_paths, "", shell, 3), 1);
 		}
 	}
@@ -116,14 +114,7 @@ char	*ft_execve(char *first_arg, char **argv, t_shell *shell)
 			return (wait(NULL), NULL);
 	path = ft_getenv("PATH", shell->env);
 	if (path == NULL)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		shell->exit_status = 127;
-		free_all(shell, "no print\n", 3);
-		return (NULL);
-	}
+		return (null_path(argv[0], shell), NULL);
 	all_paths = append_path(ft_split(ft_getenv("PATH", shell->env), ':'), \
 	ft_strjoin("/", first_arg));
 	if (all_paths == NULL)

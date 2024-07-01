@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 19:18:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 14:44:46 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_shell
 	t_tokens	*tokens;
 	char		**hdoc;
 	int			table_id;
+	int			in_fd;
 }	t_shell;
 
 /****SHELL****/
@@ -170,8 +171,10 @@ void			free_d_all(char **all_paths,
 					char *msg, t_shell *shell, int type);
 void			get_exit_code(t_shell *shell, pid_t pid);
 void			get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec);
+void			path_run_signals(pid_t pid, t_shell *shell);
 int				all_path_check(char *all_path);
 char			*it_is_directory(char *first_arg, t_shell *shell);
+void			null_path(char *argv, t_shell *shell);
 
 /***BUILT-INS****/
 
