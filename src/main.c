@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 15:54:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 19:00:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,19 @@ static void	loop_items(t_shell *shell, char *init_in)
 	execution(shell);
 }
 
-static void	else_isatty(char **init_in)
-{
-	char	*line;
+// static void	else_isatty(char **init_in)
+// {
+// 	char	*line;
 
-	errno = 0;
-	line = get_next_line(fileno(stdin));
-	if (line != 0)
-		*init_in = ft_strtrim(line, "\n");
-	free(line);
-}
+// 	errno = 0;
+// 	line = get_next_line(fileno(stdin));
+// 	if (line != 0)
+// 		*init_in = ft_strtrim(line, "\n");
+// 	free(line);
+// }
+// if (isatty(fileno(stdin)))
+// else
+	// else_isatty(&init_in);
 
 void	shell_loop(t_shell *shell)
 {
@@ -60,10 +63,7 @@ void	shell_loop(t_shell *shell)
 		signal(SIGINT, sigint_handler_int);
 		errno = 0;
 		init_in = NULL;
-		if (isatty(fileno(stdin)))
-			init_in = readline("minishell$ ");
-		else
-			else_isatty(&init_in);
+		init_in = readline("minishell$ ");
 		if (errno == 4)
 			errno = 0;
 		if (errno != 0)
