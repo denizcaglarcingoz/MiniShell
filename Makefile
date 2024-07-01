@@ -89,7 +89,7 @@ SRCS =	./src/backend/execution/exec_utils.c\
 
 
 OBJ = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-CFLAGS := -Wall -Wextra -Werror -fPIE -Iincludes
+CFLAGS := -Wall -Wextra -Werror -Iincludes
 
 RM := rm -f
 
@@ -103,8 +103,6 @@ OBS := $(SRCS:.c=.o)
 
 MAKEFLAGS += --no-print-directory
 
-
-.SILENT:
 
 all: $(LIBFT_ARCH) $(EXECUTABLE)
 

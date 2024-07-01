@@ -6,7 +6,7 @@
 #    By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/11 09:14:16 by jhotchki          #+#    #+#              #
-#    Updated: 2024/05/14 17:11:46 by dcingoz          ###   ########.fr        #
+#    Updated: 2024/07/01 20:23:56 by dcingoz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ SRCS := ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strl
 BONUS_SRCS := ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c \
 	ft_lstiter.c ft_lstmap.c 
 
-CFLAGS := -Wall -Wextra -Werror -fPIE -g -Iincludes
+CFLAGS := -Wall -Wextra -Werror -g -Iincludes
 
 CC := cc
 
