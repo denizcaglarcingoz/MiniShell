@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:16 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/28 23:58:20 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 17:17:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ void	null_path(char *argv, t_shell *shell)
 	ft_putstr_fd(argv, 2);
 	ft_putstr_fd(": command not found\n", 2);
 	shell->exit_status = 127;
-	free_all(shell, "no print", 127);
+	if (shell->table_len > 1)
+		free_all(shell, "no print", 127);
+	if (shell->table_len == 1)
+		free_all(shell, "no print", 3);;
 }
 
 void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
