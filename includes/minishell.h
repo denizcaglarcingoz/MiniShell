@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 14:44:46 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 15:54:44 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void			init_env(t_shell *shell);
 void			token_list_error_exit(t_shell *shell);
 void			readline_error_exit(char *init_in, t_shell *shell);
 void			trim_error_exit(char *init_in, t_shell *shell);
-void			control_d_exit(t_shell *shell);
+void			control_d_exit(t_shell *shell, char *init_in);
 void			free_envs(char **env, int i);
 void			free_all_env(char **env);
 void			free_list(t_tokens *tokens);

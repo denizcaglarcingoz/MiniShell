@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 19:58:57 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 15:54:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	shell_loop(t_shell *shell)
 			break ;
 		loop_items(shell, init_in);
 	}
-	control_d_exit(shell);
+	control_d_exit(shell, init_in);
 }
 
 int	main(int ac, char **av)

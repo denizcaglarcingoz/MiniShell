@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:15 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 17:41:43 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/01 16:05:37 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	readline_error_exit(char *init_in, t_shell *shell)
 {
 	perror(strerror(errno));
 	clear_history();
-	free(init_in);
+	if (init_in != NULL)
+		free(init_in);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
 	ft_putstr_fd("Readline Errno: ", 2);
@@ -46,9 +47,11 @@ void	trim_error_exit(char *init_in, t_shell *shell)
 	exit(EXIT_FAILURE);
 }
 
-void	control_d_exit(t_shell *shell)
+void	control_d_exit(t_shell *shell, char *init_in)
 {
 	clear_history();
+	if (init_in != NULL)
+		free(init_in);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
 	// printf("exit\n");
