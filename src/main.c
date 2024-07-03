@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 19:00:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 08:35:27 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	shell_loop(t_shell *shell)
 	shell->tables = NULL;
 	while (1)
 	{
-		g_sig_int = 0;
-		usleep(1000);
+		signal(SIGINT, sigint_handler_sigint);
+		kill(shell->pid, SIGINT);
 		signal(SIGINT, sigint_handler_int);
 		errno = 0;
 		init_in = NULL;
@@ -75,16 +75,26 @@ void	shell_loop(t_shell *shell)
 	control_d_exit(shell, init_in);
 }
 
+int	ft_getpid(void)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		exit(1);
+	if (pid == 0)
+		exit(0);
+	return (pid);
+}
+
 int	main(int ac, char **av)
 {
 	t_shell				shell;
-	struct sigaction	sig;
 
-	sig.sa_sigaction = signal_handler;
-	sig.sa_flags = SA_SIGINFO | SA_RESTART;
-	sigemptyset(&sig.sa_mask);
-	sigaction(SIGUSR1, &sig, 0);
-	g_sig_int = 0;
+	ft_putstr_fd("Bash by Shell of MiniTeam\n", 1);
+	signal(SIGPIPE, sigpipe_handler);
+	signal(SIGUSR1, sigusr1_handler);
+	shell.pipe_hdoc_sig = 0;
 	(void)av;
 	signal(SIGQUIT, SIG_IGN);
 	if (ac != 1)
@@ -93,6 +103,7 @@ int	main(int ac, char **av)
 		exit(EXIT_FAILURE);
 	}
 	init_env(&shell);
+	shell.pid = ft_getpid();
 	shell_loop(&shell);
 	return (0);
 }

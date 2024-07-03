@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 15:45:10 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 06:26:00 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ char **environ, t_shell *shell)
 				free_d_all(all_paths, "execve fail\n", shell, 127);
 			if (pid == 0)
 			{
+				signal(SIGQUIT, sigint_handler_quit);
 				if (shell->in_fd != -1)
 					close(shell->in_fd);
 				execve(all_paths[i], argv, environ);

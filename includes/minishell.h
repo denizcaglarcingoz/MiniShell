@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 15:54:44 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 07:45:17 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ typedef struct s_shell
 	t_table		*tables;
 	t_tokens	*tokens;
 	char		**hdoc;
+	int			pipe_hdoc_sig;
 	int			table_id;
 	int			in_fd;
+	int			pid;
 }	t_shell;
 
 /****SHELL****/
@@ -175,6 +177,7 @@ void			path_run_signals(pid_t pid, t_shell *shell);
 int				all_path_check(char *all_path);
 char			*it_is_directory(char *first_arg, t_shell *shell);
 void			null_path(char *argv, t_shell *shell);
+void			ft_access_execve(char *path, char **argv, t_shell *shell);
 
 /***BUILT-INS****/
 
@@ -229,7 +232,9 @@ void			signal_handler(int signum, siginfo_t *info, void *context);
 void			sigint_handler_child(int signum);
 void			sigint_handler_int_exec(int signum);
 void			sigint_handler_quit(int signum);
-
+void			sigpipe_handler(int signum);
+void			sigusr1_handler(int signum);
+void			sigint_handler_sigint(int signum);
 /***TESTING***/
 int				print_tables(t_table *table);
 void			print_tokens(t_tokens *tokens);

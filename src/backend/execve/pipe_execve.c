@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:16 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 18:22:01 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 06:56:40 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,10 @@ t_shell *shell)
 		if (access(all_paths[i], X_OK) == 0 && ft_strlen(argv[0]) > 0
 			&& all_path_check(all_paths[i]) == 1)
 		{
-			if (execve(all_paths[i], argv, environ) == -1)
-			{
-				free_d_str(all_paths);
-				free_all(shell, "Pipe Execve Error\n", 127);
-			}
+			signal(SIGQUIT, sigint_handler_quit);
+			execve(all_paths[i], argv, environ);
+			free_d_str(all_paths);
+			free_all(shell, "Pipe Execve Error\n", 127);
 		}
 		i++;
 	}
@@ -94,8 +93,7 @@ void	ft_pipe_execve(char *path, char **argv, t_shell *shell)
 		exit(126);
 	}
 	if (access(path, X_OK) == 0)
-		if (execve(path, argv, shell->env) == -1)
-			free_all(shell, "Pipe Execve Error\n", 127);
+		ft_access_execve(path, argv, shell);
 	env = ft_getenv("PATH", shell->env);
 	if (env == NULL)
 		return (null_path(argv[0], shell));

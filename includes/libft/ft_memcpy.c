@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:52:14 by jhotchki          #+#    #+#             */
-/*   Updated: 2023/09/19 07:51:03 by jhotchki         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:40:49 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int main()
         char str[50] = "stuff for the thing";
         //char str1[40];
        // ft_memcpy(str + 11, str + 5, 19);
-        memcpy(str + 11, str + 5, 19);
+        ft_memcpy(str + 11, str + 5, 19);
         printf("%s\n", str);
         return 0;
 }

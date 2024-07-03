@@ -6,13 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 20:00:08 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/02 17:34:07 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// extern pid_t	g_sig_int;
 
 pid_t	pipe_fork(t_shell *shell, int pipefd[2])
 {

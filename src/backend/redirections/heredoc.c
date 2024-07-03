@@ -6,13 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 14:11:21 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 06:37:21 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// extern pid_t	g_sig_int;
 
 char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len, t_shell *shell)
 {
@@ -43,10 +41,11 @@ char	*hdoc_strjoin(char *s1, char *s2, size_t s2_len, t_shell *shell)
 
 int	hdoc_check(char **input, char *whole_inp, t_shell *shell)
 {
-	if (g_sig_int == 1)
+	if (g_sig_int == SIGUSR1)
 	{
 		if (whole_inp != NULL)
 			free(whole_inp);
+		shell->pipe_hdoc_sig = 1;
 		return (1);
 	}
 	errno = 0;

@@ -6,13 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 14:20:24 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 06:49:13 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// extern int	g_sig_int;
 
 char	*temp_hdoc(char *hdoc)
 {
@@ -65,12 +63,11 @@ int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 		return (close(*out_fd), 1);
 	*hdoc = NULL;
 	*hdoc = check_hdoc(shell->tables[0], shell);
-	if (g_sig_int == 1)
+	if (g_sig_int == SIGUSR1)
 	{
 		close(*out_fd);
 		free_all(shell, "no print", 3);
 		free(*hdoc);
-		g_sig_int = getpid();
 		return (1);
 	}
 	if (expandor(shell, 0) == false)

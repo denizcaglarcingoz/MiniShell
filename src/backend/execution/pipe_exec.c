@@ -6,13 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 18:29:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 06:47:50 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// extern pid_t	g_sig_int;
 
 void	child_pro_helper(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 {
@@ -48,17 +46,14 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 	char	**hdoc;
 
 	close(pipefd[0]);
-	g_sig_int = 2;
 	hdoc = shell->hdoc;
-	if (g_sig_int == 1)
+	if (g_sig_int == SIGUSR1)
 	{
-		g_sig_int = getpid();
 		close(pipefd[1]);
 		free_d_str(hdoc);
 		free_all(shell, "no exit", 0);
 		exit(0);
 	}
-	g_sig_int = getpid();
 	child_pro_helper(shell, pipefd, prev_read_fd, i);
 	close(pipefd[1]);
 	if ((shell->tables[i]).args[0] == NULL)
@@ -95,7 +90,6 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	status = 0;
 	signal(SIGQUIT, sigint_handler_quit);
 	signal(SIGINT, sigint_handler_int_exec);
-	g_sig_int = exec->pid;
 	if (exec->expandor_check == 0)
 		(get_exit_code_p(shell, exec), free_all(shell, "no exit", 3));
 	if (exec->expandor_check == 0)
@@ -108,6 +102,7 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	close(exec->std_in);
 	dup2(exec->std_out, STDOUT_FILENO);
 	close(exec->std_out);
+	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
 	free(exec->str_pid);
 }

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:15:43 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/01 18:26:46 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 07:45:50 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,10 @@ void	get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec)
 
 void	path_run_signals(pid_t pid, t_shell *shell)
 {
-	signal(SIGQUIT, sigint_handler_quit);
+	shell->pid = pid;
 	signal(SIGINT, sigint_handler_int_exec);
-	g_sig_int = pid;
+	signal(SIGQUIT, sigint_handler_quit);
 	get_exit_code(shell, pid);
+	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
 }
