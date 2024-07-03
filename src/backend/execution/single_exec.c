@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 06:49:13 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 13:09:07 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 		close(*out_fd);
 		free_all(shell, "no print", 3);
 		free(*hdoc);
+		signal(SIGINT, sigint_handler_sigint);
+		kill(0, SIGINT);
+		signal(SIGINT, sigint_handler_int);
 		return (1);
 	}
 	if (expandor(shell, 0) == false)

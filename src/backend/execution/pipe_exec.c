@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 06:47:50 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 13:31:52 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	signal(SIGINT, sigint_handler_int_exec);
 	if (exec->expandor_check == 0)
 		(get_exit_code_p(shell, exec), free_all(shell, "no exit", 3));
-	if (exec->expandor_check == 0)
+	if (g_sig_int != SIGUSR1 && exec->expandor_check == 0)
 		close(exec->pipefd[0]);
 	if (exec->pid != -1)
 		result = waitpid(exec->pid, &status, WNOHANG);
@@ -105,33 +105,36 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	signal(SIGINT, sigint_handler_int);
 	signal(SIGQUIT, SIG_IGN);
 	free(exec->str_pid);
+	signal(SIGINT, sigint_handler_sigint);
+	kill(0, SIGINT);
+	signal(SIGINT, sigint_handler_int);
 }
 
-void	pipe_execution(t_shell *shell)
+void	pipe_execution(t_shell *shell, t_pipe_exec_var *exec)
 {
-	t_pipe_exec_var	exec;
-
-	exec_init(&exec, shell);
-	while (exec.i < shell->table_len)
+	exec_init(exec, shell);
+	while (exec->i < shell->table_len)
 	{
-		if (expandor_hdoc(shell, exec.i) == false)
-			exec.hdoc_check = 1;
-		if (exec.hdoc_check == 0)
-			shell->hdoc = check_hdoc(shell->tables[exec.i], shell);
-		if (exec.hdoc_check == 0 && expandor(shell, exec.i) == false)
-			exec.expandor_check = 1;
-		if (exec.expandor_check == 0 && exec.hdoc_check == 0)
-			expansion_ok_run(shell, &exec);
-		if (exec.i < shell->table_len)
-			if (exec.hdoc_check == 0 && exec.expandor_check == 1)
+		if (expandor_hdoc(shell, exec->i) == false)
+			exec->hdoc_check = 1;
+		if (exec->hdoc_check == 0)
+			shell->hdoc = check_hdoc(shell->tables[exec->i], shell);
+		if (g_sig_int == SIGUSR1)
+			break ;
+		if (exec->hdoc_check == 0 && expandor(shell, exec->i) == false)
+			exec->expandor_check = 1;
+		if (exec->expandor_check == 0 && exec->hdoc_check == 0)
+			expansion_ok_run(shell, exec);
+		if (exec->i < shell->table_len)
+			if (exec->hdoc_check == 0 && exec->expandor_check == 1)
 				free_d_str(shell->hdoc);
-		exec.str_pid[exec.i] = exec.pid;
-		(exec.i)++;
-		if (exec.i < shell->table_len)
+		exec->str_pid[exec->i] = exec->pid;
+		(exec->i)++;
+		if (exec->i < shell->table_len)
 		{
-			exec.hdoc_check = 0;
-			exec.expandor_check = 0;
+			exec->hdoc_check = 0;
+			exec->expandor_check = 0;
 		}
 	}
-	pipe_closing_args(shell, &exec);
+	pipe_closing_args(shell, exec);
 }

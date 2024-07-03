@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:15:43 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 07:45:50 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 13:28:22 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,25 @@ void	get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec)
 	int		i;
 
 	i = 0;
-	while (i < shell->table_len)
+	if (g_sig_int != SIGUSR1)
 	{
-		wait_result = waitpid(exec->str_pid[i], &status, 0);
-		if (wait_result == exec->pid)
+		while (i < shell->table_len)
 		{
-			if (WIFEXITED(status))
+			wait_result = waitpid(exec->str_pid[i], &status, 0);
+			if (wait_result == exec->pid)
 			{
-				child_exit_code = WEXITSTATUS(status);
-				shell->exit_status = child_exit_code;
+				if (WIFEXITED(status))
+				{
+					child_exit_code = WEXITSTATUS(status);
+					shell->exit_status = child_exit_code;
+				}
+				else
+					shell->exit_status = 127;
 			}
-			else
-				shell->exit_status = 127;
+			i++;
 		}
-		i++;
+		unlink_hdoc(shell);
 	}
-	unlink_hdoc(shell);
 }
 
 void	path_run_signals(pid_t pid, t_shell *shell)
