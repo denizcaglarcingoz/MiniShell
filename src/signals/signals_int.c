@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:50 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:09:17 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 23:00:50 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	sigint_handler_int(int signum)
 void	sigint_handler_int_exec(int signum)
 {
 	(void)signum;
-	printf("\n");
+	ft_putstr_fd("\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 }

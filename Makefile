@@ -17,9 +17,10 @@ SRCS =	./src/backend/execution/exec_utils.c\
 		./src/backend/execution/pipe_exec.c \
 		./src/backend/execution/single_exec.c \
 		\
-		./src/backend/execve/execve_utils.c \
 		./src/backend/execve/ft_access.c \
+		./src/backend/execve/ft_execve_path_append.c\
 		./src/backend/execve/ft_execve.c \
+		./src/backend/execve/ft_execve_utils.c \
 		./src/backend/execve/get_exit_code.c \
 		./src/backend/execve/pipe_execve.c \
 		\

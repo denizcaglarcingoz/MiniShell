@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 18:00:59 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:02:04 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,8 @@ void			ft_access_execve(char *path, char **argv, t_shell *shell);
 char			*check_hdoc_p(t_table table, t_shell *shell);
 void			not_in_file(char **in, t_shell *shell);
 void			not_in_file_p(char **in, t_shell *shell);
+char			**app_assign_new(char **new, char **str, char *path_add);
+char			**append_path(char **str, char *path_add);
 
 /***BUILT-INS****/
 

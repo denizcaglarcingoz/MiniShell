@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 22:53:53 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 16:17:08 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 22:02:37 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ char	**check_hdoc(t_table table, t_shell *shell)
 	hdocs[1] = NULL;
 	return (hdocs);
 }
-
 
 char	*check_hdoc_p(t_table table, t_shell *shell)
 {

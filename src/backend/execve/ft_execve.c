@@ -6,57 +6,20 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 16:18:59 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:01:33 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**app_assign_new(char **new, char **str, char *path_add)
+
+void	s_path_run_child_clean(t_shell *shell)
 {
-	int	i;
-
-	i = -1;
-	while (str[++i])
-	{
-		new[i] = ft_strjoin(str[i], path_add);
-		if (!new[i])
-		{
-			free_matrix(new, i);
-			free(path_add);
-			free_d_str(str);
-			return (NULL);
-		}
-	}
-	new[i] = NULL;
-	return (new);
-}
-
-char	**append_path(char **str, char *path_add)
-{
-	char	**new;
-	int		i;
-
-	i = 0;
-	if (path_add == NULL)
-		return (free_d_str(str), NULL);
-	if (str == NULL)
-		return (NULL);
-	while (str[i])
-		i++;
-	new = (char **)malloc((i + 1) * sizeof(char *));
-	if (new == NULL)
-	{
-		free(path_add);
-		free_d_str(str);
-		return (NULL);
-	}
-	new = app_assign_new(new, str, path_add);
-	if (!new)
-		return (NULL);
-	free(path_add);
-	free_d_str(str);
-	return (new);
+	signal(SIGQUIT, sigint_handler_quit);
+	if (shell->in_fd != -1)
+		close(shell->in_fd);
+	if (shell->out_fd != -1)
+		close(shell->out_fd);
 }
 
 int	path_run_access_check(char **all_paths, char **argv, \
@@ -76,11 +39,7 @@ char **environ, t_shell *shell)
 				free_d_all(all_paths, "execve fail\n", shell, 127);
 			if (pid == 0)
 			{
-				signal(SIGQUIT, sigint_handler_quit);
-				if (shell->in_fd != -1)
-					close(shell->in_fd);
-				if (shell->out_fd != -1)
-					close(shell->out_fd);
+				s_path_run_child_clean(shell);
 				execve(all_paths[i], argv, environ);
 				free_d_all(all_paths, "execve fail\n", shell, 127);
 			}

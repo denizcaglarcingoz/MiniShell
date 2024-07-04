@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 21:39:09 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 00:43:03 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ void	child_out_check(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 		{
 			out_check = output_check(shell->tables[i], i, shell->tokens);
 			if (out_check == -1)
-			{
-				dup2(pipefd[1], STDOUT_FILENO);
-				close(pipefd[1]);
-			}
+				(dup2(pipefd[1], STDOUT_FILENO), close(pipefd[1]));
 			else if (out_check == -127)
 				(close(pipefd[1]), free_all(shell, "no print", 127));
 		}
@@ -50,7 +47,7 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 	child_out_check(shell, pipefd, prev_read_fd, i);
 	close(pipefd[1]);
 	if ((shell->tables[i]).args[0] == NULL)
-	{	
+	{
 		free_d_str_till(shell->hdoc, shell->table_len - 1);
 		free_all(shell, "", 0);
 		exit(0);
@@ -78,6 +75,25 @@ void	expansion_ok_run(t_shell *shell, t_pipe_exec_var *exec)
 	}
 }
 
+void	pipe_closing_sigs(t_shell *shell, t_pipe_exec_var *exec)
+{
+	int	dup_res;
+
+	dup_res = dup2(exec->std_in, STDIN_FILENO);
+	if (dup_res == -1)
+		free_all(shell, "dup2 fail", 127);
+	close(exec->std_in);
+	dup_res = dup2(exec->std_out, STDOUT_FILENO);
+	if (dup_res == -1)
+		free_all(shell, "dup2 fail", 127);
+	close(exec->std_out);
+	free(exec->str_pid);
+	signal(SIGINT, sigint_handler_sigint);
+	kill(0, SIGINT);
+	signal(SIGINT, sigint_handler_int);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 {
 	int		status;
@@ -101,21 +117,14 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 		waitpid(exec->pid, &status, 0);
 	free_d_str_till(shell->hdoc, shell->table_len - 1);
 	dup2(exec->std_in, STDIN_FILENO);
-	close(exec->std_in);
-	dup2(exec->std_out, STDOUT_FILENO);
-	close(exec->std_out);
-	free(exec->str_pid);
-	signal(SIGINT, sigint_handler_sigint);
-	kill(0, SIGINT);
-	signal(SIGINT, sigint_handler_int);
-	signal(SIGQUIT, SIG_IGN);
+	pipe_closing_sigs(shell, exec);
 }
 
-int is_hdoc_exist(t_shell *shell)
+int	is_hdoc_exist(t_shell *shell)
 {
 	int	i;
-	int k;
-	
+	int	k;
+
 	k = 0;
 	i = 0;
 	while (i < shell->table_len)
@@ -132,7 +141,7 @@ int is_hdoc_exist(t_shell *shell)
 int	pipe_hdocs(t_shell *shell)
 {
 	int	i;
-	
+
 	if (is_hdoc_exist(shell) == 0)
 		return (0);
 	shell->hdoc = (char **)malloc(sizeof(char *) * (shell->table_len + 1));
@@ -143,7 +152,7 @@ int	pipe_hdocs(t_shell *shell)
 	while (i < shell->table_len)
 	{
 		if (expandor_hdoc(shell, i) == false)
-			return  (1);
+			return (1);
 		if (shell->tables[i].heredoc[0] == NULL)
 			shell->hdoc[i] = ft_strdup("");
 		else
@@ -159,7 +168,7 @@ void	pipe_execution(t_shell *shell, t_pipe_exec_var *exec)
 {
 	exec_init(exec, shell);
 	if (pipe_hdocs(shell) == 1)
-	{	
+	{
 		signal(SIGINT, sigint_handler_sigint);
 		kill(0, SIGINT);
 		signal(SIGINT, sigint_handler_int);

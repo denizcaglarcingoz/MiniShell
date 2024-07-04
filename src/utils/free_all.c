@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 21:08:20 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 00:48:36 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,15 @@ static void	free_list_env(t_shell *shell)
 	free_list(shell->tokens);
 }
 
-static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
+void	close_std_fd(void)
 {
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
+}
+
+static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
+{
+	close_std_fd();
 	if (exit_type == 2)
 	{
 		clear_history();
@@ -63,8 +68,7 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 	{
 		shell->exit_status = 1;
 		clear_history();
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
+		close_std_fd();
 		exit(1);
 	}
 	else if (exit_type == 126)
@@ -74,10 +78,7 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 		free_table(shell->tables);
 	}
 	else if (exit_type == 3)
-	{
-		free_list(shell->tokens);
-		free_table(shell->tables);
-	}
+		(free_list(shell->tokens), free_table(shell->tables));
 	else
 		free_all_ops2(shell, print, exit_type);
 }
@@ -91,8 +92,7 @@ void	free_all(t_shell *shell, char *print, int exit_type)
 		clear_history();
 		free_list_env(shell);
 		free_table(shell->tables);
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
+		close_std_fd();
 		exit(127);
 	}
 	else

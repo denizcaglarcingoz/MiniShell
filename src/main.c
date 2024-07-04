@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 19:30:31 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 22:06:05 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	main(int ac, char **av)
 {
 	t_shell				shell;
 
-	ft_putstr_fd("Bash by Shell of MiniTeam\n", 1);
+	// ft_putstr_fd("Bash by Shell of MiniTeam\n", 1);
 	shell.pid = ft_pid(NULL) - 1;
 	signal(SIGPIPE, sigpipe_handler);
 	signal(SIGUSR1, sigusr1_handler);

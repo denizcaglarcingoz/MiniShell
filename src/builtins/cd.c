@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:27:50 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/13 14:29:52 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 23:14:15 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
 			return (1);
 		}
+		ft_putstr_fd(path, 1);
+		ft_putstr_fd("\n", 1);
 	}
 	else
 		path = full_cmd[1];
