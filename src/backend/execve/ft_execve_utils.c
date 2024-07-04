@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve_utils.c                                     :+:      :+:    :+:   */
+/*   ft_execve_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:09 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/26 17:21:40 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:04:55 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	dot_check(char *first_arg, t_shell *shell)
 	if (first_arg[0] == '.' && first_arg[1] == '\0')
 	{
 		ft_putstr_fd("bash: .: filename argument required\n \
-		 .: usage: . filename [arguments]\n", 2);
+		.: usage: . filename [arguments]\n", 2);
 		shell->exit_status = 127;
 		free_all(shell, "no print\n", 3);
 		return (1);

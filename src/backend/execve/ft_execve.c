@@ -6,12 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 01:01:33 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:05:24 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	s_path_run_child_clean(t_shell *shell)
 {

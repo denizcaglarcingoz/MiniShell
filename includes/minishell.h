@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 01:02:04 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:10:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,10 @@ void			not_in_file(char **in, t_shell *shell);
 void			not_in_file_p(char **in, t_shell *shell);
 char			**app_assign_new(char **new, char **str, char *path_add);
 char			**append_path(char **str, char *path_add);
+int				is_hdoc_exist(t_shell *shell);
+int				pipe_hdocs(t_shell *shell);
+void			pipe_closing_sigs(t_shell *shell, t_pipe_exec_var *exec);
+void			pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec);
 
 /***BUILT-INS****/
 

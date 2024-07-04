@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 00:33:16 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:15:17 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,42 +54,6 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
 	close(fd);
 	free_d_str_till(shell->hdoc, shell->table_len - 1);
 	ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
-}
-
-void	not_in_file_p(char **in, t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (in[i] != NULL)
-	{
-		if (access(in[i], F_OK) == -1)
-			break ;
-		i++;
-	}
-	write(1, "", 0);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(in[i], 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	free_all(shell, "no print", 127);
-}
-
-void	not_in_file(char **in, t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (in[i] != NULL)
-	{
-		if (access(in[i], F_OK) == -1)
-			break ;
-		i++;
-	}
-	write(1, "", 0);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(in[i], 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	free_all(shell, "no print", 0);
 }
 
 void	pipe_exec_run(t_table table, int table_id, t_shell *shell)

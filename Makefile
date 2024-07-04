@@ -11,10 +11,13 @@ INCLUDES = ./includes/execution.h ./includes/lexer.h ./includes/minishell.h ./in
 SRCS =	./src/backend/execution/exec_utils.c\
 		./src/backend/execution/execution.c \
 		./src/backend/execution/last_redirect.c \
+		./src/backend/execution/not_in_file.c \
 		./src/backend/execution/output_check.c \
+		./src/backend/execution/pipe_closings.c \
 		./src/backend/execution/pipe_exec_run.c \
 		./src/backend/execution/pipe_exec_utils.c \
 		./src/backend/execution/pipe_exec.c \
+		./src/backend/execution/pipe_hdoc.c \
 		./src/backend/execution/single_exec.c \
 		\
 		./src/backend/execve/ft_access.c \

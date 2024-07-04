@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 00:43:03 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 01:10:17 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,95 +73,6 @@ void	expansion_ok_run(t_shell *shell, t_pipe_exec_var *exec)
 			close(exec->prev_read_fd);
 		exec->prev_read_fd = exec->pipefd[0];
 	}
-}
-
-void	pipe_closing_sigs(t_shell *shell, t_pipe_exec_var *exec)
-{
-	int	dup_res;
-
-	dup_res = dup2(exec->std_in, STDIN_FILENO);
-	if (dup_res == -1)
-		free_all(shell, "dup2 fail", 127);
-	close(exec->std_in);
-	dup_res = dup2(exec->std_out, STDOUT_FILENO);
-	if (dup_res == -1)
-		free_all(shell, "dup2 fail", 127);
-	close(exec->std_out);
-	free(exec->str_pid);
-	signal(SIGINT, sigint_handler_sigint);
-	kill(0, SIGINT);
-	signal(SIGINT, sigint_handler_int);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
-{
-	int		status;
-	pid_t	result;
-
-	status = 0;
-	if (g_sig_int == SIGUSR1)
-		free_d_str(shell->hdoc);
-	signal(SIGQUIT, sigint_handler_quit);
-	signal(SIGINT, sigint_handler_int_exec);
-	if (exec->expandor_check == 0)
-	{
-		get_exit_code_p(shell, exec);
-		free_all(shell, "no exit", 3);
-	}
-	if (exec->expandor_check == 0 && exec->pipefd[0] != -1)
-		close(exec->pipefd[0]);
-	if (exec->pid != -1)
-		result = waitpid(exec->pid, &status, WNOHANG);
-	if (exec->pid != -1 && result == 0)
-		waitpid(exec->pid, &status, 0);
-	free_d_str_till(shell->hdoc, shell->table_len - 1);
-	dup2(exec->std_in, STDIN_FILENO);
-	pipe_closing_sigs(shell, exec);
-}
-
-int	is_hdoc_exist(t_shell *shell)
-{
-	int	i;
-	int	k;
-
-	k = 0;
-	i = 0;
-	while (i < shell->table_len)
-	{
-		if (shell->tables[i].heredoc[0] != NULL)
-			k++;
-		i++;
-	}
-	if (k == 0)
-		return (0);
-	return (1);
-}
-
-int	pipe_hdocs(t_shell *shell)
-{
-	int	i;
-
-	if (is_hdoc_exist(shell) == 0)
-		return (0);
-	shell->hdoc = (char **)malloc(sizeof(char *) * (shell->table_len + 1));
-	if (shell->hdoc == NULL)
-		free_all(shell, "malloc fail", 127);
-	shell->hdoc[shell->table_len] = NULL;
-	i = 0;
-	while (i < shell->table_len)
-	{
-		if (expandor_hdoc(shell, i) == false)
-			return (1);
-		if (shell->tables[i].heredoc[0] == NULL)
-			shell->hdoc[i] = ft_strdup("");
-		else
-			shell->hdoc[i] = check_hdoc_p(shell->tables[i], shell);
-		if (g_sig_int == SIGUSR1)
-			return (free_all(shell, "", 0), 1);
-		i++;
-	}
-	return (0);
 }
 
 void	pipe_execution(t_shell *shell, t_pipe_exec_var *exec)
