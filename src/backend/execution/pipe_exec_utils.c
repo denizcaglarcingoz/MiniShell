@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/02 17:34:07 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/03 17:09:45 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	exec_init(t_pipe_exec_var *exec, t_shell *shell)
 	if (exec->str_pid == NULL)
 		free_all(shell, "Malloc Fail\n", 127);
 	exec->i = 0;
+	exec->pipefd[0] = -1;
+	exec->pipefd[1] = -1;
 	exec->prev_read_fd = -1;
 	exec->expandor_check = 0;
 	exec->hdoc_check = 0;

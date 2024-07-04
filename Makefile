@@ -84,6 +84,7 @@ SRCS =	./src/backend/execution/exec_utils.c\
 		./src/utils/freeing_utils.c \
 		./src/utils/print_utils.c \
 		./src/utils/table_free.c \
+		./src/utils/ft_pid.c \
 		\
 		./src/main.c
 

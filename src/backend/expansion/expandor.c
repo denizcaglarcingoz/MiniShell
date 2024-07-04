@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:51 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/28 02:00:57 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 12:58:53 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ bool	check_in_expandor(t_table exp_table, t_shell *shell)
 	}
 	return (true);
 }
+// || check_in_expandor(shell->tables[table_num], shell) == false
 
 bool	expandor(t_shell *shell, int table_num)
 {
 	if (redir_expand(shell->tables[table_num].in, shell) == false
-		|| check_in_expandor(shell->tables[table_num], shell) == false
 		|| arg_expand(&(shell->tables[table_num].args), shell) == false
 		|| redir_expand(shell->tables[table_num].out, shell) == false
 		|| redir_expand(shell->tables[table_num].append, shell) == false)
@@ -57,9 +57,7 @@ bool	expandor_hdoc(t_shell *shell, int table_num)
 {
 	if (hdoc_expand(shell->tables[table_num].heredoc, shell) == false)
 	{
-		if (shell->tables->table_len == 1
-			|| shell->tables->table_len == table_num + 1)
-			free_all(shell, "no print", 3);
+		free_all(shell, "no print", 3);
 		return (false);
 	}
 	return (true);

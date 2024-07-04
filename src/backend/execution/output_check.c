@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 16:07:51 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/26 16:11:29 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 16:49:19 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,5 @@ int	output_check(t_table table, int table_id, t_tokens *tokens)
 			return (perror("output_check_open"), -127);
 		return (dup2(fd, STDOUT_FILENO), close(fd), fd);
 	}
-	return (0);
+	return (-1);
 }

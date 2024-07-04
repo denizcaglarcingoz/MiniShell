@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/29 19:51:21 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 16:51:08 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ typedef struct s_single_exec_var
 {
 	char	**hdoc;
 	char	*in;
-	int		out_fd;
 	int		is_out;
 }	t_single_exec_var;
 

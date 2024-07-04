@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:49:40 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 18:00:59 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,21 @@ extern pid_t	g_sig_int;
 
 typedef struct s_shell
 {
-	char			*input;
-	char			**env;
-	char			**exported;
-	int				exit_status;
-	int				table_len;
-	t_table			*tables;
-	t_tokens		*tokens;
-	char			**hdoc;
-	int				pipe_hdoc_sig;
-	int				table_id;
-	int				in_fd;
-	int				pid;
-	t_pipe_exec_var	exec;
+	char				*input;
+	char				**env;
+	char				**exported;
+	int					exit_status;
+	int					table_len;
+	t_table				*tables;
+	t_tokens			*tokens;
+	char				**hdoc;
+	int					pipe_hdoc_sig;
+	int					table_id;
+	int					in_fd;
+	int					out_fd;
+	int					pid;
+	t_pipe_exec_var		exec;
+	t_single_exec_var	var;
 }	t_shell;
 
 /****SHELL****/
@@ -142,8 +144,7 @@ int *k, t_shell *shell);
 void			execution(t_shell *shell);
 void			ft_pipe_execve(char *path, char **argv, t_shell *shell);
 void			pipe_execution(t_shell *shell, t_pipe_exec_var *exec);
-void			pipe_exec_run(t_table exp_table, int table_id, char **hdoc, \
-t_shell *shell);
+void			pipe_exec_run(t_table exp_table, int table_id, t_shell *shell);
 pid_t			pipe_fork(t_shell *shell, int pipefd[2]);
 void			exec_init(t_pipe_exec_var *exec, t_shell *shell);
 
@@ -179,6 +180,9 @@ int				all_path_check(char *all_path);
 char			*it_is_directory(char *first_arg, t_shell *shell);
 void			null_path(char *argv, t_shell *shell);
 void			ft_access_execve(char *path, char **argv, t_shell *shell);
+char			*check_hdoc_p(t_table table, t_shell *shell);
+void			not_in_file(char **in, t_shell *shell);
+void			not_in_file_p(char **in, t_shell *shell);
 
 /***BUILT-INS****/
 
@@ -236,8 +240,13 @@ void			sigint_handler_quit(int signum);
 void			sigpipe_handler(int signum);
 void			sigusr1_handler(int signum);
 void			sigint_handler_sigint(int signum);
+
+/***SIGNAL UTILS***/
+int				ft_pid(t_shell *shell);
+
 /***TESTING***/
 int				print_tables(t_table *table);
 void			print_tokens(t_tokens *tokens);
 void			print_d_str(char **str);
+
 #endif

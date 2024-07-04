@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:38:35 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 21:08:20 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	free_list_env(t_shell *shell)
 
 static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
 {
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	if (exit_type == 2)
 	{
 		clear_history();
@@ -61,6 +63,8 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 	{
 		shell->exit_status = 1;
 		clear_history();
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
 		exit(1);
 	}
 	else if (exit_type == 126)
@@ -87,6 +91,8 @@ void	free_all(t_shell *shell, char *print, int exit_type)
 		clear_history();
 		free_list_env(shell);
 		free_table(shell->tables);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
 		exit(127);
 	}
 	else

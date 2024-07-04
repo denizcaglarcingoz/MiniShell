@@ -6,18 +6,18 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 06:40:09 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 21:11:44 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_fork_ft(t_token_type *t_type, char **inp, char *in, char **hdoc)
+int init_inp_fd(t_token_type *t_type, char **inp, char *in, t_shell *shell)
 {
-	int	fd;
+	int fd;
 
 	if (*t_type == D_LESS)
-		*inp = temp_hdoc(hdoc[0]);
+		*inp = temp_hdoc(shell->hdoc[shell->exec.i]);
 	if (*t_type == LESS)
 		*inp = in;
 	if (*inp == NULL)
@@ -31,7 +31,7 @@ int	init_fork_ft(t_token_type *t_type, char **inp, char *in, char **hdoc)
 	return (fd);
 }
 
-void	wait_ft(t_token_type t_type, char *inp)
+void wait_ft(t_token_type t_type, char *inp)
 {
 	wait(NULL);
 	if (t_type == D_LESS)
@@ -39,55 +39,86 @@ void	wait_ft(t_token_type t_type, char *inp)
 	exit(0);
 }
 
-void	pipe_inp_cmd_run(t_table exp_table, char *in, char **hdoc, \
-t_shell *shell)
+void pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
 {
-	int				fd;
-	int				pid;
-	char			*inp;
-	t_token_type	t_type;
+	int fd;
+	char *inp;
+	t_token_type t_type;
 
 	inp = NULL;
+
 	t_type = in_o_hdoc(shell->tokens, shell->table_id);
-	fd = init_fork_ft(&t_type, &inp, in, hdoc);
+	fd = init_inp_fd(&t_type, &inp, in, shell);
 	if (fd == -1)
-		return ;
+		return;
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	pid = fork();
-	if (pid == -1)
-		(free_d_str(hdoc), free_all(shell, "Fork Fail\n", 127));
-	if (pid == 0)
-		ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
-	else
-	{
-		free_d_str(hdoc);
-		free_all(shell, "no print", 127);
-		wait_ft(t_type, inp);
-	}
+	free_d_str_till(shell->hdoc, shell->table_len - 1);
+	ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
 }
 
-void	pipe_exec_run(t_table table, int table_id, char **hdoc, t_shell *shell)
+void not_in_file_p(char **in, t_shell *shell)
 {
-	char	*in;
+	int i;
+
+	i = 0;
+
+	while (in[i] != NULL)
+	{
+		if (access(in[i], F_OK) == -1)
+			break;
+		i++;
+	}
+	write(1, "", 0);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(in[i], 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	free_all(shell, "no print", 127);
+}
+
+void not_in_file(char **in, t_shell *shell)
+{
+	int i;
+
+	i = 0;
+
+	while (in[i] != NULL)
+	{
+		if (access(in[i], F_OK) == -1)
+			break;
+		i++;
+	}
+	write(1, "", 0);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(in[i], 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	free_all(shell, "no print", 0);
+}
+
+void pipe_exec_run(t_table table, int table_id, t_shell *shell)
+{
+	char *in;
 
 	in = check_in(table);
+	if (table.in[0] != NULL && in == NULL)
+		not_in_file_p(table.in, shell);
 	output_check(table, table_id, shell->tokens);
 	shell->table_id = table_id;
 	if (is_builtin(table.args[0]) == 1)
 	{
-		free_d_str(hdoc);
+		free_d_str_till(shell->hdoc, shell->table_len - 1);
 		run_builtin(table, shell);
 		free_all_env(shell->env);
 		free_all_env(shell->exported);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
 		exit(shell->exit_status);
 	}
-	else if ((table.args[1] != NULL || table.heredoc[0] == NULL) \
-	&& table.in[0] == NULL)
+	else if ((table.args[1] != NULL || table.heredoc[0] == NULL) && table.in[0] == NULL)
 	{
-		free_d_str(hdoc);
+		free_d_str_till(shell->hdoc, shell->table_len - 1);
 		ft_pipe_execve(table.args[0], table.args, shell);
 	}
 	else
-		pipe_inp_cmd_run(table, in, hdoc, shell);
+		pipe_inp_cmd_run(table, in, shell);
 }

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:49 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:34:32 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 13:15:44 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	pipe_exec_init(t_pipe_exec_var *exec)
 void	execution(t_shell *shell)
 {
 	pipe_exec_init(&(shell->exec));
+	shell->hdoc = NULL;
 	if (shell->tables == NULL)
 		return ;
 	shell->table_len = shell->tables->table_len;

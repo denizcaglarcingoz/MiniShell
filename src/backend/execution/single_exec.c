@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:09:07 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 16:51:24 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 
 void	single_exec_run(t_shell *shell, t_single_exec_var *var)
 {
-	if (var->is_out == 0)
-		close(var->out_fd);
+	shell->out_fd = shell->out_fd;
+	if (var->is_out == -1)
+		close(shell->out_fd);
 	if (shell->tables[0].args[0] == NULL )
 		return (free_all(shell, "no print", 3));
 	if (is_builtin(shell->tables[0].args[0]) == 1)
@@ -106,20 +107,23 @@ void	single_exec(t_shell *shell)
 	t_single_exec_var	var;
 
 	shell->in_fd = -1;
-	if (check_and_set(&(var.out_fd), &(var.hdoc), shell))
+	shell->out_fd = -1;
+	if (check_and_set(&(shell->out_fd), &(var.hdoc), shell))
 		return ;
 	var.in = check_in(shell->tables[0]);
+	if (shell->tables->in[0] != NULL && var.in == NULL)
+		return (close(shell->out_fd), not_in_file(shell->tables->in, shell));
 	var.is_out = output_check(shell->tables[0], 0, shell->tokens);
-	if (var.is_out != 0 && shell->tables[0].args[0] == NULL)
+	if (var.is_out != -1 && shell->tables[0].args[0] == NULL)
 	{
-		dup2(var.out_fd, STDOUT_FILENO);
-		close(var.out_fd);
+		dup2(shell->out_fd, STDOUT_FILENO);
+		close(shell->out_fd);
 		return (free_all(shell, "no print", 3));
 	}
 	if (var.is_out == -127)
 		return (shell->exit_status = 1, free_all(shell, "no print", 3));
 	single_exec_run(shell, &var);
-	if (var.is_out != 0)
-		dup2(var.out_fd, STDOUT_FILENO);
-	close(var.out_fd);
+	if (var.is_out != -1)
+		dup2(shell->out_fd, STDOUT_FILENO);
+	close(shell->out_fd);
 }

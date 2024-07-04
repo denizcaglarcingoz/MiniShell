@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:55:52 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 21:04:49 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	final_free(t_shell *shell)
 	free_all_env(shell->exported);
 	free_list(shell->tokens);
 	free_table(shell->tables);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 }
 
 int	ft_exit(char **full_cmd, t_shell *shell)
@@ -88,6 +90,6 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 	if (full_cmd[1])
 		code = set_code(full_cmd, shell);
 	final_free(shell);
-	printf("exit\n");
+	// printf("exit\n");
 	exit(code);
 }

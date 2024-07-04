@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:15 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:55:59 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/04 21:03:27 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,12 @@ void	trim_error_exit(char *init_in, t_shell *shell)
 void	control_d_exit(t_shell *shell, char *init_in)
 {
 	clear_history();
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	if (init_in != NULL)
 		free(init_in);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	printf("exit\n");
+	// printf("exit\n");
 	exit(shell->exit_status);
 }
