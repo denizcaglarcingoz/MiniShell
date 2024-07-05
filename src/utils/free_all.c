@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 00:48:36 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 05:47:40 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
 	close_std_fd();
 	if (exit_type == 2)
 	{
-		clear_history();
+		rl_clear_history();
 		free_list_env(shell);
 		perror(print);
 		exit (2);
@@ -41,7 +41,7 @@ static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
 	{
 		if (ft_strcmp(print, "no print") != 0)
 			perror(print);
-		clear_history();
+		rl_clear_history();
 		free_list_env(shell);
 		exit(2);
 	}
@@ -49,7 +49,7 @@ static void	free_all_ops2(t_shell *shell, char *print, int exit_type)
 	{
 		if (ft_strcmp(print, "no print") != 0)
 			perror(print);
-		clear_history();
+		rl_clear_history();
 		free_list(shell->tokens);
 		free_table(shell->tables);
 		exit(1);
@@ -67,7 +67,7 @@ static void	free_all_ops(t_shell *shell, char *print, int exit_type)
 	else if (exit_type == 1)
 	{
 		shell->exit_status = 1;
-		clear_history();
+		rl_clear_history();
 		close_std_fd();
 		exit(1);
 	}
@@ -89,7 +89,7 @@ void	free_all(t_shell *shell, char *print, int exit_type)
 	{
 		if (ft_strcmp(print, "no print") != 0)
 			perror(print);
-		clear_history();
+		rl_clear_history();
 		free_list_env(shell);
 		free_table(shell->tables);
 		close_std_fd();

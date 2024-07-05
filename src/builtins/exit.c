@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:21:19 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 05:47:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_exit_err(char **full_cmd, long int *code, t_shell *shell)
 {
-	clear_history();
+	rl_clear_history();
 	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(full_cmd[1], 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
@@ -61,7 +61,7 @@ int	set_code(char **full_cmd, t_shell *shell)
 
 void	final_free(t_shell *shell)
 {
-	clear_history();
+	rl_clear_history();
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
 	free_list(shell->tokens);

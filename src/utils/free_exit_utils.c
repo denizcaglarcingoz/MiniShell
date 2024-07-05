@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:15 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:19:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 05:48:02 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	token_list_error_exit(t_shell *shell)
 {
-	clear_history();
+	rl_clear_history();
 	free(shell->input);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
@@ -25,7 +25,7 @@ void	token_list_error_exit(t_shell *shell)
 void	readline_error_exit(char *init_in, t_shell *shell)
 {
 	perror(strerror(errno));
-	clear_history();
+	rl_clear_history();
 	if (init_in != NULL)
 		free(init_in);
 	free_all_env(shell->env);
@@ -38,7 +38,7 @@ void	readline_error_exit(char *init_in, t_shell *shell)
 
 void	trim_error_exit(char *init_in, t_shell *shell)
 {
-	clear_history();
+	rl_clear_history();
 	free(shell->input);
 	free(init_in);
 	free_all_env(shell->env);
@@ -49,7 +49,7 @@ void	trim_error_exit(char *init_in, t_shell *shell)
 
 void	control_d_exit(t_shell *shell, char *init_in)
 {
-	clear_history();
+	rl_clear_history();
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	if (init_in != NULL)

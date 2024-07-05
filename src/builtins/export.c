@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:18 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/10 19:28:19 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 05:47:16 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	ft_export(char **full_cmd, t_shell *shell)
 			if (status == 2)
 			{
 				perror("env malloc failure\n");
-				clear_history();
+				rl_clear_history();
 				free_list(shell->tokens);
 				free_table(shell->tables);
 				exit(1);
