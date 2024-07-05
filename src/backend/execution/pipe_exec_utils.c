@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 17:09:45 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 04:58:07 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,13 @@ void	exec_init(t_pipe_exec_var *exec, t_shell *shell)
 	exec->expandor_check = 0;
 	exec->hdoc_check = 0;
 	exec->std_in = dup(STDIN_FILENO);
+	if (exec->std_in == -1)
+		(free(exec->str_pid), free_all(shell, "dup fail", 127));
 	exec->std_out = dup(STDOUT_FILENO);
+	if (exec->std_out == -1)
+	{
+		close(exec->std_in);
+		free(exec->str_pid);
+		free_all(shell, "dup fail", 127);
+	}
 }

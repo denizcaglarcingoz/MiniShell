@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 01:09:05 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 01:10:49 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 02:37:17 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec)
 	if (exec->pid != -1 && result == 0)
 		waitpid(exec->pid, &status, 0);
 	free_d_str_till(shell->hdoc, shell->table_len - 1);
-	dup2(exec->std_in, STDIN_FILENO);
+	status = dup2(exec->std_in, STDIN_FILENO);
+	if (status == -1)
+		exit(127);
 	pipe_closing_sigs(shell, exec);
 }

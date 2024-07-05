@@ -6,40 +6,11 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 01:10:17 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 04:56:15 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	child_out_check(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
-{
-	int	out_check;
-
-	out_check = -1;
-	if (prev_read_fd != -1)
-		(dup2(prev_read_fd, STDIN_FILENO), close(prev_read_fd));
-	if (i + 1 < shell->tables->table_len)
-	{
-		if (shell->tables[i].args[0] != NULL || shell->tables[i].out[0] != NULL)
-		{
-			out_check = output_check(shell->tables[i], i, shell->tokens);
-			if (out_check == -1)
-				(dup2(pipefd[1], STDOUT_FILENO), close(pipefd[1]));
-			else if (out_check == -127)
-				(close(pipefd[1]), free_all(shell, "no print", 127));
-		}
-	}
-	if (i + 1 == shell->tables->table_len)
-	{
-		if (shell->tables[i].args[0] == NULL || shell->tables[i].out[0] != NULL)
-		{
-			out_check = output_check(shell->tables[i], i, shell->tokens);
-			if (out_check == -127)
-				(close(pipefd[1]), free_all(shell, "no print", 127));
-		}
-	}
-}
 
 void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 {

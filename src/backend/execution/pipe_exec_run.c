@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 01:15:17 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 02:52:31 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	wait_ft(t_token_type t_type, char *inp)
 
 void	pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
 {
+	int				dup_res;
 	int				fd;
 	char			*inp;
 	t_token_type	t_type;
@@ -50,9 +51,15 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
 	fd = init_inp_fd(&t_type, &inp, in, shell);
 	if (fd == -1)
 		return ;
-	dup2(fd, STDIN_FILENO);
-	close(fd);
 	free_d_str_till(shell->hdoc, shell->table_len - 1);
+	dup_res = dup2(fd, STDIN_FILENO);
+	if (dup_res == -1)
+	{
+		close(fd);
+		free_d_str_till(shell->hdoc, shell->table_len - 1);
+		free_all(shell, "dup2 error", 127);
+	}
+	close(fd);
 	ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
 }
 
@@ -63,7 +70,6 @@ void	pipe_exec_run(t_table table, int table_id, t_shell *shell)
 	in = check_in(table);
 	if (table.in[0] != NULL && in == NULL)
 		not_in_file_p(table.in, shell);
-	output_check(table, table_id, shell->tokens);
 	shell->table_id = table_id;
 	if (is_builtin(table.args[0]) == 1)
 	{

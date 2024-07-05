@@ -8,7 +8,8 @@ BT_DIR = ./builtins
 
 INCLUDES = ./includes/execution.h ./includes/lexer.h ./includes/minishell.h ./includes/parser.h
 
-SRCS =	./src/backend/execution/exec_utils.c\
+SRCS =	./src/backend/execution/child_out_check.c \
+		./src/backend/execution/exec_utils.c \
 		./src/backend/execution/execution.c \
 		./src/backend/execution/last_redirect.c \
 		./src/backend/execution/not_in_file.c \
@@ -18,6 +19,7 @@ SRCS =	./src/backend/execution/exec_utils.c\
 		./src/backend/execution/pipe_exec_utils.c \
 		./src/backend/execution/pipe_exec.c \
 		./src/backend/execution/pipe_hdoc.c \
+		./src/backend/execution/single_exec_run.c \
 		./src/backend/execution/single_exec.c \
 		\
 		./src/backend/execve/ft_access.c \
@@ -89,6 +91,7 @@ SRCS =	./src/backend/execution/exec_utils.c\
 		./src/utils/print_utils.c \
 		./src/utils/table_free.c \
 		./src/utils/ft_pid.c \
+		./src/utils/temp_hdoc.c \
 		\
 		./src/main.c
 

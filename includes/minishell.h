@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 01:10:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 05:04:20 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,9 @@ int				is_hdoc_exist(t_shell *shell);
 int				pipe_hdocs(t_shell *shell);
 void			pipe_closing_sigs(t_shell *shell, t_pipe_exec_var *exec);
 void			pipe_closing_args(t_shell *shell, t_pipe_exec_var *exec);
+void			child_out_check(t_shell *shell, \
+int pipefd[2], int prev_read_fd, int i);
+void			single_exec_run(t_shell *shell, t_single_exec_var *var);
 
 /***BUILT-INS****/
 
