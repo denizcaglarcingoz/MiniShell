@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:21 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/26 20:36:11 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:29:32 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ int *k, t_shell *shell)
 	(*k)++;
 }
 
-void	n_content_dup(char **content, char ***new_content, \
+void	n_content_dup(char *content, char ***new_content, \
 int *k, t_shell *shell)
 {
-	(*new_content)[*k] = ft_strdup(content[*k]);
+	(*new_content)[*k] = ft_strdup(content);
 	if ((*new_content)[*k] == NULL)
 	{
-		free_d_str(content);
+		free(content);
 		free_d_str_till(*new_content, *k - 1);
 		free_all(shell, "New C Malloc Error", 127);
 	}

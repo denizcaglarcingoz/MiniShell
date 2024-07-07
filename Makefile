@@ -48,6 +48,7 @@ SRCS =	./src/backend/execution/child_out_check.c \
 		./src/backend/expansion/question_mark.c\
 		./src/backend/expansion/quotes.c \
 		\
+		./src/backend/redirections/hdoc_inside_expand.c \
 		./src/backend/redirections/heredoc.c \
 		./src/backend/redirections/output.c \
 		\
@@ -91,6 +92,7 @@ SRCS =	./src/backend/execution/child_out_check.c \
 		./src/utils/print_utils.c \
 		./src/utils/table_free.c \
 		./src/utils/ft_pid.c \
+		./src/utils/ft_strncpy.c \
 		./src/utils/temp_hdoc.c \
 		\
 		./src/main.c

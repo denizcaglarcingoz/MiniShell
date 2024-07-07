@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:04:20 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:27:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,12 @@ char			**one_dollar(char **new_content, t_shell *shell, int *i);
 char			**word_split(char *new_exp);
 void			empt_str_dup(char **content, char ***new_content, \
 int *k, t_shell *shell);
-void			n_content_dup(char **content, char ***new_content, \
+void			n_content_dup(char *content, char ***new_content, \
 int *k, t_shell *shell);
+char			*ft_strncpy(char *dest, char *src, unsigned int n);
+char			*hdoc_in_expand(t_shell *shell, char *hdoc, char *non_exp_hdoc);
+char			*get_last_non_exp_hdoc(t_table table, t_shell *shell);
+
 
 /****EXECUTION****/
 void			execution(t_shell *shell);
@@ -238,6 +242,7 @@ void			free_matrix(char **matrix, int i);
 void			free_d_str(char **str);
 void			free_d_str_till(char **content, int i);
 void			free_all(t_shell *shell, char *print, int exit_type);
+void			close_std_fd(void);
 
 /***SIGNALS***/
 void			sigint_handler_int(int signum);

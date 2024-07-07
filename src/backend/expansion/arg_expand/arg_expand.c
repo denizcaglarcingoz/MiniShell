@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:27 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 21:47:30 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/07 21:29:43 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ char	**n_content_alloc_fill(char **content, int k, t_shell *shell)
 	while (content[i])
 	{
 		if (content[i][0] == '\0')
-		{
+		{ 
 			if (content[i][1] == '"')
+			{	
 				empt_str_dup(content, &new_content, &k, shell);
-		}
+		}}
 		else
-			n_content_dup(content, &new_content, &k, shell);
+			n_content_dup(content[i], &new_content, &k, shell);
 		i++;
 	}
 	return (new_content);

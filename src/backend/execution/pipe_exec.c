@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 04:56:15 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 16:32:23 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 	if ((shell->tables[i]).args[0] == NULL)
 	{
 		free_d_str_till(shell->hdoc, shell->table_len - 1);
-		free_all(shell, "", 0);
-		exit(0);
+		free_all(shell, "", -1);
 	}
 	else
 		pipe_exec_run(shell->tables[i], i, shell);

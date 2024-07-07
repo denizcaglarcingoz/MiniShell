@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:26 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:47:40 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/05 16:31:28 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,14 @@ void	free_all(t_shell *shell, char *print, int exit_type)
 		free_table(shell->tables);
 		close_std_fd();
 		exit(127);
+	}
+	else if (exit_type == -1)
+	{
+		rl_clear_history();
+		free_list_env(shell);
+		free_table(shell->tables);
+		close_std_fd();
+		exit(0);
 	}
 	else
 		free_all_ops(shell, print, exit_type);
