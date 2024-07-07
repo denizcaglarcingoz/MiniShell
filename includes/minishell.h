@@ -197,7 +197,7 @@ void			single_exec_run(t_shell *shell, t_single_exec_var *var);
 
 int				ft_echo(char **full_cmd, t_shell *shell);
 int				ft_cd(char **full_cmd, t_shell *shell);
-int				ft_pwd(void);
+int				ft_pwd(t_shell *shell);
 int				ft_exit(char **full_cmd, t_shell *shell);
 int				ft_export(char **full_cmd, t_shell *shell);
 int				ft_unset(char **full_cmd, t_shell *shell);
@@ -206,15 +206,19 @@ int				ft_unset(char **full_cmd, t_shell *shell);
 void			run_builtin(t_table table, t_shell *shell);
 void			ft_quicksort_params(char **tab, int start, int end);
 int				has_equal(char *str);
-void			cd_not_found(char **full_cmd);
+void			cd_not_found(char *path);
 int				invalid_id(char *id);
 int				compare_names_add(char *name, char *var);
 int				compare_names(char *name, char *var);
 int				ft_num_strcmp(char *n1, char *n2);
 int				no_equal_case(t_shell *shell, char *var);
+int				handle_twodotempty(t_shell *shell);
 
 /***ENV_UTILS***/
-char			**get_env(void);
+char			**get_exp(t_shell *shell);
+char			**get_env(t_shell *shell);
+char			**add_empty_items(char **env, t_shell *shell);
+char			**init_empty_env(t_shell *shell);
 int				print_env(char **env);
 char			**add_env(char **env, char *variable);
 char			**del_env(char **env, char *variable);

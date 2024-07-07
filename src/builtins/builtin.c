@@ -19,7 +19,7 @@ void	run_builtin(t_table table, t_shell *shell)
 	else if (ft_strcmp(table.args[0], "echo") == 0)
 		shell->exit_status = ft_echo(table.args, shell);
 	else if (ft_strcmp(table.args[0], "pwd") == 0)
-		shell->exit_status = ft_pwd();
+		shell->exit_status = ft_pwd(shell);
 	else if (ft_strcmp(table.args[0], "env") == 0)
 		shell->exit_status = print_env(shell->env);
 	else if (ft_strcmp(table.args[0], "cd") == 0)
