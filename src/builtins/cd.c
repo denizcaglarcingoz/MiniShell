@@ -64,7 +64,7 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 {
 	char	*path;
 
-	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~')
+	if (!(*(full_cmd + 1)) || !ft_strcmp(full_cmd[1], "~"))
 	{
 		path = ft_getenv("HOME", shell->env);
 		if (!path)
@@ -72,18 +72,18 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 	}
 	else if (**(full_cmd + 1) == '\0')
 		return (EXIT_SUCCESS);
-	else if (**(full_cmd + 1) == '-')
+	else if (!ft_strcmp(full_cmd[1], "-"))
 	{
 		path = ft_getenv("OLDPWD", shell->env);
 		if (!path)
 			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
-		ft_putstr_fd(path, 1);
-		ft_putstr_fd("\n", 1);
 	}
 	else
 		path = full_cmd[1];
 	if (chdir(path) == -1)
 		return (cd_not_found(path), 1);
+	else if (*(full_cmd + 1) && **(full_cmd + 1) == '-')
+		cd_dash_putpath(path);
 	return (EXIT_SUCCESS);
 }
 

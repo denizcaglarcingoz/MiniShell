@@ -213,6 +213,7 @@ int				compare_names(char *name, char *var);
 int				ft_num_strcmp(char *n1, char *n2);
 int				no_equal_case(t_shell *shell, char *var);
 int				handle_twodotempty(t_shell *shell);
+void			cd_dash_putpath(char *path);
 
 /***ENV_UTILS***/
 char			**get_exp(t_shell *shell);

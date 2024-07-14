@@ -54,3 +54,9 @@ int	handle_twodotempty(t_shell *shell)
 	}
 	return (0);
 }
+
+void	cd_dash_putpath(char *path)
+{
+	ft_putstr_fd(path, 1);
+	ft_putstr_fd("\n", 1);
+}
