@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/16 15:38:32 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 20:27:10 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,15 +140,26 @@ int *k, t_shell *shell);
 void			n_content_dup(char *content, char ***new_content, \
 int *k, t_shell *shell);
 char			*ft_strncpy(char *dest, char *src, unsigned int n);
-char			*hdoc_in_expand(t_shell *shell, char *hdoc, char *non_exp_hdoc);
+char			*hdoc_in_exp(t_shell *shell, char *hdoc, char *non_exp_hdoc);
 char			*get_last_non_exp_hdoc(t_table table, t_shell *shell);
+
+/****REDIRECTION****/
+char			*is_dollar(char *hdoc);
+char			*get_last_non_exp_hdoc(t_table table, t_shell *shell);
+int				quote_check(char *non_exp_hdoc);
+char			*temp_init(t_shell *shell, char *hdoc, int *i);
+char			*get_dollar_name(t_shell *shell, char *hdoc, int *i);
+char			*hdoc_in_dollar(t_shell *shell, char *hdoc, int *i);
+char			*hdoc_inenv_loop(t_shell *shell, char *dollar);
+void			hdoc_in_question(t_shell *shell, char **hdoc, int *i);
 
 
 /****EXECUTION****/
 void			execution(t_shell *shell);
 void			ft_pipe_execve(char *path, char **argv, t_shell *shell);
 void			pipe_execution(t_shell *shell, t_pipe_exec_var *exec);
-void			pipe_exec_run(t_table exp_table, int table_id, t_shell *shell, char *in);
+void			pipe_exec_run(t_table exp_table, int table_id, \
+t_shell *shell, char *in);
 pid_t			pipe_fork(t_shell *shell, int pipefd[2]);
 void			exec_init(t_pipe_exec_var *exec, t_shell *shell);
 
@@ -165,7 +176,7 @@ int				output_check(t_table exp_table, int table_id, \
 t_tokens *tokens);
 char			*check_in(t_table exp_table);
 char			**check_hdoc(t_table exp_table, t_shell *shell);
-char			*temp_hdoc(char *hdoc);
+int				fd_write_hdoc(char *hdoc);
 
 // exectution utils
 t_tokens		*start_of_pipe(t_tokens *tokens, int table_id);

@@ -6,20 +6,22 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 05:00:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:07:54 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 20:05:53 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*temp_hdoc(char *hdoc)
+int	fd_write_hdoc(char *hdoc)
 {
-	int	fd;
+	int	fd[2];
 
-	fd = open("temp_hdoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		return (perror("open: temp_hdoc"), NULL);
-	write(fd, hdoc, ft_strlen(hdoc));
-	close(fd);
-	return ("temp_hdoc");
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		return (-1);
+	}
+	write(fd[1], hdoc, ft_strlen(hdoc));
+	close(fd[1]);
+	return (fd[0]);
 }

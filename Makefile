@@ -51,6 +51,7 @@ SRCS =	./src/backend/execution/child_out_check.c \
 		./src/backend/redirections/hdoc_inside_expand.c \
 		./src/backend/redirections/heredoc.c \
 		./src/backend/redirections/output.c \
+		./src/backend/redirections/hdoc_inside_exp_util.c \
 		\
 		./src/builtins/add_env.c \
 		./src/builtins/builtin_utils.c \

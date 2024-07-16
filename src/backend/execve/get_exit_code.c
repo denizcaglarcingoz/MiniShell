@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:15:43 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 18:06:08 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 18:35:27 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,6 @@ void	get_exit_code(t_shell *shell, pid_t pid)
 	}
 }
 
-void	unlink_hdoc(t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (i < shell->table_len)
-	{
-		if (shell->tables[i].heredoc[0] != NULL)
-			unlink("temp_hdoc");
-		i++;
-	}
-}
-
 void	get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec)
 {
 	int		child_exit_code;
@@ -76,7 +63,6 @@ void	get_exit_code_p(t_shell *shell, t_pipe_exec_var *exec)
 			i++;
 		}
 	}
-	unlink_hdoc(shell);
 }
 
 void	path_run_signals(pid_t pid, t_shell *shell)

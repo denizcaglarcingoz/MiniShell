@@ -6,26 +6,25 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 01:14:55 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/16 16:29:59 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:18:15 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 void	not_in_out(char *in, t_shell *shell)
 {
-	t_tokens *first;
+	t_tokens	*first;
 
-	first =	shell->tokens;
-	while(shell->tokens)
+	first = shell->tokens;
+	while (shell->tokens)
 	{
 		if (shell->tokens->type == 5 || shell->tokens->type == 7)
 		{
 			shell->tokens = shell->tokens->next;
 			output_file(shell->tokens->content, NULL);
 		}
-		if (shell->tokens->type == 4 )
+		if (shell->tokens->type == 4)
 		{
 			shell->tokens = shell->tokens->next;
 			if (ft_strcmp(shell->tokens->content, in) == 0)
@@ -40,20 +39,20 @@ void	not_in_out_p(char *in, t_shell *shell, int table_num)
 {
 	while (shell->tokens)
 	{
-		if(shell->tokens->type == PIPE)
+		if (shell->tokens->type == PIPE)
 			table_num--;
 		if (table_num == 0)
 			break ;
 		shell->tokens = shell->tokens->next;
 	}
-	while(shell->tokens)
+	while (shell->tokens)
 	{
 		if (shell->tokens->type == 5 || shell->tokens->type == 7)
 		{
 			shell->tokens = shell->tokens->next;
 			output_file(shell->tokens->content, NULL);
 		}
-		if (shell->tokens->type == 4 )
+		if (shell->tokens->type == 4)
 		{
 			shell->tokens = shell->tokens->next;
 			if (ft_strcmp(shell->tokens->content, in) == 0)
@@ -85,7 +84,6 @@ void	not_in_file_p(char **in, t_shell *shell, int table_num)
 	ft_putstr_fd(": No such file or directory\n", 2);
 	free_all(shell, "no print", 127);
 }
-
 
 void	not_in_file(char **in, t_shell *shell)
 {

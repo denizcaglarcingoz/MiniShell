@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 05:03:34 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:07:26 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 18:43:06 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,15 @@ void	inp_cmd_run_dups(t_shell *shell, int fd)
 void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)
 {
 	int				fd;
-	char			*inp;
 	t_token_type	t_type;
 	int				dup_res;
 
 	t_type = in_o_hdoc(shell->tokens, 0);
 	if (t_type == D_LESS)
-		inp = temp_hdoc(hdoc[0]);
-	if (t_type == LESS)
-		inp = in;
+		fd = fd_write_hdoc(hdoc[0]);
 	free_d_str(hdoc);
-	fd = open(inp, 0);
+	if (t_type == LESS)
+		fd = open(in, 0);
 	if (fd == -1)
 		return (free_all(shell, "open", 127));
 	inp_cmd_run_dups(shell, fd);
@@ -47,8 +45,6 @@ void	inp_cmd_run(t_table exp_table, char *in, char **hdoc, t_shell *shell)
 	if (dup_res == -1)
 		(close(shell->in_fd), free_all(shell, "dup2", 127));
 	close(shell->in_fd);
-	if (t_type == D_LESS)
-		unlink(inp);
 }
 
 void	single_exec_run(t_shell *shell, t_single_exec_var *var)

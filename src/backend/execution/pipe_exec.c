@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/16 15:38:05 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 19:37:36 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,13 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 	close(pipefd[0]);
 	in = check_in(shell->tables[i]);
 	if (shell->tables[i].in[0] != NULL && in == NULL)
+	{
+		free_d_str_till(shell->hdoc, shell->table_len - 1);
+		if (prev_read_fd != -1)
+			close(prev_read_fd);
+		close(pipefd[1]);
 		not_in_file_p(shell->tables[i].in, shell, i);
+	}
 	child_out_check(shell, pipefd, prev_read_fd, i);
 	close(pipefd[1]);
 	if ((shell->tables[i]).args[0] == NULL)

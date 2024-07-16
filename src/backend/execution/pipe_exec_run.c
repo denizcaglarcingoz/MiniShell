@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/16 15:37:04 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 18:43:30 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ int	init_inp_fd(t_token_type *t_type, char **inp, char *in, t_shell *shell)
 	int	fd;
 
 	if (*t_type == D_LESS)
-		*inp = temp_hdoc(shell->hdoc[shell->exec.i]);
-	if (*t_type == LESS)
-		*inp = in;
+		return (fd_write_hdoc(shell->hdoc[shell->exec.i]));
+	*inp = in;
 	if (*inp == NULL)
 		return (-1);
 	fd = open(*inp, 0);
@@ -29,14 +28,6 @@ int	init_inp_fd(t_token_type *t_type, char **inp, char *in, t_shell *shell)
 		return (-1);
 	}
 	return (fd);
-}
-
-void	wait_ft(t_token_type t_type, char *inp)
-{
-	wait(NULL);
-	if (t_type == D_LESS)
-		unlink(inp);
-	exit(0);
 }
 
 void	pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
@@ -65,11 +56,6 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
 
 void	pipe_exec_run(t_table table, int table_id, t_shell *shell, char *in)
 {
-	// char	*in;
-// 
-	// in = check_in(table);
-	// if (table.in[0] != NULL && in == NULL)
-		// not_in_file_p(table.in, shell, table_id);
 	shell->table_id = table_id;
 	if (is_builtin(table.args[0]) == 1)
 	{
