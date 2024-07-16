@@ -16,8 +16,6 @@ int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 {
 	char *non_exp_hdoc;
 
-	// if (shell->tables[0].args[0] == NULL)
-		// return (free_all(shell, "no print", 3), 1);
 	*out_fd = dup(STDOUT_FILENO);
 	if (*out_fd == -1)
 		free_all(shell, "dup error", 127);
@@ -42,8 +40,6 @@ int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 		*hdoc[0] = hdoc_in_expand(shell, *hdoc[0], non_exp_hdoc);
 	if (expandor(shell, 0) == false)
 		return (close(*out_fd), 1);
-	// if (shell->tables[0].args[0] == NULL)
-	// 	return (free_all(shell, "no print", 3), 1);
 	return (0);
 }
 

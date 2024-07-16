@@ -17,10 +17,7 @@ void	free_envs(char **env, int i)
 	int	j;
 
 	if (env == NULL)
-	{
-		ft_putstr_fd("Empty Environmental Variable List\n", 2);
 		return ;
-	}
 	j = -1;
 	while (++j < i)
 	{
@@ -37,10 +34,7 @@ void	free_all_env(char **env)
 	int	env_len;
 
 	if (env == NULL)
-	{
-		ft_putstr_fd("Empty Environmental Variable List\n", 2);
 		return ;
-	}
 	j = -1;
 	env_len = 0;
 	while (env[env_len])
@@ -57,10 +51,7 @@ void	free_all_env(char **env)
 int	print_env(char **env)
 {
 	if (env == NULL)
-	{
-		ft_putstr_fd("Empty Environmental Variable List\n", 2);
 		return (2);
-	}
 	while (*env != NULL)
 	{
 		ft_putstr_fd(*env, 1);
@@ -70,7 +61,7 @@ int	print_env(char **env)
 	return (0);
 }
 
-char	**get_env(void)
+char	**get_env(t_shell *shell)
 {
 	extern char	**environ;
 	char		**env;
@@ -80,7 +71,7 @@ char	**get_env(void)
 	i = 0;
 	j = -1;
 	if (environ == NULL || environ[i] == NULL)
-		return (NULL);
+		return (init_empty_env(shell));
 	while (environ[i] != NULL)
 		i++;
 	env = (char **)malloc((i + 1) * sizeof(char *));

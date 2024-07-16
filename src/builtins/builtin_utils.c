@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-void	cd_not_found(char **full_cmd)
+void	cd_not_found(char *path)
 {
 	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(full_cmd[1], 2);
+	ft_putstr_fd(path, 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 }
 

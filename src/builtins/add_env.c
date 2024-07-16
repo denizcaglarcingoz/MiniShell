@@ -81,12 +81,15 @@ char	**add_env(char **env, char *variable)
 	flag = 0;
 	if (variable == NULL || *variable == '\0')
 		return (env);
-	while (env[++i] != NULL)
+	if (env)
 	{
-		if (compare_names_add(env[i], variable) == 0)
-			flag = 1;
-		if (compare_names_add(env[i], variable) == -256)
-			return (env);
+		while (env[++i] != NULL)
+		{
+			if (compare_names_add(env[i], variable) == 0)
+				flag = 1;
+			if (compare_names_add(env[i], variable) == -256)
+				return (env);
+		}
 	}
 	new_env = add_env_helper(env, variable, i - flag, flag);
 	free_envs(env, i);

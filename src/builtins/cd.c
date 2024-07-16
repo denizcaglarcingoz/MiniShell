@@ -64,56 +64,56 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 {
 	char	*path;
 
-	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~' \
-		|| **(full_cmd + 1) == '\0')
+	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~')
+	{
 		path = ft_getenv("HOME", shell->env);
+		if (!path)
+			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
+	}
+	else if (**(full_cmd + 1) == '\0')
+		return (EXIT_SUCCESS);
 	else if (**(full_cmd + 1) == '-')
 	{
 		path = ft_getenv("OLDPWD", shell->env);
 		if (!path)
-		{
-			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-			return (1);
-		}
+			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
 		ft_putstr_fd(path, 1);
 		ft_putstr_fd("\n", 1);
 	}
 	else
 		path = full_cmd[1];
 	if (chdir(path) == -1)
-	{
-		cd_not_found(full_cmd);
-		return (1);
-	}
+		return (cd_not_found(path), 1);
 	return (EXIT_SUCCESS);
 }
 
-int	handle_relative(char **full_cmd)
+int	handle_relative(char **full_cmd, t_shell *shell)
 {
 	char	*curr_dir;
 	char	*path;
 
 	curr_dir = getcwd(NULL, 0);
-	if (!curr_dir)
-		return (2);
+	if (!curr_dir && (!ft_strcmp(full_cmd[1], "..")))
+	{
+		if (handle_twodotempty(shell) == 3)
+			return (3);
+		return (0);
+	}
+	else if (!curr_dir && ft_strcmp(full_cmd[1], ".."))
+		return (cd_not_found(full_cmd[1]), 1);
 	path = malloc(ft_strlen(curr_dir) + ft_strlen(full_cmd[1]) + 2);
 	if (!path)
-	{
-		free(curr_dir);
-		return (2);
-	}
+		return (free(curr_dir), 2);
 	ft_strcpy(path, curr_dir);
 	ft_strcat(path, "/");
 	ft_strcat(path, full_cmd[1]);
 	free(curr_dir);
 	if (chdir(path) == -1)
 	{
-		cd_not_found(full_cmd);
-		free(path);
-		return (1);
+		cd_not_found(full_cmd[1]);
+		return (free(path), 1);
 	}
-	free(path);
-	return (0);
+	return (free(path), 0);
 }
 
 int	ft_cd(char **full_cmd, t_shell *shell)
@@ -122,20 +122,19 @@ int	ft_cd(char **full_cmd, t_shell *shell)
 
 	status = 0;
 	if (ft_matrix_len(full_cmd) > 2)
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		return (1);
-	}
-	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~' \
-		|| **(full_cmd + 1) == '/' || **(full_cmd + 1) == '\0' \
-			|| **(full_cmd + 1) == '-')
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
+	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~' || \
+	**(full_cmd + 1) == '/' || **(full_cmd + 1) == '\0' || \
+	**(full_cmd + 1) == '-')
 	{
 		status = absolute_home(full_cmd, shell);
 	}
 	else
-		status = handle_relative(full_cmd);
+		status = handle_relative(full_cmd, shell);
 	if (status == 1)
 		return (1);
+	if (status == 3)
+		return (0);
 	if (update_old(shell) || update_pwd(shell) || status == 2)
 		free_all(shell, "cd malloc failed", 127);
 	return (EXIT_SUCCESS);
