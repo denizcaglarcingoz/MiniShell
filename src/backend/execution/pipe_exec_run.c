@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 02:52:31 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 15:37:04 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ void	pipe_inp_cmd_run(t_table exp_table, char *in, t_shell *shell)
 	ft_pipe_execve(exp_table.args[0], exp_table.args, shell);
 }
 
-void	pipe_exec_run(t_table table, int table_id, t_shell *shell)
+void	pipe_exec_run(t_table table, int table_id, t_shell *shell, char *in)
 {
-	char	*in;
-
-	in = check_in(table);
-	if (table.in[0] != NULL && in == NULL)
-		not_in_file_p(table.in, shell);
+	// char	*in;
+// 
+	// in = check_in(table);
+	// if (table.in[0] != NULL && in == NULL)
+		// not_in_file_p(table.in, shell, table_id);
 	shell->table_id = table_id;
 	if (is_builtin(table.args[0]) == 1)
 	{

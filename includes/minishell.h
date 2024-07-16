@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/07 21:27:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 15:38:32 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ char			*get_last_non_exp_hdoc(t_table table, t_shell *shell);
 void			execution(t_shell *shell);
 void			ft_pipe_execve(char *path, char **argv, t_shell *shell);
 void			pipe_execution(t_shell *shell, t_pipe_exec_var *exec);
-void			pipe_exec_run(t_table exp_table, int table_id, t_shell *shell);
+void			pipe_exec_run(t_table exp_table, int table_id, t_shell *shell, char *in);
 pid_t			pipe_fork(t_shell *shell, int pipefd[2]);
 void			exec_init(t_pipe_exec_var *exec, t_shell *shell);
 
@@ -186,7 +186,7 @@ void			null_path(char *argv, t_shell *shell);
 void			ft_access_execve(char *path, char **argv, t_shell *shell);
 char			*check_hdoc_p(t_table table, t_shell *shell);
 void			not_in_file(char **in, t_shell *shell);
-void			not_in_file_p(char **in, t_shell *shell);
+void			not_in_file_p(char **in, t_shell *shell, int table_num);
 char			**app_assign_new(char **new, char **str, char *path_add);
 char			**append_path(char **str, char *path_add);
 int				is_hdoc_exist(t_shell *shell);

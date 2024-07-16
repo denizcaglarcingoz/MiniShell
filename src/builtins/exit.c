@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:13 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:47:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 15:43:59 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ int	ft_exit(char **full_cmd, t_shell *shell)
 	if (full_cmd[1])
 		code = set_code(full_cmd, shell);
 	final_free(shell);
-	ft_putstr_fd("exit\n", 1);
+	// ft_putstr_fd("exit\n", 1);
 	exit(code);
 }

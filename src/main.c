@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:19:08 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 15:45:31 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ static void	loop_items(t_shell *shell, char *init_in)
 	execution(shell);
 }
 
-// static void	else_isatty(char **init_in)
-// {
-// 	char	*line;
+static void	else_isatty(char **init_in)
+{
+	char	*line;
 
-// 	errno = 0;
-// 	line = get_next_line(fileno(stdin));
-// 	if (line != 0)
-// 		*init_in = ft_strtrim(line, "\n");
-// 	free(line);
-// }
+	errno = 0;
+	line = get_next_line(fileno(stdin));
+	if (line != 0)
+		*init_in = ft_strtrim(line, "\n");
+	free(line);
+}
 // if (isatty(fileno(stdin)))
 // else
 	// else_isatty(&init_in);
@@ -64,7 +64,10 @@ void	shell_loop(t_shell *shell)
 		signal(SIGINT, sigint_handler_int);
 		errno = 0;
 		init_in = NULL;
-		init_in = readline("minishell$ ");
+		if (isatty(fileno(stdin)))
+			init_in = readline("minishell$ ");
+		else
+			else_isatty(&init_in);
 		if (errno == 4)
 			errno = 0;
 		if (errno != 0)
@@ -80,7 +83,7 @@ int	main(int ac, char **av)
 {
 	t_shell				shell;
 
-	ft_putstr_fd("Bash by Shell of MiniTeam\n", 1);
+	// ft_putstr_fd("Bash by Shell of MiniTeam\n", 1);
 	shell.pid = ft_pid(NULL) - 1;
 	signal(SIGPIPE, sigpipe_handler);
 	signal(SIGUSR1, sigusr1_handler);

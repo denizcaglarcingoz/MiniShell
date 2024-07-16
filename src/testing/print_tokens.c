@@ -6,21 +6,21 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:48:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/28 19:08:05 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 11:18:22 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void print_tokens(t_tokens *tokens)
-// {
-// 	t_tokens *tmp;
+void print_tokens(t_tokens *tokens)
+{
+	t_tokens *tmp;
 
-// 	tmp = tokens;
-// 	while (tmp)
-// 	{
-// 		printf("content: %s\n", tmp->content);
-// 		printf("type: %d\n", tmp->type);
-// 		tmp = tmp->next;
-// 	}
-// }
+	tmp = tokens;
+	while (tmp)
+	{
+		printf("content: %s\n", tmp->content);
+		printf("type: %d\n", tmp->type);
+		tmp = tmp->next;
+	}
+}

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:25:15 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 05:48:02 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 15:43:04 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,6 @@ void	control_d_exit(t_shell *shell, char *init_in)
 		free(init_in);
 	free_all_env(shell->env);
 	free_all_env(shell->exported);
-	printf("exit\n");
+	// printf("exit\n");
 	exit(shell->exit_status);
 }

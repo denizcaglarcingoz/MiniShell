@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:04 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/05 16:32:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/16 15:38:05 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 {
+	char	*in;
+
 	close(pipefd[0]);
+	in = check_in(shell->tables[i]);
+	if (shell->tables[i].in[0] != NULL && in == NULL)
+		not_in_file_p(shell->tables[i].in, shell, i);
 	child_out_check(shell, pipefd, prev_read_fd, i);
 	close(pipefd[1]);
 	if ((shell->tables[i]).args[0] == NULL)
@@ -23,7 +28,7 @@ void	child_pro(t_shell *shell, int pipefd[2], int prev_read_fd, int i)
 		free_all(shell, "", -1);
 	}
 	else
-		pipe_exec_run(shell->tables[i], i, shell);
+		pipe_exec_run(shell->tables[i], i, shell, in);
 }
 
 void	expansion_ok_run(t_shell *shell, t_pipe_exec_var *exec)
