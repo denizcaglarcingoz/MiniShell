@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 01:14:55 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/16 17:18:15 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/17 18:29:12 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,5 @@ void	not_in_file(char **in, t_shell *shell)
 	ft_putstr_fd(in[i], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 	free_all(shell, "no print", 0);
+	shell->exit_status = 1;
 }
