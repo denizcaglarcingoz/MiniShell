@@ -20,7 +20,7 @@ int	update_old(t_shell *shell)
 
 	pwd = ft_getenv("PWD", shell->env);
 	if (pwd == NULL)
-		return (0);
+		return (set_nullpwd(shell));
 	old = ft_strdup(pwd);
 	if (!old)
 		return (2);
@@ -29,10 +29,12 @@ int	update_old(t_shell *shell)
 	if (!temp)
 		return (2);
 	shell->env = add_env(shell->env, temp);
+	shell->exported = add_env(shell->exported, temp);
 	free(temp);
-	if (!shell->env)
+	if (!shell->env || !shell->exported)
 	{
 		free_all_env(shell->exported);
+		free_all_env(shell->env);
 		free_all(shell, "cd add_env", 5);
 	}
 	return (EXIT_SUCCESS);
@@ -40,23 +42,18 @@ int	update_old(t_shell *shell)
 
 int	update_pwd(t_shell *shell)
 {
-	int		i;
 	char	cwd[PATH_MAX];
-	char	*temp1;
+	char	*temp;
 
-	i = -1;
 	getcwd(cwd, sizeof(cwd));
-	while (shell->env[++i])
-	{
-		if (!ft_strncmp(shell->env[i], "PWD=", 4))
-		{
-			temp1 = ft_strjoin("PWD=", cwd);
-			if (!temp1)
-				return (2);
-			free(shell->env[i]);
-			shell->env[i] = temp1;
-		}
-	}
+	temp = ft_strjoin("PWD=", cwd);
+	if (!temp)
+		return (2);
+	shell->env = add_env(shell->env, temp);
+	shell->exported = add_env(shell->exported, temp);
+	free (temp);
+	if (!shell->env || !shell->exported)
+		return (2);
 	return (0);
 }
 
@@ -64,7 +61,7 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 {
 	char	*path;
 
-	if (!(*(full_cmd + 1)) || **(full_cmd + 1) == '~')
+	if (!(*(full_cmd + 1)) || !ft_strcmp(full_cmd[1], "~"))
 	{
 		path = ft_getenv("HOME", shell->env);
 		if (!path)
@@ -72,18 +69,18 @@ int	absolute_home(char **full_cmd, t_shell *shell)
 	}
 	else if (**(full_cmd + 1) == '\0')
 		return (EXIT_SUCCESS);
-	else if (**(full_cmd + 1) == '-')
+	else if (!ft_strcmp(full_cmd[1], "-"))
 	{
 		path = ft_getenv("OLDPWD", shell->env);
 		if (!path)
 			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
-		ft_putstr_fd(path, 1);
-		ft_putstr_fd("\n", 1);
 	}
 	else
 		path = full_cmd[1];
 	if (chdir(path) == -1)
 		return (cd_not_found(path), 1);
+	else if (*(full_cmd + 1) && **(full_cmd + 1) == '-')
+		cd_dash_putpath(path);
 	return (EXIT_SUCCESS);
 }
 

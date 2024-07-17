@@ -54,3 +54,24 @@ int	handle_twodotempty(t_shell *shell)
 	}
 	return (0);
 }
+
+void	cd_dash_putpath(char *path)
+{
+	ft_putstr_fd(path, 1);
+	ft_putstr_fd("\n", 1);
+}
+
+int	set_nullpwd(t_shell *shell)
+{
+	if (ft_getenv("OLDPWD", shell->env))
+	{
+		shell->exported = del_env(shell->exported, "OLDPWD");
+		shell->env = del_env(shell->env, "OLDPWD");
+		if (!shell->env || !shell->exported)
+			return (2);
+		shell->exported = add_env(shell->exported, "OLDPWD");
+		if (!shell->exported)
+			return (2);
+	}
+	return (0);
+}

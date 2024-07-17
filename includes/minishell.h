@@ -153,7 +153,6 @@ char			*hdoc_in_dollar(t_shell *shell, char *hdoc, int *i);
 char			*hdoc_inenv_loop(t_shell *shell, char *dollar);
 void			hdoc_in_question(t_shell *shell, char **hdoc, int *i);
 
-
 /****EXECUTION****/
 void			execution(t_shell *shell);
 void			ft_pipe_execve(char *path, char **argv, t_shell *shell);
@@ -229,6 +228,8 @@ int				compare_names(char *name, char *var);
 int				ft_num_strcmp(char *n1, char *n2);
 int				no_equal_case(t_shell *shell, char *var);
 int				handle_twodotempty(t_shell *shell);
+void			cd_dash_putpath(char *path);
+int				set_nullpwd(t_shell *shell);
 
 /***ENV_UTILS***/
 char			**get_exp(t_shell *shell);

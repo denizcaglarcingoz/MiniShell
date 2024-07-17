@@ -35,9 +35,6 @@ char	**init_empty_exp(t_shell *shell)
 	shell->exported = add_env(shell->exported, path_str);
 	if (shell->exported == NULL)
 		return (NULL);
-	shell->exported = add_env(shell->exported, "OLDPWD");
-	if (shell->exported == NULL)
-		return (NULL);
 	return (shell->exported);
 }
 
@@ -126,6 +123,13 @@ void	init_env(t_shell *shell)
 	}
 	shell->exported = get_exp(shell);
 	if (!shell->exported)
+	{
+		free_all_env(shell->env);
+		free_all_env(shell->exported);
+		exit(EXIT_FAILURE);
+	}
+	shell->exported = add_env(shell->exported, "OLDPWD");
+	if (shell->exported == NULL)
 	{
 		free_all_env(shell->env);
 		free_all_env(shell->exported);
