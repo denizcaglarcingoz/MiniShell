@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:12 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/17 18:17:40 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/17 18:26:18 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ char **environ, t_shell *shell)
 
 int	permission_denied(char *path, t_shell *shell, char **all_paths)
 {
-	if (dot_check(path, shell) == 1)
-		return (1);
 	if (access(path, X_OK) != 0 && path[0] == '.' && path[1] == '/')
 	{
 		if (access(path, F_OK) != 0)
@@ -81,16 +79,13 @@ char	*path_run(char **all_paths, char **argv, char **environ, t_shell *shell)
 	if (path_run_access_check(all_paths, argv, environ, shell))
 		return (NULL);
 	permission = permission_denied(argv[0], shell, all_paths);
-	if (argv[0] != NULL && permission == 0)
-	{
-		write(2, argv[0], ft_strlen(argv[0]));
+	if (permission == 1)
+		return (NULL);
+	write(2, argv[0], ft_strlen(argv[0]));
+	if (argv[0] != NULL)
 		write(2, ": command not found\n", 20);
-	}
-	if (permission == 0)
-	{
-		free_d_all(all_paths, "no print\n", shell, 0);
-		shell->exit_status = 127;
-	}
+	free_d_all(all_paths, "no print\n", shell, 0);
+	shell->exit_status = 127;
 	return (NULL);
 }
 
