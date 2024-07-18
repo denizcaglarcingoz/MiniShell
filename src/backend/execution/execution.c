@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:49 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 13:15:44 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/18 11:54:08 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,45 @@ void	pipe_exec_init(t_pipe_exec_var *exec)
 	exec->str_pid = NULL;
 }
 
+int	cat_or_echo(t_shell *shell)
+{
+	if (ft_strcmp(shell->tables->args[0], "echo") == 0)
+		return (1);
+	if (ft_strcmp(shell->tables->args[0], "cat") == 0)
+		return (1);
+	if (ft_strcmp(shell->tables->args[0], "wc") == 0)
+		return (1);
+	return (0);
+}
+
+void	last_command_init(t_shell *shell, int type)
+{
+	char	*first_arg;
+	int		c_or_e;
+
+	c_or_e = 0;
+	if (shell->tables->args[0] == NULL)
+		return ;
+	if (type == 0)
+	{
+		if (d_str_len(shell->tables->args) > 1)
+			if (ft_strcmp(shell->tables->args[0], "echo") == 0 && \
+				ft_strcmp(shell->tables->args[1], "$_") == 0)
+				return ;
+		if (d_str_len(shell->tables->args) > 1)
+			c_or_e = cat_or_echo(shell);
+		if (c_or_e == 0)
+			first_arg = ft_strjoin("_=", shell->tables->args[0]);
+		else
+			first_arg = ft_strjoin("_=", shell->tables->args[1]);
+		if (first_arg == NULL)
+			free_all(shell, "malloc last command init", 127);
+		shell->env = add_env(shell->env, first_arg);
+		if (shell->env == NULL)
+			free_all(shell, "add_env issue", 127);
+	}
+}
+
 void	execution(t_shell *shell)
 {
 	pipe_exec_init(&(shell->exec));
@@ -41,7 +80,13 @@ void	execution(t_shell *shell)
 		return ;
 	shell->table_len = shell->tables->table_len;
 	if (shell->tables->table_len < 2)
+	{
+		last_command_init(shell, 0);
 		single_exec(shell);
+	}
 	else
+	{
+		last_command_init(shell, 1);
 		pipe_execution(shell, &(shell->exec));
+	}
 }
