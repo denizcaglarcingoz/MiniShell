@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 22:56:14 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 10:02:20 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,12 @@ char	**one_dollar(char **new_content, t_shell *shell, int *i)
 	new_content = add_new_content(new_content, question_mark, shell);
 	(*i)++;
 	return (new_content);
+}
+
+bool	ambigous_return(char **exp, t_shell *shell, char **content, int i)
+{
+	printf("bash: %s: ambiguous redirect\n", content[i]);
+	free_d_str(exp);
+	shell->exit_status = 1;
+	return (false);
 }

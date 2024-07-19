@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/18 17:21:00 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 10:03:27 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,9 @@ bool	redir_expand(char **content, t_shell *shell)
 		if (str_is_alfa_num(content[i]) == false)
 		{
 			exp = exp_check(content[i], shell);
-			if (exp[1] != 0 || (exp[0][0] == '\0' && exp[1] == NULL))
-			{
-				printf("bash: %s: ambiguous redirect\n", content[i]);
-				return (free_d_str(exp), shell->exit_status = 1, false);
-			}
+			if (exp[0] == NULL || exp[1] != 0 || \
+				(exp[0][0] == '\0' && exp[1] == NULL))
+				return (ambigous_return(exp, shell, content, i));
 			free(content[i]);
 			content[i] = ft_strdup(exp[0]);
 			free_d_str(exp);

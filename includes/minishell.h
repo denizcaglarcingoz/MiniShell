@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/19 08:28:46 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 10:03:11 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ char			*get_dollar_name(t_shell *shell, char *hdoc, int *i);
 char			*hdoc_in_dollar(t_shell *shell, char *hdoc, int *i);
 char			*hdoc_inenv_loop(t_shell *shell, char *dollar);
 void			hdoc_in_question(t_shell *shell, char **hdoc, int *i);
+bool			ambigous_return(char **exp, t_shell *shell, \
+char **content, int i);
 
 /****EXECUTION****/
 void			execution(t_shell *shell);

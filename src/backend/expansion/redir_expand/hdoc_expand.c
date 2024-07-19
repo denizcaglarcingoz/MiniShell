@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 17:23:08 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/04 22:57:30 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 09:58:56 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ char	**hdoc_exp_check(char *content, t_shell *shell)
 	new_content = NULL;
 	if (content == NULL)
 		return (NULL);
+	if (ft_strlen(content) == 2 && content[0] == '"' && content[1] == '"')
+		return (NULL);
 	hdoc_init_new_content(&new_content, shell);
 	while (content[i])
 	{
@@ -82,11 +84,9 @@ bool	hdoc_expand(char **content, t_shell *shell)
 		if (str_is_alfa_num(content[i]) == false)
 		{
 			exp = hdoc_exp_check(content[i], shell);
-			if (exp[1] != 0 || (exp[0][0] == '\0' && exp[1] == NULL))
-			{
-				printf("bash: %s: ambiguous redirect\n", content[i]);
-				return (false);
-			}
+			if (exp == NULL || exp[1] != 0 || (exp[0][0] == '\0' \
+				&& exp[1] == NULL))
+				return (ft_putstr_fd("bash: ambiguous redirect\n", 2), false);
 			free(content[i]);
 			content[i] = ft_strdup(exp[0]);
 			free_d_str(exp);

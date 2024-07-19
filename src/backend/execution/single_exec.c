@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 19:00:10 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/18 16:19:26 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 09:55:58 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	check_and_set(int *out_fd, char ***hdoc, t_shell *shell)
 		free_all(shell, "dup error", 127);
 	non_exp_hdoc = get_last_non_exp_hdoc(shell->tables[0], shell);
 	if (expandor_hdoc(shell, 0) == false)
-		return (close(*out_fd), 1);
+		return (free(non_exp_hdoc), close(*out_fd), 1);
 	*hdoc = NULL;
 	*hdoc = check_hdoc(shell->tables[0], shell);
 	if (g_sig_int == SIGUSR1)
