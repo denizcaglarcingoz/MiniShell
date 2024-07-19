@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:26:14 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/24 22:38:33 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 06:29:26 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,22 @@ t_tokens	*grammer_check(t_tokens *tokens, int *exit_status)
 		}
 		if (tokens != NULL)
 			tokens = tokens->next;
+	}
+	return (first_token);
+}
+
+t_tokens	*token_content_check(t_tokens *tokens, int *exit_status)
+{
+	t_tokens	*first_token;
+
+	if (tokens == NULL)
+		return (NULL);
+	first_token = tokens;
+	while (tokens)
+	{
+		if (content_check(tokens->content) == false)
+			return (*exit_status = 2, error_print(tokens, first_token));
+		tokens = tokens->next;
 	}
 	return (first_token);
 }

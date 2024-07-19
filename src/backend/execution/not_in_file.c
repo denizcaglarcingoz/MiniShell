@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 01:14:55 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/17 18:29:12 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/18 12:07:22 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	not_in_file_p(char **in, t_shell *shell, int table_num)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(in[i], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
-	free_all(shell, "no print", 127);
+	free_all(shell, "no print", 1);
 }
 
 void	not_in_file(char **in, t_shell *shell)

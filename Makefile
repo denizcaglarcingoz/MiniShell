@@ -35,7 +35,10 @@ SRCS =	./src/backend/execution/child_out_check.c \
 		\
 		./src/backend/expansion/expand_utils/expand_utils.c \
 		\
+		./src/backend/expansion/redir_expand/add_first_loop.c \
+		./src/backend/expansion/redir_expand/add_new_content_utils.c \
 		./src/backend/expansion/redir_expand/add_new_content.c \
+		./src/backend/expansion/redir_expand/add_second_loop.c \
 		./src/backend/expansion/redir_expand/exp_check.c \
 		./src/backend/expansion/redir_expand/hdoc_expand_quo.c \
 		./src/backend/expansion/redir_expand/hdoc_expand.c \

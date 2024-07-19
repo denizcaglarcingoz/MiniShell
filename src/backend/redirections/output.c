@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:29 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/13 15:22:23 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:45:52 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,14 @@ int	output_file(char *file_name, char *out_file)
 	int	len;
 	int	written_size;
 
+	if (is_directory(file_name) == 1)
+		return (print_is_directory(file_name), 1);
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		perror("open x");
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(file_name, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (1);
 	}
 	if (out_file == NULL)

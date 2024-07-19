@@ -1,31 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_new_content.c                                  :+:      :+:    :+:   */
+/*   add_new_content_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 19:29:39 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/19 06:07:39 by dcingoz          ###   ########.fr       */
+/*   Created: 2024/07/19 06:01:03 by dcingoz           #+#    #+#             */
+/*   Updated: 2024/07/19 06:08:08 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**add_new_content(char **new_content, char **d_exp, t_shell *shell)
+void	joined_free(char ***joined, t_shell *shell, \
+int new_content_len, char **new_content)
 {
-	char	**joined;
+	int	i;
 
-	if (d_exp == NULL)
-		return (new_content);
-	if (new_content && new_content[0][0] == '\0' && new_content[1] == NULL)
+	i = 0;
+	while (i < new_content_len)
 	{
-		free_d_str(new_content);
-		return (d_exp);
+		free((*joined)[i]);
+		i++;
 	}
-	first_loops(&new_content, &d_exp, &joined, shell);
-	second_loops(&new_content, &d_exp, &joined, shell);
 	free_d_str(new_content);
-	free_d_str(d_exp);
-	return (joined);
+	free(*joined);
+	free_all(shell, "Malloc Error\n", 127);
+}
+
+int	free_d_str_int(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (1);
+	while (str[i] != NULL)
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+	return (1);
 }

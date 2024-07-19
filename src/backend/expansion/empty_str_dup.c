@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 22:07:18 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 02:40:54 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,17 @@ char	**empty_dollar_txt_d(void)
 	dollar_specification[0][2] = '\0';
 	dollar_specification[1] = NULL;
 	return (dollar_specification);
+}
+
+char	*empty_txt_nothing(void)
+{
+	char	*txt_nothing;
+
+	txt_nothing = (char *)malloc(sizeof(char) * 3);
+	if (txt_nothing == NULL)
+		return (NULL);
+	txt_nothing[0] = '\0';
+	txt_nothing[1] = '\0';
+	txt_nothing[2] = '\0';
+	return (txt_nothing);
 }

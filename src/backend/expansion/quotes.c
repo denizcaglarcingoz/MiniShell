@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:59 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/26 20:31:18 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/18 15:29:32 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,24 @@ t_shell *shell)
 	return (free(temp), new_cntnt);
 }
 
+int	exp_d_quo_join_char_if_check(char *cntnt, int *i)
+{
+	if (cntnt[*i] != '$' || \
+		(cntnt[*i] == '$' && (cntnt[*i + 1] == '/' \
+		|| cntnt[*i + 1] == ' ')) || \
+		(cntnt[*i] == '$' && cntnt[*i + 1] == '"'))
+	{
+		return (1);
+	}
+	return (0);
+}
+
 char	*exp_d_quo(char *cntnt, int *i, char *new_cntnt, t_shell *shell)
 {
 	while (cntnt[*i] && cntnt[*i] != '"')
 	{
-		if (cntnt[*i] == '$' && cntnt[*i + 1] != ' ' && cntnt[*i + 1] != '"')
+		if (cntnt[*i] == '$' && cntnt[*i + 1] != ' ' \
+			&& cntnt[*i + 1] != '/' && cntnt[*i + 1] != '"')
 		{
 			new_cntnt = quo_exp_dollar(cntnt, i, new_cntnt, shell);
 			if (new_cntnt == NULL)
@@ -83,8 +96,7 @@ char	*exp_d_quo(char *cntnt, int *i, char *new_cntnt, t_shell *shell)
 		}
 		if (!cntnt[*i] || cntnt[*i] == '"')
 			break ;
-		if (cntnt[*i] != '$' || (cntnt[*i] == '$' && cntnt[*i + 1] == ' ')
-			|| (cntnt[*i] == '$' && cntnt[*i + 1] == '"'))
+		if (exp_d_quo_join_char_if_check(cntnt, i) == 1)
 		{
 			new_cntnt = ft_strjoin_char(new_cntnt, cntnt[*i]);
 			if (new_cntnt == NULL)

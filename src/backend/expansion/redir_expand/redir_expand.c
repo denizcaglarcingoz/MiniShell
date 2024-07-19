@@ -6,11 +6,29 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:48 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/27 22:43:18 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/18 17:21:00 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	exp_space_flag(char *new_exp, t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	if (new_exp == NULL || new_exp[0] == '\0')
+		return ;
+	shell->exp_space_flag_start = 0;
+	shell->exp_space_flag_end = 0;
+	if (new_exp[0] == ' ')
+		shell->exp_space_flag_start = 1;
+	while (new_exp[i])
+		i++;
+	i--;
+	if (new_exp[i] == ' ')
+		shell->exp_space_flag_end = 1;
+}
 
 int	env_loop(char **to_exp, char ***new_d_exp, char **new_exp, \
 t_shell *shell)
@@ -28,6 +46,7 @@ t_shell *shell)
 			free(temp);
 			if (*new_exp == NULL)
 				return (free_d_str(*new_d_exp), free(to_exp), 1);
+			exp_space_flag(*new_exp, shell);
 			*new_d_exp = word_split(*new_exp);
 			if (*new_d_exp == NULL)
 				return (free(*new_exp), free(to_exp), 1);
@@ -64,7 +83,8 @@ char	**exp_dollar(char *content, int *i, char **new_content, t_shell *shell)
 	char	**d_exp;
 
 	to_exp = NULL;
-	if (content[*i] == '$' && content[*i + 1] == '\0')
+	if (content[*i] == '$' && (content[*i + 1] == '\0' \
+		|| content[*i + 1] == '/'))
 		return (one_dollar(new_content, shell, i));
 	(*i)++;
 	if (content[*i] == '?')

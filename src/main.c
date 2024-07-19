@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:24:46 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/16 15:45:31 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 06:17:04 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	loop_items(t_shell *shell, char *init_in)
 	shell->tokens = build_token_list(shell->input, shell);
 	free(shell->input);
 	shell->input = NULL;
+	shell->tokens = token_content_check(shell->tokens, &shell->exit_status);
 	shell->tokens = grammer_check(shell->tokens, &shell->exit_status);
 	shell->tables = parser(shell->tokens, shell);
 	execution(shell);

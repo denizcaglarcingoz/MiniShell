@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/17 17:52:01 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 06:16:36 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ typedef struct s_shell
 	int					in_fd;
 	int					out_fd;
 	int					pid;
+	int					exp_space_flag_start;
+	int					exp_space_flag_end;
 	t_pipe_exec_var		exec;
 	t_single_exec_var	var;
 }	t_shell;
@@ -81,6 +83,7 @@ int				if_meta(int first_quo, int quo_qty, int d_quo_qty);
 
 /****PARSER****/
 t_tokens		*grammer_check(t_tokens *tokens, int *exit_status);
+t_tokens		*token_content_check(t_tokens *tokens, int *exit_status);
 t_table			*parser(t_tokens *tokens, t_shell *shell);
 t_table			*table_init(t_tokens *tokens, t_table *table, t_shell *shell);
 int				t_content_alloc(t_tokens *tokens, t_table *table);
@@ -126,12 +129,11 @@ void			free_content(char **content);
 char			**exp_check(char *content, t_shell *shell);
 char			**exp_dollar(char *content, int *i,
 					char **new_content, t_shell *shell);
-char			**add_new_content(char **new_content,
-					char **d_exp, t_shell *shell);
 char			*empty_s_quo_txt(void);
 char			*empty_d_quo_txt(void);
 char			*empty_dollar_txt_s(void);
 char			**empty_dollar_txt_d(void);
+char			*empty_txt_nothing(void);
 int				free_d_str_int(char **str);
 char			**one_dollar(char **new_content, t_shell *shell, int *i);
 char			**word_split(char *new_exp);
@@ -142,6 +144,19 @@ int *k, t_shell *shell);
 char			*ft_strncpy(char *dest, char *src, unsigned int n);
 char			*hdoc_in_exp(t_shell *shell, char *hdoc, char *non_exp_hdoc);
 char			*get_last_non_exp_hdoc(t_table table, t_shell *shell);
+
+/****ADD NEW CONTENT****/
+char			**add_new_content(char **new_content,
+					char **d_exp, t_shell *shell);
+void			first_loops(char ***new_content, char ***d_exp, \
+char ***joined, t_shell *shell);
+void			second_loops(char ***new_content, char ***d_exp, \
+char ***joined, t_shell *shell);
+
+/****ADD NEW CONTENT UTILS****/
+void			joined_free(char ***joined, t_shell *shell, \
+int new_content_len, char **new_content);
+int				free_d_str_int(char **str);
 
 /****REDIRECTION****/
 char			*is_dollar(char *hdoc);
@@ -207,6 +222,7 @@ void			child_out_check(t_shell *shell, \
 int pipefd[2], int prev_read_fd, int i);
 void			single_exec_run(t_shell *shell, t_single_exec_var *var);
 int				dot_check(char *first_arg, t_shell *shell);
+void			print_is_directory(char *redir);
 
 /***BUILT-INS****/
 

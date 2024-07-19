@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:29:30 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/06/26 19:44:32 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 02:43:17 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	**join_dup(char **joined, int *join, char **dup, int dup_int)
 	{
 		if (dup[dup_int][0] == '\0')
 		{
+			if (dup[dup_int][1] == '\0' && dup[dup_int][2] == '\0')
+				joined[*join] = empty_txt_nothing();
 			if (dup[dup_int][1] == '"')
 				joined[*join] = empty_d_quo_txt();
 			else if (dup[dup_int][1] == '$')
