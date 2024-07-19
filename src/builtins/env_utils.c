@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:07 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/19 03:47:13 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 08:32:47 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,13 @@ void	free_all_env(char **env)
 
 int	print_env(char **env)
 {
+	signal(SIGPIPE, SIG_IGN);
 	if (env == NULL)
 		return (2);
 	while (*env != NULL)
 	{
-		ft_putstr_fd(*env, 1);
+		if (ft_putstr_fd_return(*env, 1) == -1)
+			return (1);
 		ft_putchar_fd('\n', 1);
 		env++;
 	}

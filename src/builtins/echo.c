@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:28:00 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/03 13:48:53 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 08:33:24 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	ft_echo(char **full_cmd, t_shell *shell)
 
 	flag = false;
 	i = 1;
+	signal(SIGPIPE, SIG_IGN);
 	handle_ns(&full_cmd, shell);
 	if (full_cmd[i] && !ft_strcmp(full_cmd[i], "-n"))
 	{

@@ -6,7 +6,7 @@
 /*   By: dcingoz <dcingoz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:30:54 by dcingoz           #+#    #+#             */
-/*   Updated: 2024/07/19 06:16:36 by dcingoz          ###   ########.fr       */
+/*   Updated: 2024/07/19 08:28:46 by dcingoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,7 @@ void			sigint_handler_quit(int signum);
 void			sigpipe_handler(int signum);
 void			sigusr1_handler(int signum);
 void			sigint_handler_sigint(int signum);
+int				ft_putstr_fd_return(char *s, int fd);
 
 /***SIGNAL UTILS***/
 int				ft_pid(t_shell *shell);
